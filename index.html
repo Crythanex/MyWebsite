@@ -6,16 +6,32 @@
 <title>Crythane</title>
 
 <style>
+
+/* ================= 字体系统（中英分流） ================= */
+
+/* 英文 → Cal Sans */
 @font-face {
-  font-family:"Cal Sans";
-  src:url("fonts/CalSans-Regular.ttf");
-  font-display:swap;
+  font-family: "SiteFont";
+  src: url("fonts/CalSans-Regular.ttf");
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF,
+    U+0100-024F,
+    U+1E00-1EFF;
 }
+
+/* 中文 → Alimama */
 @font-face {
-  font-family:"Alimama";
-  src:url("fonts/AlimamaShuHeiTi-Bold.ttf");
-  font-display:swap;
+  font-family: "SiteFont";
+  src: url("fonts/AlimamaShuHeiTi-Bold.ttf");
+  font-display: swap;
+  unicode-range:
+    U+4E00-9FFF,
+    U+3400-4DBF,
+    U+3000-303F;
 }
+
+/* Logo 专用 */
 @font-face {
   font-family:"Ankh";
   src:url("fonts/AnkhSanctuary-PVK0B.ttf");
@@ -36,8 +52,9 @@ body{
 margin:0;
 background:var(--bg-dark);
 color:var(--text-main);
-font-family:"Cal Sans","Alimama",-apple-system,sans-serif;
+font-family:"SiteFont",-apple-system,sans-serif;
 overflow:hidden;
+-webkit-font-smoothing:antialiased;
 }
 
 /* ================= Splash ================= */
@@ -87,9 +104,10 @@ to{opacity:0;visibility:hidden}
 
 .page{
 opacity:0;
+transition:opacity .8s ease;
 }
 
-/* Header */
+/* ================= Header ================= */
 
 .header{
 position:sticky;
@@ -101,13 +119,12 @@ background:rgba(18,26,34,.55);
 }
 
 .title.apple-text{
-font-family:"Alimama";
 font-size:30px;
 letter-spacing:.6px;
 color:#6fe3ea;
 }
 
-/* Apple text */
+/* ================= Apple 动画 ================= */
 
 .apple-text span{
 display:inline-block;
@@ -121,7 +138,7 @@ transform:translateY(0);
 transition:.6s cubic-bezier(.22,.61,.36,1);
 }
 
-/* Avatar */
+/* ================= Avatar ================= */
 
 .avatar-wrap{
 display:flex;
@@ -141,7 +158,16 @@ font-size:36px;
 color:#111;
 }
 
-/* Cards */
+/* ================= Intro ================= */
+
+.intro{
+text-align:center;
+font-size:26px;
+margin-bottom:48px;
+letter-spacing:.4px;
+}
+
+/* ================= Cards ================= */
 
 .card-list{
 padding:0 28px 120px;
@@ -169,6 +195,7 @@ filter:blur(0);
 .card-inner{
 height:100%;
 transition:transform .2s ease-out;
+will-change:transform;
 }
 
 .card-main{
@@ -227,17 +254,30 @@ transition:.12s;
 <div class="avatar apple-text">Avatar</div>
 </div>
 
-<div class="card-list">
-<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span>Introduction</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
-<div class="card"><div class="card-inner"><div class="card-main">施工中*2</div><div class="card-footer"><span>Gallery</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
-<div class="card"><div class="card-inner"><div class="card-main">施工中*3</div><div class="card-footer"><span>Contact</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
-</div>
+<div class="intro apple-text">你好，这里是凌绡</div>
 
+<div class="card-list">
+
+<!-- 7 张卡片 -->
+
+<div class="card"><div class="card-inner"><div class="card-main">施工中 1</div><div class="card-footer"><span>Introduction</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+
+<div class="card"><div class="card-inner"><div class="card-main">施工中 2</div><div class="card-footer"><span>Gallery</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+
+<div class="card"><div class="card-inner"><div class="card-main">施工中 3</div><div class="card-footer"><span>Contact</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+
+<div class="card"><div class="card-inner"><div class="card-main">施工中 4</div><div class="card-footer"><span>Diary</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+
+<div class="card"><div class="card-inner"><div class="card-main">施工中 5</div><div class="card-footer"><span>Projects</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+
+<div class="card"><div class="card-inner"><div class="card-main">施工中 6</div><div class="card-footer"><span>Music</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+
+<div class="card"><div class="card-inner"><div class="card-main">施工中 7</div><div class="card-footer"><span>More</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+
+</div>
 </div>
 
 <script>
-
-/* Splash timing */
 
 window.addEventListener("load",()=>{
 setTimeout(()=>{
@@ -251,8 +291,9 @@ startPage();
 function startPage(){
 
 document.querySelectorAll(".apple-text").forEach(el=>{
-const t=el.textContent.trim();el.textContent="";
-(t.split("")).forEach((c,i)=>{
+const t=el.textContent.trim();
+el.textContent="";
+[...t].forEach((c,i)=>{
 const s=document.createElement("span");
 s.textContent=c;
 el.appendChild(s);
@@ -261,6 +302,7 @@ setTimeout(()=>s.classList.add("show"),i*60);
 });
 
 const cards=[...document.querySelectorAll(".card")];
+
 const obs=new IntersectionObserver(e=>{
 e.forEach(x=>{
 if(x.isIntersecting){
@@ -273,12 +315,22 @@ obs.unobserve(x.target);
 cards.forEach(c=>obs.observe(c));
 
 let lastY=scrollY;
+let ticking=false;
+
 addEventListener("scroll",()=>{
-const d=scrollY-lastY;lastY=scrollY;
+if(!ticking){
+requestAnimationFrame(()=>{
+const d=scrollY-lastY;
+lastY=scrollY;
 cards.forEach(c=>{
 if(!c.classList.contains("show"))return;
-c.querySelector(".card-inner").style.transform=`translateY(${Math.max(-6,Math.min(6,d*.15))}px)`;
+c.querySelector(".card-inner").style.transform=
+`translateY(${Math.max(-6,Math.min(6,d*.15))}px)`;
 });
+ticking=false;
+});
+ticking=true;
+}
 });
 
 }
