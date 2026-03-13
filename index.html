@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <title>Crythane</title>
 
 <style>
 
-/* ================= Fonts ================= */
+/* ===== Fonts ===== */
 
 @font-face{
-font-family:"Caviar Dreams";
+font-family:"Caviar";
 src:url("fonts/CaviarDreams-Bold-2.ttf");
 font-display:swap;
 }
@@ -33,53 +37,79 @@ src:url("fonts/AnkhSanctuary-PVK0B.ttf");
 font-display:swap;
 }
 
+/* ===== Root ===== */
+
 :root{
---bg-dark:#0e1620;
---card-cyan:#5fd0d6;
---text-main:#e9f6f7;
---text-dark:#0b1b1e;
---radius-card:32px;
+--bg:#0e1620;
+--cyan:#5fd0d6;
+--text:#e9f6f7;
+--dark:#0b1b1e;
+--radius:32px;
 }
 
-*{box-sizing:border-box}
+/* ===== Base ===== */
+
+*{
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
 
 body{
+
 margin:0;
-background:var(--bg-dark);
-color:var(--text-main);
-font-family:"Caviar Dreams","Alimama",-apple-system,sans-serif;
+background:var(--bg);
+color:var(--text);
+
+font-family:"Caviar","Alimama",-apple-system,sans-serif;
+
 overflow:hidden;
+
 }
+
+/* JP font */
 
 body.lang-jp{
-font-family:"Kazesawa","Caviar Dreams",-apple-system,sans-serif;
+font-family:"Kazesawa","Caviar",sans-serif;
 }
 
-/* ================= Splash ================= */
+/* ===== Splash ===== */
 
 #splash{
+
 position:fixed;
 inset:0;
+
 background:#0e1620;
+
 display:flex;
 align-items:center;
 justify-content:center;
+
 z-index:999;
+
 }
 
 #logo{
 width:320px;
+max-width:70vw;
 }
 
 #logo text{
+
 font-family:"Ankh";
 font-size:96px;
+
 fill:none;
 stroke:#6fe3ea;
+
 stroke-width:2.5;
+
 stroke-dasharray:600;
 stroke-dashoffset:600;
-animation:draw 1.6s ease forwards,fill .6s ease forwards 1.6s;
+
+animation:draw 1.6s ease forwards,
+fill .6s ease forwards 1.6s;
+
 }
 
 @keyframes draw{
@@ -98,62 +128,93 @@ animation:splashOut .8s ease forwards;
 to{opacity:0;visibility:hidden}
 }
 
-/* ================= Page ================= */
+/* ===== Page ===== */
 
 .page{
 opacity:0;
-transition:opacity .8s ease;
+transition:opacity .7s;
 }
 
-/* ================= Header ================= */
+/* ===== Header ===== */
 
 .header{
+
 position:sticky;
 top:0;
+
 z-index:10;
-padding:calc(18px + env(safe-area-inset-top)) 28px 18px;
+
+padding:
+calc(16px + env(safe-area-inset-top))
+24px
+16px;
+
 backdrop-filter:blur(40px) saturate(180%);
 background:rgba(18,26,34,.55);
+
 display:flex;
 justify-content:center;
 align-items:center;
+
 }
 
+/* brand */
+
 .title{
-font-family:"Alimama";
+
+font-family:"Caviar";
+
 font-size:30px;
-letter-spacing:.6px;
+
+letter-spacing:1.2px;
+
 color:#6fe3ea;
+
 opacity:0;
-transform:translateY(-12px);
-transition:.6s cubic-bezier(.22,.61,.36,1);
+transform:translateY(-10px);
+
+transition:.55s cubic-bezier(.22,.61,.36,1);
+
 }
 
 .header.show-title .title{
+
 opacity:1;
 transform:translateY(0);
+
 }
 
-/* ================= Language ================= */
+/* ===== Language ===== */
 
 .lang-switch{
+
 position:absolute;
-right:28px;
+right:24px;
+
 top:50%;
 transform:translateY(-50%);
+
 }
 
 .lang-btn{
+
 width:40px;
 height:32px;
+
 border:1.5px solid #6fe3ea;
+
 border-radius:8px;
+
 background:transparent;
+
 display:flex;
 align-items:center;
 justify-content:center;
+
 cursor:pointer;
+
 color:#6fe3ea;
+
 }
 
 .lang-btn svg{
@@ -161,22 +222,33 @@ width:18px;
 height:18px;
 }
 
+/* menu */
+
 .lang-menu{
+
 position:absolute;
+
 right:0;
 top:42px;
-background:rgba(18,26,34,.9);
+
+background:rgba(18,26,34,.92);
+
 backdrop-filter:blur(20px);
+
 border-radius:10px;
+
 padding:8px 0;
+
 display:flex;
 flex-direction:column;
-gap:2px;
 
 opacity:0;
 pointer-events:none;
-transform:translateY(-8px);
+
+transform:translateY(-6px);
+
 transition:.25s;
+
 }
 
 .lang-menu.show{
@@ -186,125 +258,179 @@ transform:translateY(0);
 }
 
 .lang-menu div{
+
 padding:8px 16px;
+
 cursor:pointer;
+
 font-size:14px;
 white-space:nowrap;
+
 }
 
 .lang-menu div:hover{
 background:rgba(255,255,255,.08);
 }
 
-/* ================= Apple Text ================= */
-
-.apple-text span{
-display:inline-block;
-opacity:0;
-transform:translateY(14px);
-}
-
-.apple-text span.show{
-opacity:1;
-transform:translateY(0);
-transition:.6s cubic-bezier(.22,.61,.36,1);
-}
-
-/* ================= Avatar ================= */
+/* ===== Avatar ===== */
 
 .avatar-wrap{
+
 display:flex;
 justify-content:center;
-margin:48px 0 28px;
+
+margin:56px 0 30px;
+
 }
 
 .avatar{
+
 width:200px;
 height:200px;
+
 border-radius:50%;
-background:#f6c3cf;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:36px;
-color:#111;
+
+background-image:url("fonts/1000075580.jpeg");
+
+background-size:cover;
+background-position:center;
+
 }
 
-/* ================= Intro ================= */
+/* mobile */
+
+@media (max-width:600px){
+
+.avatar{
+width:150px;
+height:150px;
+}
+
+}
+
+/* ===== Intro ===== */
 
 .intro{
+
 text-align:center;
+
 font-size:26px;
-margin-bottom:48px;
-transition:.6s cubic-bezier(.22,.61,.36,1);
+
+margin-bottom:50px;
+
+transition:.55s cubic-bezier(.22,.61,.36,1);
+
 }
 
 .intro.absorb{
+
 transform:translateY(-70px);
+
 opacity:0;
+
 }
 
-/* ================= Cards ================= */
+/* ===== Cards ===== */
 
 .card-list{
-padding:0 28px 120px;
+
+padding:0 24px 120px;
+
 display:flex;
 flex-direction:column;
-gap:32px;
+
+gap:28px;
+
 }
 
+/* card */
+
 .card{
-background:var(--card-cyan);
-border-radius:var(--radius-card);
+
+background:var(--cyan);
+
+border-radius:var(--radius);
+
 overflow:hidden;
+
 opacity:0;
-transform:translateY(48px) scale(.965);
+
+transform:translateY(48px) scale(.96);
+
 filter:blur(8px);
+
 transition:.9s cubic-bezier(.16,1,.3,1);
+
 }
 
 .card.show{
+
 opacity:1;
+
 transform:translateY(0) scale(1);
+
 filter:blur(0);
+
 }
 
-.card-inner{
-height:100%;
-}
+/* main */
 
 .card-main{
+
 aspect-ratio:5/3;
+
 display:flex;
 align-items:center;
-padding-left:36px;
-font-size:40px;
+
+padding-left:34px;
+
+font-size:38px;
 font-weight:600;
-color:var(--text-dark);
+
+color:var(--dark);
+
 }
+
+/* footer */
 
 .card-footer{
+
 background:#fff;
-padding:22px 26px;
+
+padding:20px 24px;
+
 display:flex;
+
 justify-content:space-between;
 align-items:center;
+
+font-size:20px;
+
 border-radius:0 0 28px 28px;
-font-size:22px;
-font-weight:500;
+
 color:#222;
+
 }
 
+/* arrow */
+
 .arrow-btn{
+
 width:52px;
 height:52px;
+
 border-radius:50%;
+
 border:none;
-background:var(--card-cyan);
+
+background:var(--cyan);
+
 display:flex;
 align-items:center;
 justify-content:center;
+
 transition:.12s;
+
 }
 
 .arrow-btn:active{
@@ -312,8 +438,27 @@ transform:scale(.88)
 }
 
 .arrow-btn svg{
-width:22px;
-height:22px;
+width:22px;height:22px
+}
+
+/* ===== Tablet ===== */
+
+@media (min-width:900px){
+
+.card-list{
+padding:0 15vw 140px;
+}
+
+}
+
+/* ===== Desktop ===== */
+
+@media (min-width:1300px){
+
+.card-list{
+padding:0 22vw 140px;
+}
+
 }
 
 </style>
@@ -321,63 +466,191 @@ height:22px;
 
 <body>
 
+<!-- Splash -->
+
 <div id="splash">
+
 <svg id="logo" viewBox="0 0 600 160">
-<text x="50%" y="60%" text-anchor="middle">Crythane</text>
+
+<text x="50%" y="60%" text-anchor="middle">
+Crythane
+</text>
+
 </svg>
+
 </div>
 
 <div class="page">
 
+<!-- Header -->
+
 <div class="header">
 
-<div class="title apple-text" data-i18n="title">凌绡 Crythane</div>
+<div class="title">
+Crythane
+</div>
 
 <div class="lang-switch">
 
 <button class="lang-btn" id="langBtn">
+
 <svg viewBox="0 0 24 24">
-<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/>
-<ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="2" fill="none"/>
-<path d="M3 12h18" stroke="currentColor" stroke-width="2"/>
+
+<circle cx="12" cy="12" r="9"
+stroke="currentColor"
+stroke-width="2"
+fill="none"/>
+
+<ellipse cx="12" cy="12"
+rx="4"
+ry="9"
+stroke="currentColor"
+stroke-width="2"
+fill="none"/>
+
+<path d="M3 12h18"
+stroke="currentColor"
+stroke-width="2"/>
+
 </svg>
+
 </button>
 
 <div class="lang-menu" id="langMenu">
+
 <div data-lang="zh">简体中文</div>
 <div data-lang="en">English</div>
 <div data-lang="jp">日本語</div>
-</div>
 
 </div>
 
 </div>
+
+</div>
+
+<!-- Avatar -->
 
 <div class="avatar-wrap">
-<div class="avatar apple-text">Avatar</div>
+<div class="avatar"></div>
 </div>
 
-<div class="intro apple-text" data-i18n="intro">
+<!-- Intro -->
+
+<div class="intro" data-i18n="intro">
 你好，这里是凌绡
 </div>
 
+<!-- Cards -->
+
 <div class="card-list">
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="intro_card">自介</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card">
+<div class="card-main">施工中</div>
+<div class="card-footer">
+<span data-i18n="intro_card">自介</span>
+<button class="arrow-btn">
+<svg viewBox="0 0 24 24">
+<path d="M9 6l6 6-6 6"
+stroke="currentColor"
+stroke-width="2.5"
+fill="none"/>
+</svg>
+</button>
+</div>
+</div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="gallery">图库</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card">
+<div class="card-main">施工中</div>
+<div class="card-footer">
+<span data-i18n="gallery">图库</span>
+<button class="arrow-btn">
+<svg viewBox="0 0 24 24">
+<path d="M9 6l6 6-6 6"
+stroke="currentColor"
+stroke-width="2.5"
+fill="none"/>
+</svg>
+</button>
+</div>
+</div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="commission">约稿</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card">
+<div class="card-main">施工中</div>
+<div class="card-footer">
+<span data-i18n="commission">约稿</span>
+<button class="arrow-btn">
+<svg viewBox="0 0 24 24">
+<path d="M9 6l6 6-6 6"
+stroke="currentColor"
+stroke-width="2.5"
+fill="none"/>
+</svg>
+</button>
+</div>
+</div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="projects">项目</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card">
+<div class="card-main">施工中</div>
+<div class="card-footer">
+<span data-i18n="projects">项目</span>
+<button class="arrow-btn">
+<svg viewBox="0 0 24 24">
+<path d="M9 6l6 6-6 6"
+stroke="currentColor"
+stroke-width="2.5"
+fill="none"/>
+</svg>
+</button>
+</div>
+</div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="contact">联络</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card">
+<div class="card-main">施工中</div>
+<div class="card-footer">
+<span data-i18n="contact">联络</span>
+<button class="arrow-btn">
+<svg viewBox="0 0 24 24">
+<path d="M9 6l6 6-6 6"
+stroke="currentColor"
+stroke-width="2.5"
+fill="none"/>
+</svg>
+</button>
+</div>
+</div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="friends">友链</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card">
+<div class="card-main">施工中</div>
+<div class="card-footer">
+<span data-i18n="friends">友链</span>
+<button class="arrow-btn">
+<svg viewBox="0 0 24 24">
+<path d="M9 6l6 6-6 6"
+stroke="currentColor"
+stroke-width="2.5"
+fill="none"/>
+</svg>
+</button>
+</div>
+</div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="donation">捐赠</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card">
+<div class="card-main">施工中</div>
+<div class="card-footer">
+<span data-i18n="donation">捐赠</span>
+<button class="arrow-btn">
+<svg viewBox="0 0 24 24">
+<path d="M9 6l6 6-6 6"
+stroke="currentColor"
+stroke-width="2.5"
+fill="none"/>
+</svg>
+</button>
+</div>
+</div>
 
 </div>
+
 </div>
 
 <script>
@@ -385,36 +658,41 @@ height:22px;
 /* Splash */
 
 window.addEventListener("load",()=>{
+
 setTimeout(()=>{
-document.getElementById("splash").classList.add("fade")
+
+document.getElementById("splash")
+.classList.add("fade")
+
 document.body.style.overflow="auto"
+
 document.querySelector(".page").style.opacity=1
+
 startPage()
+
 },2000)
+
 })
+
+/* Card animation */
 
 function startPage(){
-
-document.querySelectorAll(".apple-text").forEach(el=>{
-const t=el.textContent.trim()
-el.textContent=""
-;[...t].forEach((c,i)=>{
-const s=document.createElement("span")
-s.textContent=c
-el.appendChild(s)
-setTimeout(()=>s.classList.add("show"),i*60)
-})
-})
 
 const cards=[...document.querySelectorAll(".card")]
 
 const obs=new IntersectionObserver(e=>{
+
 e.forEach(x=>{
+
 if(x.isIntersecting){
+
 x.target.classList.add("show")
 obs.unobserve(x.target)
+
 }
+
 })
+
 },{threshold:.15})
 
 cards.forEach(c=>obs.observe(c))
@@ -423,13 +701,19 @@ const header=document.querySelector(".header")
 const intro=document.querySelector(".intro")
 
 addEventListener("scroll",()=>{
+
 if(scrollY>80){
+
 header.classList.add("show-title")
 intro.classList.add("absorb")
+
 }else{
+
 header.classList.remove("show-title")
 intro.classList.remove("absorb")
+
 }
+
 })
 
 }
@@ -439,7 +723,6 @@ intro.classList.remove("absorb")
 const LANG={
 
 zh:{
-title:"凌绡 Crythane",
 intro:"你好，这里是凌绡",
 intro_card:"自介",
 gallery:"图库",
@@ -451,7 +734,6 @@ donation:"捐赠"
 },
 
 en:{
-title:"Crythane",
 intro:"Hey there, I am Crythane",
 intro_card:"Introduction",
 gallery:"Gallery",
@@ -463,7 +745,6 @@ donation:"Donation"
 },
 
 jp:{
-title:"Crythane",
 intro:"ようこそ、凌绡（シノセン）へ",
 intro_card:"自己紹介",
 gallery:"ギャラリー",
@@ -481,8 +762,12 @@ function setLang(lang){
 localStorage.setItem("lang",lang)
 
 document.querySelectorAll("[data-i18n]").forEach(el=>{
+
 const key=el.dataset.i18n
-if(LANG[lang][key]) el.textContent=LANG[lang][key]
+
+if(LANG[lang][key])
+el.textContent=LANG[lang][key]
+
 })
 
 document.body.classList.remove("lang-jp")
@@ -494,18 +779,25 @@ document.body.classList.add("lang-jp")
 }
 
 const savedLang=localStorage.getItem("lang")||"zh"
+
 setLang(savedLang)
 
 const btn=document.getElementById("langBtn")
 const menu=document.getElementById("langMenu")
 
-btn.onclick=()=>menu.classList.toggle("show")
+btn.onclick=()=>{
+menu.classList.toggle("show")
+}
 
 menu.querySelectorAll("[data-lang]").forEach(item=>{
+
 item.onclick=()=>{
+
 setLang(item.dataset.lang)
 menu.classList.remove("show")
+
 }
+
 })
 
 </script>
