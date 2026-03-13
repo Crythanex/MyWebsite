@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Crythane</title>
 
 <style>
 
 /* ================= Fonts ================= */
 
-@font-face {
-  font-family:"Caviar Dreams";
-  src:url("fonts/CaviarDreams-Bold-2.ttf");
-  font-display:swap;
+@font-face{
+font-family:"Caviar Dreams";
+src:url("fonts/CaviarDreams-Bold-2.ttf");
+font-display:swap;
 }
 
-@font-face {
-  font-family:"Alimama";
-  src:url("fonts/AlimamaShuHeiTi-Bold.ttf");
-  font-display:swap;
+@font-face{
+font-family:"Alimama";
+src:url("fonts/AlimamaShuHeiTi-Bold.ttf");
+font-display:swap;
 }
 
-@font-face {
-  font-family:"Ankh";
-  src:url("fonts/AnkhSanctuary-PVK0B.ttf");
-  font-display:swap;
+@font-face{
+font-family:"Kazesawa";
+src:url("fonts/Kazesawa-Bold.ttf");
+font-display:swap;
+}
+
+@font-face{
+font-family:"Ankh";
+src:url("fonts/AnkhSanctuary-PVK0B.ttf");
+font-display:swap;
 }
 
 :root{
@@ -43,6 +49,10 @@ background:var(--bg-dark);
 color:var(--text-main);
 font-family:"Caviar Dreams","Alimama",-apple-system,sans-serif;
 overflow:hidden;
+}
+
+body.lang-jp{
+font-family:"Kazesawa","Caviar Dreams",-apple-system,sans-serif;
 }
 
 /* ================= Splash ================= */
@@ -69,7 +79,7 @@ stroke:#6fe3ea;
 stroke-width:2.5;
 stroke-dasharray:600;
 stroke-dashoffset:600;
-animation:draw 1.6s ease forwards,fill 0.6s ease forwards 1.6s;
+animation:draw 1.6s ease forwards,fill .6s ease forwards 1.6s;
 }
 
 @keyframes draw{
@@ -104,14 +114,16 @@ z-index:10;
 padding:calc(18px + env(safe-area-inset-top)) 28px 18px;
 backdrop-filter:blur(40px) saturate(180%);
 background:rgba(18,26,34,.55);
+display:flex;
+justify-content:center;
+align-items:center;
 }
 
-.title.apple-text{
+.title{
 font-family:"Alimama";
 font-size:30px;
 letter-spacing:.6px;
 color:#6fe3ea;
-
 opacity:0;
 transform:translateY(-12px);
 transition:.6s cubic-bezier(.22,.61,.36,1);
@@ -120,6 +132,68 @@ transition:.6s cubic-bezier(.22,.61,.36,1);
 .header.show-title .title{
 opacity:1;
 transform:translateY(0);
+}
+
+/* ================= Language ================= */
+
+.lang-switch{
+position:absolute;
+right:28px;
+top:50%;
+transform:translateY(-50%);
+}
+
+.lang-btn{
+width:40px;
+height:32px;
+border:1.5px solid #6fe3ea;
+border-radius:8px;
+background:transparent;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+color:#6fe3ea;
+}
+
+.lang-btn svg{
+width:18px;
+height:18px;
+}
+
+.lang-menu{
+position:absolute;
+right:0;
+top:42px;
+background:rgba(18,26,34,.9);
+backdrop-filter:blur(20px);
+border-radius:10px;
+padding:8px 0;
+display:flex;
+flex-direction:column;
+gap:2px;
+
+opacity:0;
+pointer-events:none;
+transform:translateY(-8px);
+transition:.25s;
+}
+
+.lang-menu.show{
+opacity:1;
+pointer-events:auto;
+transform:translateY(0);
+}
+
+.lang-menu div{
+padding:8px 16px;
+cursor:pointer;
+font-size:14px;
+white-space:nowrap;
+}
+
+.lang-menu div:hover{
+background:rgba(255,255,255,.08);
 }
 
 /* ================= Apple Text ================= */
@@ -162,7 +236,6 @@ color:#111;
 text-align:center;
 font-size:26px;
 margin-bottom:48px;
-letter-spacing:.4px;
 transition:.6s cubic-bezier(.22,.61,.36,1);
 }
 
@@ -198,8 +271,6 @@ filter:blur(0);
 
 .card-inner{
 height:100%;
-transition:transform .2s ease-out;
-will-change:transform;
 }
 
 .card-main{
@@ -221,27 +292,35 @@ align-items:center;
 border-radius:0 0 28px 28px;
 font-size:22px;
 font-weight:500;
-letter-spacing:.2px;
 color:#222;
 }
 
 .arrow-btn{
-width:52px;height:52px;border-radius:50%;
-border:none;background:var(--card-cyan);
-display:flex;align-items:center;justify-content:center;
+width:52px;
+height:52px;
+border-radius:50%;
+border:none;
+background:var(--card-cyan);
+display:flex;
+align-items:center;
+justify-content:center;
 transition:.12s;
 }
 
-.arrow-btn:active{transform:scale(.88)}
+.arrow-btn:active{
+transform:scale(.88)
+}
 
-.arrow-btn svg{width:22px;height:22px}
+.arrow-btn svg{
+width:22px;
+height:22px;
+}
 
 </style>
 </head>
 
 <body>
 
-<!-- Splash -->
 <div id="splash">
 <svg id="logo" viewBox="0 0 600 160">
 <text x="50%" y="60%" text-anchor="middle">Crythane</text>
@@ -251,30 +330,52 @@ transition:.12s;
 <div class="page">
 
 <div class="header">
-<div class="title apple-text">凌绡 Crythane</div>
+
+<div class="title apple-text" data-i18n="title">凌绡 Crythane</div>
+
+<div class="lang-switch">
+
+<button class="lang-btn" id="langBtn">
+<svg viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/>
+<ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="2" fill="none"/>
+<path d="M3 12h18" stroke="currentColor" stroke-width="2"/>
+</svg>
+</button>
+
+<div class="lang-menu" id="langMenu">
+<div data-lang="zh">简体中文</div>
+<div data-lang="en">English</div>
+<div data-lang="jp">日本語</div>
+</div>
+
+</div>
+
 </div>
 
 <div class="avatar-wrap">
 <div class="avatar apple-text">Avatar</div>
 </div>
 
-<div class="intro apple-text">你好，这里是凌绡</div>
+<div class="intro apple-text" data-i18n="intro">
+你好，这里是凌绡
+</div>
 
 <div class="card-list">
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中 1</div><div class="card-footer"><span>Introduction</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="intro_card">自介</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中 2</div><div class="card-footer"><span>Gallery</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="gallery">图库</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中 3</div><div class="card-footer"><span>Contact</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="commission">约稿</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中 4</div><div class="card-footer"><span>Diary</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="projects">项目</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中 5</div><div class="card-footer"><span>Projects</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="contact">联络</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中 6</div><div class="card-footer"><span>Music</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="friends">友链</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
 
-<div class="card"><div class="card-inner"><div class="card-main">施工中 7</div><div class="card-footer"><span>More</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
+<div class="card"><div class="card-inner"><div class="card-main">施工中</div><div class="card-footer"><span data-i18n="donation">捐赠</span><button class="arrow-btn"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div></div></div>
 
 </div>
 </div>
@@ -285,73 +386,127 @@ transition:.12s;
 
 window.addEventListener("load",()=>{
 setTimeout(()=>{
-document.getElementById("splash").classList.add("fade");
-document.body.style.overflow="auto";
-document.querySelector(".page").style.opacity=1;
-startPage();
-},2000);
-});
+document.getElementById("splash").classList.add("fade")
+document.body.style.overflow="auto"
+document.querySelector(".page").style.opacity=1
+startPage()
+},2000)
+})
 
 function startPage(){
 
 document.querySelectorAll(".apple-text").forEach(el=>{
-const t=el.textContent.trim();
-el.textContent="";
-[...t].forEach((c,i)=>{
-const s=document.createElement("span");
-s.textContent=c;
-el.appendChild(s);
-setTimeout(()=>s.classList.add("show"),i*60);
-});
-});
+const t=el.textContent.trim()
+el.textContent=""
+;[...t].forEach((c,i)=>{
+const s=document.createElement("span")
+s.textContent=c
+el.appendChild(s)
+setTimeout(()=>s.classList.add("show"),i*60)
+})
+})
 
-const cards=[...document.querySelectorAll(".card")];
+const cards=[...document.querySelectorAll(".card")]
 
 const obs=new IntersectionObserver(e=>{
 e.forEach(x=>{
 if(x.isIntersecting){
-x.target.classList.add("show");
-obs.unobserve(x.target);
+x.target.classList.add("show")
+obs.unobserve(x.target)
 }
-});
-},{threshold:.15});
+})
+},{threshold:.15})
 
-cards.forEach(c=>obs.observe(c));
+cards.forEach(c=>obs.observe(c))
 
-let lastY=scrollY;
-let ticking=false;
+const header=document.querySelector(".header")
+const intro=document.querySelector(".intro")
 
 addEventListener("scroll",()=>{
-if(!ticking){
-requestAnimationFrame(()=>{
-const d=scrollY-lastY;
-lastY=scrollY;
-cards.forEach(c=>{
-if(!c.classList.contains("show"))return;
-c.querySelector(".card-inner").style.transform=
-`translateY(${Math.max(-6,Math.min(6,d*.15))}px)`;
-});
-ticking=false;
-});
-ticking=true;
-}
-
-/* Header 吞入 intro */
-
-const header=document.querySelector(".header");
-const intro=document.querySelector(".intro");
-
 if(scrollY>80){
-header.classList.add("show-title");
-intro.classList.add("absorb");
+header.classList.add("show-title")
+intro.classList.add("absorb")
 }else{
-header.classList.remove("show-title");
-intro.classList.remove("absorb");
+header.classList.remove("show-title")
+intro.classList.remove("absorb")
+}
+})
+
 }
 
-});
+/* Language */
+
+const LANG={
+
+zh:{
+title:"凌绡 Crythane",
+intro:"你好，这里是凌绡",
+intro_card:"自介",
+gallery:"图库",
+commission:"约稿",
+projects:"项目",
+contact:"联络",
+friends:"友链",
+donation:"捐赠"
+},
+
+en:{
+title:"Crythane",
+intro:"Hey there, I am Crythane",
+intro_card:"Introduction",
+gallery:"Gallery",
+commission:"Commission",
+projects:"Project",
+contact:"Contact",
+friends:"Links",
+donation:"Donation"
+},
+
+jp:{
+title:"Crythane",
+intro:"ようこそ、凌绡（シノセン）へ",
+intro_card:"自己紹介",
+gallery:"ギャラリー",
+commission:"コミッション",
+projects:"プロジェクト",
+contact:"連絡",
+friends:"リンク",
+donation:"寄付"
+}
 
 }
+
+function setLang(lang){
+
+localStorage.setItem("lang",lang)
+
+document.querySelectorAll("[data-i18n]").forEach(el=>{
+const key=el.dataset.i18n
+if(LANG[lang][key]) el.textContent=LANG[lang][key]
+})
+
+document.body.classList.remove("lang-jp")
+
+if(lang==="jp"){
+document.body.classList.add("lang-jp")
+}
+
+}
+
+const savedLang=localStorage.getItem("lang")||"zh"
+setLang(savedLang)
+
+const btn=document.getElementById("langBtn")
+const menu=document.getElementById("langMenu")
+
+btn.onclick=()=>menu.classList.toggle("show")
+
+menu.querySelectorAll("[data-lang]").forEach(item=>{
+item.onclick=()=>{
+setLang(item.dataset.lang)
+menu.classList.remove("show")
+}
+})
 
 </script>
 
