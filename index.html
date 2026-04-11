@@ -55,7 +55,7 @@ body.lang-jp{
   font-family:"Kazesawa","Caviar",sans-serif;
 }
 
-/* Splash */
+/* ================= Splash ================= */
 
 #splash{
   position:fixed;
@@ -99,14 +99,14 @@ body.lang-jp{
   to{opacity:0;visibility:hidden}
 }
 
-/* Page */
+/* ================= Page ================= */
 
 .page{
   opacity:0;
   transition:opacity .7s;
 }
 
-/* Header */
+/* ================= Header ================= */
 
 .header{
   position:sticky;
@@ -136,7 +136,7 @@ body.lang-jp{
   transform:translateY(0);
 }
 
-/* Language */
+/* ================= Language ================= */
 
 .lang-switch{
   position:absolute;
@@ -197,7 +197,7 @@ body.lang-jp{
   background:rgba(255,255,255,.08);
 }
 
-/* Avatar */
+/* ================= Avatar ================= */
 
 .avatar-wrap{
   display:flex;
@@ -222,7 +222,21 @@ body.lang-jp{
   }
 }
 
-/* Intro */
+/* ================= Apple Text Animation ================= */
+
+.apple-text span{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(14px);
+}
+
+.apple-text span.show{
+  opacity:1;
+  transform:translateY(0);
+  transition:.6s cubic-bezier(.22,.61,.36,1);
+}
+
+/* ================= Intro ================= */
 
 .intro{
   text-align:center;
@@ -236,7 +250,7 @@ body.lang-jp{
   opacity:0;
 }
 
-/* Cards */
+/* ================= Cards ================= */
 
 .card-list{
   padding:0 24px 120px;
@@ -279,14 +293,6 @@ body.lang-jp{
   position:absolute;
   inset:0;
   background:linear-gradient(to top, rgba(0,0,0,.28), rgba(0,0,0,0));
-}
-
-.card-main .label{
-  position:relative;
-  z-index:1;
-  font-size:16px;
-  letter-spacing:.2px;
-  opacity:.95;
 }
 
 .card-footer{
@@ -371,14 +377,12 @@ body.lang-jp{
     <div class="avatar"></div>
   </div>
 
-  <div class="intro" data-i18n="intro">你好，这里是凌绡</div>
+  <div class="intro apple-text" data-i18n="intro">你好，这里是凌绡</div>
 
   <div class="card-list">
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-1.jpeg')">
-        <div class="label"></div>
-      </div>
+      <div class="card-main" style="background-image:url('fonts/card-1.jpeg')"></div>
       <div class="card-footer">
         <span data-i18n="intro_card">自介</span>
         <button class="arrow-btn">
@@ -390,9 +394,7 @@ body.lang-jp{
     </div>
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-2.jpeg')">
-        <div class="label"></div>
-      </div>
+      <div class="card-main" style="background-image:url('fonts/card-2.jpeg')"></div>
       <div class="card-footer">
         <span data-i18n="gallery">图库</span>
         <button class="arrow-btn">
@@ -404,9 +406,7 @@ body.lang-jp{
     </div>
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-3.jpeg')">
-        <div class="label"></div>
-      </div>
+      <div class="card-main" style="background-image:url('fonts/card-3.jpeg')"></div>
       <div class="card-footer">
         <span data-i18n="commission">约稿</span>
         <button class="arrow-btn">
@@ -418,9 +418,7 @@ body.lang-jp{
     </div>
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-4.jpeg')">
-        <div class="label"></div>
-      </div>
+      <div class="card-main" style="background-image:url('fonts/card-4.jpeg')"></div>
       <div class="card-footer">
         <span data-i18n="projects">项目</span>
         <button class="arrow-btn">
@@ -432,9 +430,7 @@ body.lang-jp{
     </div>
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-5.jpeg')">
-        <div class="label"></div>
-      </div>
+      <div class="card-main" style="background-image:url('fonts/card-5.jpeg')"></div>
       <div class="card-footer">
         <span data-i18n="contact">联络</span>
         <button class="arrow-btn">
@@ -446,9 +442,7 @@ body.lang-jp{
     </div>
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-6.jpeg')">
-        <div class="label"></div>
-      </div>
+      <div class="card-main" style="background-image:url('fonts/card-6.jpeg')"></div>
       <div class="card-footer">
         <span data-i18n="friends">友链</span>
         <button class="arrow-btn">
@@ -460,9 +454,7 @@ body.lang-jp{
     </div>
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-7.jpeg')">
-        <div class="label"></div>
-      </div>
+      <div class="card-main" style="background-image:url('fonts/card-7.jpeg')"></div>
       <div class="card-footer">
         <span data-i18n="donation">捐赠</span>
         <button class="arrow-btn">
@@ -486,7 +478,26 @@ window.addEventListener("load",()=>{
   },2000);
 });
 
+/* Apple Music style text animation */
+function playAppleText(el){
+  const text = el.textContent.trim();
+  el.textContent = "";
+
+  const isChinese = /[\u4e00-\u9fff]/.test(text);
+  const units = isChinese ? [...text] : text.split(" ");
+
+  units.forEach((u,i)=>{
+    const s = document.createElement("span");
+    s.textContent = u + (isChinese ? "" : " ");
+    el.appendChild(s);
+    setTimeout(()=>s.classList.add("show"), i*60);
+  });
+}
+
 function startPage(){
+
+  playAppleText(document.querySelector(".intro"));
+
   const cards=[...document.querySelectorAll(".card")];
 
   const obs=new IntersectionObserver(e=>{
@@ -513,6 +524,8 @@ function startPage(){
     }
   });
 }
+
+/* Language */
 
 const LANG={
   zh:{
@@ -559,6 +572,8 @@ function setLang(lang){
   if(lang==="jp"){
     document.body.classList.add("lang-jp");
   }
+
+  playAppleText(document.querySelector(".intro"));
 }
 
 const savedLang=localStorage.getItem("lang")||"zh";
