@@ -79,8 +79,8 @@ body.theme-light{
   --border2:   rgba(0,0,0,.08);
   --border3:   rgba(0,0,0,.10);
   --btn-bg:    rgba(0,0,0,.04);
-  --accent:    #0097a7;
-  --accent-border: rgba(0,151,167,.35);
+  --accent:    #2ab8c4;
+  --accent-border: rgba(42,184,196,.38);
   --card-img-overlay: rgba(240,244,250,.08);
   --splash-bg: #f0f4f8;
   --shadow:    0 16px 40px rgba(0,0,0,.10);
@@ -342,6 +342,8 @@ body.theme-light .theme-btn .icon-sun { display:block; }
   text-align:center;
   font-size:26px;
   margin-bottom:54px;
+  /* 初始隐藏，防止原始文字在动画前泄漏成点点 */
+  opacity:0;
   transition:.55s cubic-bezier(.22,.61,.36,1);
   color:var(--text);
 }
@@ -651,9 +653,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
   <!-- Intro -->
 
-  <div class="intro apple-text" data-i18n="intro">
-    你好，这里是凌绡
-  </div>
+  <div class="intro apple-text" data-i18n="intro"></div>
 
   <!-- Cards -->
 
@@ -780,6 +780,7 @@ window.addEventListener("load", () => {
 /* ================= Text Animation ================= */
 
 function playAppleText(el) {
+  el.style.opacity = "1"; // 先让容器可见，再逐字播放
   const text = el.textContent.trim();
   el.textContent = "";
   [...text].forEach((u, i) => {
