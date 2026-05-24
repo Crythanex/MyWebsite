@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Crythane</title>
 
 <style>
+
+/* ================= Fonts ================= */
+
+@font-face{
+  font-family:"Righteous";
+  src:url("fonts/Righteous-Regular.ttf");
+  font-display:swap;
+}
+
 @font-face{
   font-family:"Urbanist";
-  src:url("fonts/Urbanist-Bold.ttf");
+  src:url("fonts/Urbanist-bold.ttf");
   font-display:swap;
 }
 
@@ -19,22 +28,22 @@
 }
 
 @font-face{
+  font-family:"Harmony";
+  src:url("fonts/HarmonyOS_Sans_SC_Medium.ttf");
+  font-display:swap;
+}
+
+@font-face{
   font-family:"Kazesawa";
   src:url("fonts/Kazesawa-Bold.ttf");
   font-display:swap;
 }
 
-@font-face{
-  font-family:"Ankh";
-  src:url("fonts/AnkhSanctuary-PVK0B.ttf");
-  font-display:swap;
-}
+/* ================= Root ================= */
 
 :root{
   --bg:#0e1620;
-  --cyan:#5fd0d6;
-  --text:#e9f6f7;
-  --dark:#0b1b1e;
+  --text:#eef7f8;
   --radius:32px;
 }
 
@@ -43,12 +52,24 @@
   -webkit-tap-highlight-color:transparent;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
   font-family:"Urbanist","Alimama",-apple-system,sans-serif;
   overflow:hidden;
+}
+
+body.lang-zh{
+  font-family:"Urbanist","Alimama",-apple-system,sans-serif;
+}
+
+body.lang-en{
+  font-family:"Urbanist",-apple-system,sans-serif;
 }
 
 body.lang-jp{
@@ -68,35 +89,44 @@ body.lang-jp{
 }
 
 #logo{
-  width:320px;
-  max-width:70vw;
+  width:340px;
+  max-width:74vw;
 }
 
 #logo text{
-  font-family:"Ankh";
+  font-family:"Righteous";
   font-size:96px;
   fill:none;
-  stroke:#6fe3ea;
-  stroke-width:2.5;
-  stroke-dasharray:600;
-  stroke-dashoffset:600;
-  animation:draw 1.6s ease forwards, fill .6s ease forwards 1.6s;
+  stroke:#73e6eb;
+  stroke-width:3.2;
+  stroke-dasharray:700;
+  stroke-dashoffset:700;
+  animation:
+    draw 1.7s cubic-bezier(.22,.61,.36,1) forwards,
+    fill .55s ease forwards 1.65s;
 }
 
 @keyframes draw{
-  to{stroke-dashoffset:0}
+  to{
+    stroke-dashoffset:0;
+  }
 }
 
 @keyframes fill{
-  to{fill:#6fe3ea}
+  to{
+    fill:#73e6eb;
+  }
 }
 
 #splash.fade{
-  animation:splashOut .8s ease forwards;
+  animation:splashOut .85s ease forwards;
 }
 
 @keyframes splashOut{
-  to{opacity:0;visibility:hidden}
+  to{
+    opacity:0;
+    visibility:hidden;
+  }
 }
 
 /* ================= Page ================= */
@@ -112,22 +142,32 @@ body.lang-jp{
   position:sticky;
   top:0;
   z-index:10;
-  padding:calc(16px + env(safe-area-inset-top)) 24px 16px;
-  backdrop-filter:blur(40px) saturate(180%);
-  -webkit-backdrop-filter:blur(40px) saturate(180%);
-  background:rgba(18,26,34,.55);
+
+  padding:
+    calc(16px + env(safe-area-inset-top))
+    24px
+    16px;
+
   display:flex;
   justify-content:center;
   align-items:center;
+
+  background:rgba(15,22,30,.52);
+
+  backdrop-filter:blur(26px) saturate(160%);
+  -webkit-backdrop-filter:blur(26px) saturate(160%);
 }
 
 .title{
-  font-family:"Urbanist";
+  font-family:"Righteous";
   font-size:30px;
-  letter-spacing:1.2px;
-  color:#6fe3ea;
+  letter-spacing:.5px;
+
+  color:#73e6eb;
+
   opacity:0;
   transform:translateY(-10px);
+
   transition:.55s cubic-bezier(.22,.61,.36,1);
 }
 
@@ -148,14 +188,26 @@ body.lang-jp{
 .lang-btn{
   width:40px;
   height:32px;
-  border:1.5px solid #6fe3ea;
-  border-radius:8px;
-  background:transparent;
+
+  border-radius:10px;
+
+  border:1px solid rgba(115,230,235,.35);
+
+  background:rgba(255,255,255,.04);
+
+  color:#73e6eb;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   cursor:pointer;
-  color:#6fe3ea;
+
+  transition:.18s;
+}
+
+.lang-btn:active{
+  transform:scale(.92);
 }
 
 .lang-btn svg{
@@ -165,19 +217,30 @@ body.lang-jp{
 
 .lang-menu{
   position:absolute;
+
   right:0;
   top:42px;
-  background:rgba(18,26,34,.92);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  border-radius:10px;
-  padding:8px 0;
+
   display:flex;
   flex-direction:column;
+
+  background:rgba(18,26,34,.92);
+
+  border-radius:12px;
+
+  padding:8px 0;
+
   opacity:0;
   pointer-events:none;
+
   transform:translateY(-6px);
+
   transition:.25s;
+
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+
+  box-shadow:0 10px 35px rgba(0,0,0,.35);
 }
 
 .lang-menu.show{
@@ -187,10 +250,12 @@ body.lang-jp{
 }
 
 .lang-menu div{
-  padding:8px 16px;
+  padding:10px 18px;
   cursor:pointer;
   font-size:14px;
   white-space:nowrap;
+
+  transition:.18s;
 }
 
 .lang-menu div:hover{
@@ -202,38 +267,31 @@ body.lang-jp{
 .avatar-wrap{
   display:flex;
   justify-content:center;
-  margin:56px 0 30px;
+  margin:58px 0 30px;
 }
 
 .avatar{
   width:200px;
   height:200px;
+
   border-radius:50%;
+
   background-image:url("fonts/1000075580.jpeg");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
+
+  box-shadow:
+    0 12px 40px rgba(0,0,0,.36);
 }
 
 @media (max-width:600px){
+
   .avatar{
     width:150px;
     height:150px;
   }
-}
 
-/* ================= Apple Text Animation ================= */
-
-.apple-text span{
-  display:inline-block;
-  opacity:0;
-  transform:translateY(14px);
-}
-
-.apple-text span.show{
-  opacity:1;
-  transform:translateY(0);
-  transition:.6s cubic-bezier(.22,.61,.36,1);
 }
 
 /* ================= Intro ================= */
@@ -241,7 +299,8 @@ body.lang-jp{
 .intro{
   text-align:center;
   font-size:26px;
-  margin-bottom:50px;
+  margin-bottom:54px;
+
   transition:.55s cubic-bezier(.22,.61,.36,1);
 }
 
@@ -250,79 +309,155 @@ body.lang-jp{
   opacity:0;
 }
 
+/* ================= Apple Text ================= */
+
+.apple-text span{
+  display:inline-block;
+
+  opacity:0;
+  transform:translateY(14px);
+
+  will-change:transform,opacity;
+}
+
+.apple-text span.show{
+  opacity:1;
+  transform:translateY(0);
+
+  transition:
+    opacity .55s cubic-bezier(.22,.61,.36,1),
+    transform .55s cubic-bezier(.22,.61,.36,1);
+}
+
 /* ================= Cards ================= */
 
 .card-list{
-  padding:0 24px 120px;
+  padding:0 24px 70px;
+
   display:flex;
   flex-direction:column;
+
   gap:28px;
 }
 
 .card{
-  background:var(--cyan);
   border-radius:var(--radius);
+
   overflow:hidden;
+
   opacity:0;
-  transform:translateY(48px) scale(.96);
+
+  transform:
+    translateY(48px)
+    scale(.965);
+
   filter:blur(8px);
-  transition:.9s cubic-bezier(.16,1,.3,1);
+
+  transition:
+    .9s cubic-bezier(.16,1,.3,1);
+
+  background:
+    rgba(20,31,38,.74);
+
+  border:
+    1px solid rgba(255,255,255,.05);
+
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.28);
 }
 
 .card.show{
   opacity:1;
-  transform:translateY(0) scale(1);
+
+  transform:
+    translateY(0)
+    scale(1);
+
   filter:blur(0);
 }
 
 .card-main{
   aspect-ratio:5/3;
+
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
-  display:flex;
-  align-items:flex-end;
-  justify-content:flex-start;
-  padding:16px;
-  color:var(--text);
+
   position:relative;
+
+  overflow:hidden;
+}
+
+.card-main::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+    rgba(14,22,28,.16);
 }
 
 .card-main::after{
   content:"";
+
   position:absolute;
   inset:0;
-  background:linear-gradient(to top, rgba(0,0,0,.28), rgba(0,0,0,0));
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,.30),
+      rgba(0,0,0,0)
+    );
 }
 
 .card-footer{
-  background:rgba(255,255,255,.16);
-  backdrop-filter:blur(50px) saturate(180%);
-  -webkit-backdrop-filter:blur(50px) saturate(180%);
-  border-top:1px solid rgba(255,255,255,.22);
-  padding:20px 24px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  border-radius:0 0 28px 28px;
+
+  padding:20px 24px;
+
+  background:
+    rgba(16,24,31,.68);
+
+  border-top:
+    1px solid rgba(255,255,255,.06);
+
   font-size:20px;
-  color:#222;
+
+  color:
+    rgba(255,255,255,.94);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
 }
 
 .arrow-btn{
   width:52px;
   height:52px;
+
   border-radius:50%;
-  border:none;
-  background:rgba(95,208,214,.95);
+
+  border:
+    1px solid rgba(255,255,255,.08);
+
+  background:
+    rgba(255,255,255,.05);
+
+  color:
+    rgba(255,255,255,.92);
+
   display:flex;
   align-items:center;
   justify-content:center;
-  transition:.12s;
+
+  transition:.14s;
 }
 
 .arrow-btn:active{
-  transform:scale(.88)
+  transform:scale(.88);
 }
 
 .arrow-btn svg{
@@ -330,206 +465,509 @@ body.lang-jp{
   height:22px;
 }
 
+/* ================= Copyright ================= */
+
+.copyright{
+  text-align:center;
+
+  padding:
+    8px
+    24px
+    44px;
+
+  font-size:13px;
+
+  opacity:.42;
+
+  letter-spacing:.25px;
+
+  color:
+    rgba(255,255,255,.72);
+}
+
+body.lang-zh .copyright{
+  font-family:"Harmony","Alimama",sans-serif;
+}
+
+body.lang-en .copyright{
+  font-family:"Urbanist",sans-serif;
+}
+
+body.lang-jp .copyright{
+  font-family:"Kazesawa",sans-serif;
+}
+
+/* ================= Responsive ================= */
+
 @media (min-width:900px){
+
   .card-list{
-    padding:0 15vw 140px;
+    padding:0 15vw 80px;
   }
+
 }
 
 @media (min-width:1300px){
+
   .card-list{
-    padding:0 22vw 140px;
+    padding:0 22vw 90px;
   }
+
 }
+
 </style>
 </head>
 
-<body>
+<body class="lang-zh">
+
+<!-- ================= Splash ================= -->
 
 <div id="splash">
+
   <svg id="logo" viewBox="0 0 600 160">
-    <text x="50%" y="60%" text-anchor="middle">Crythane</text>
+    <text
+      x="50%"
+      y="60%"
+      text-anchor="middle">
+      Crythane
+    </text>
   </svg>
+
 </div>
 
+<!-- ================= Page ================= -->
+
 <div class="page">
+
+  <!-- Header -->
+
   <div class="header">
-    <div class="title">Crythane</div>
+
+    <div class="title">
+      Crythane
+    </div>
 
     <div class="lang-switch">
-      <button class="lang-btn" id="langBtn" aria-label="Language">
+
+      <button
+        class="lang-btn"
+        id="langBtn"
+        aria-label="Language">
+
         <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/>
-          <ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="2" fill="none"/>
-          <path d="M3 12h18" stroke="currentColor" stroke-width="2"/>
+          <circle
+            cx="12"
+            cy="12"
+            r="9"
+            stroke="currentColor"
+            stroke-width="2"
+            fill="none"/>
+
+          <ellipse
+            cx="12"
+            cy="12"
+            rx="4"
+            ry="9"
+            stroke="currentColor"
+            stroke-width="2"
+            fill="none"/>
+
+          <path
+            d="M3 12h18"
+            stroke="currentColor"
+            stroke-width="2"/>
         </svg>
+
       </button>
 
       <div class="lang-menu" id="langMenu">
-        <div data-lang="zh">简体中文</div>
-        <div data-lang="en">English</div>
-        <div data-lang="jp">日本語</div>
+
+        <div data-lang="zh">
+          简体中文
+        </div>
+
+        <div data-lang="en">
+          English
+        </div>
+
+        <div data-lang="jp">
+          日本語
+        </div>
+
       </div>
+
     </div>
+
   </div>
+
+  <!-- Avatar -->
 
   <div class="avatar-wrap">
     <div class="avatar"></div>
   </div>
 
-  <div class="intro apple-text" data-i18n="intro">你好，这里是凌绡</div>
+  <!-- Intro -->
+
+  <div
+    class="intro apple-text"
+    data-i18n="intro">
+
+    你好，这里是凌绡
+
+  </div>
+
+  <!-- Cards -->
 
   <div class="card-list">
 
-    <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-1.jpeg')"></div>
-      <div class="card-footer">
-        <span data-i18n="intro_card">自介</span>
-        <button class="arrow-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          </svg>
-        </button>
-      </div>
-    </div>
+    <!-- Card 1 -->
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-2.jpeg')"></div>
-      <div class="card-footer">
-        <span data-i18n="gallery">图库</span>
-        <button class="arrow-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          </svg>
-        </button>
+
+      <div
+        class="card-main"
+        style="background-image:url('fonts/card-1.jpeg')">
       </div>
+
+      <div class="card-footer">
+
+        <span data-i18n="intro_card">
+          自介
+        </span>
+
+        <button class="arrow-btn">
+
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M9 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"/>
+          </svg>
+
+        </button>
+
+      </div>
+
     </div>
 
-    <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-3.jpeg')"></div>
-      <div class="card-footer">
-        <span data-i18n="commission">约稿</span>
-        <button class="arrow-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          </svg>
-        </button>
-      </div>
-    </div>
+    <!-- Card 2 -->
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-4.jpeg')"></div>
-      <div class="card-footer">
-        <span data-i18n="projects">项目</span>
-        <button class="arrow-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          </svg>
-        </button>
+
+      <div
+        class="card-main"
+        style="background-image:url('fonts/card-2.jpeg')">
       </div>
+
+      <div class="card-footer">
+
+        <span data-i18n="gallery">
+          图库
+        </span>
+
+        <button class="arrow-btn">
+
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M9 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"/>
+          </svg>
+
+        </button>
+
+      </div>
+
     </div>
 
-    <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-5.jpeg')"></div>
-      <div class="card-footer">
-        <span data-i18n="contact">联络</span>
-        <button class="arrow-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          </svg>
-        </button>
-      </div>
-    </div>
+    <!-- Card 3 -->
 
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-6.jpeg')"></div>
-      <div class="card-footer">
-        <span data-i18n="friends">友链</span>
-        <button class="arrow-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          </svg>
-        </button>
+
+      <div
+        class="card-main"
+        style="background-image:url('fonts/card-3.jpeg')">
       </div>
+
+      <div class="card-footer">
+
+        <span data-i18n="commission">
+          约稿
+        </span>
+
+        <button class="arrow-btn">
+
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M9 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"/>
+          </svg>
+
+        </button>
+
+      </div>
+
     </div>
 
+    <!-- Card 4 -->
+
     <div class="card">
-      <div class="card-main" style="background-image:url('fonts/card-7.jpeg')"></div>
-      <div class="card-footer">
-        <span data-i18n="donation">捐赠</span>
-        <button class="arrow-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          </svg>
-        </button>
+
+      <div
+        class="card-main"
+        style="background-image:url('fonts/card-4.jpeg')">
       </div>
+
+      <div class="card-footer">
+
+        <span data-i18n="projects">
+          项目
+        </span>
+
+        <button class="arrow-btn">
+
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M9 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"/>
+          </svg>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Card 5 -->
+
+    <div class="card">
+
+      <div
+        class="card-main"
+        style="background-image:url('fonts/card-5.jpeg')">
+      </div>
+
+      <div class="card-footer">
+
+        <span data-i18n="contact">
+          联络
+        </span>
+
+        <button class="arrow-btn">
+
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M9 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"/>
+          </svg>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Card 6 -->
+
+    <div class="card">
+
+      <div
+        class="card-main"
+        style="background-image:url('fonts/card-6.jpeg')">
+      </div>
+
+      <div class="card-footer">
+
+        <span data-i18n="friends">
+          友链
+        </span>
+
+        <button class="arrow-btn">
+
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M9 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"/>
+          </svg>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Card 7 -->
+
+    <div class="card">
+
+      <div
+        class="card-main"
+        style="background-image:url('fonts/card-7.jpeg')">
+      </div>
+
+      <div class="card-footer">
+
+        <span data-i18n="donation">
+          捐赠
+        </span>
+
+        <button class="arrow-btn">
+
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M9 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"/>
+          </svg>
+
+        </button>
+
+      </div>
+
     </div>
 
   </div>
+
+  <!-- Copyright -->
+
+  <div class="copyright" id="copyright">
+    版权所有 ©2023-2026 Crythane 保留所有权利
+  </div>
+
 </div>
 
 <script>
+
+/* ================= Splash ================= */
+
 window.addEventListener("load",()=>{
+
   setTimeout(()=>{
-    document.getElementById("splash").classList.add("fade");
+
+    document
+      .getElementById("splash")
+      .classList.add("fade");
+
     document.body.style.overflow="auto";
-    document.querySelector(".page").style.opacity=1;
+
+    document
+      .querySelector(".page")
+      .style.opacity=1;
+
     startPage();
+
   },2000);
+
 });
 
-/* Apple Music style text animation */
+/* ================= Text Animation ================= */
+
 function playAppleText(el){
+
   const text = el.textContent.trim();
+
   el.textContent = "";
 
-  const isChinese = /[\u4e00-\u9fff]/.test(text);
-  const units = isChinese ? [...text] : text.split(" ").filter(Boolean);
+  const units = [...text];
 
   units.forEach((u,i)=>{
+
     const s = document.createElement("span");
-    s.textContent = isChinese ? u : (u + " ");
+
+    s.innerHTML =
+      u === " "
+      ? "&nbsp;"
+      : u;
+
     el.appendChild(s);
-    setTimeout(()=>s.classList.add("show"), i*70);
+
+    setTimeout(()=>{
+
+      s.classList.add("show");
+
+    }, i * 38);
+
   });
+
 }
+
+/* ================= Main ================= */
 
 function startPage(){
 
-  playAppleText(document.querySelector(".intro"));
+  playAppleText(
+    document.querySelector(".intro")
+  );
 
-  const cards=[...document.querySelectorAll(".card")];
+  const cards = [
+    ...document.querySelectorAll(".card")
+  ];
 
-  /* 每次进入视野都淡入，离开视野就淡出 */
-  const obs=new IntersectionObserver(entries=>{
+  /* Repeat animation */
+
+  const obs = new IntersectionObserver(entries=>{
+
     entries.forEach(entry=>{
+
       if(entry.isIntersecting){
+
         entry.target.classList.add("show");
+
       }else{
+
         entry.target.classList.remove("show");
+
       }
+
     });
+
   },{threshold:.15});
 
   cards.forEach(c=>obs.observe(c));
 
-  const header=document.querySelector(".header");
-  const intro=document.querySelector(".intro");
+  /* Header */
+
+  const header =
+    document.querySelector(".header");
+
+  const intro =
+    document.querySelector(".intro");
 
   addEventListener("scroll",()=>{
-    if(scrollY>80){
+
+    if(scrollY > 80){
+
       header.classList.add("show-title");
+
       intro.classList.add("absorb");
+
     }else{
+
       header.classList.remove("show-title");
+
       intro.classList.remove("absorb");
+
     }
+
   });
+
 }
 
-/* Language */
+/* ================= Language ================= */
 
 const LANG={
+
   zh:{
     intro:"你好，这里是凌绡",
     intro_card:"自介",
@@ -538,8 +976,10 @@ const LANG={
     projects:"项目",
     contact:"联络",
     friends:"友链",
-    donation:"捐赠"
+    donation:"捐赠",
+    copyright:"版权所有 ©2023-2026 Crythane 保留所有权利"
   },
+
   en:{
     intro:"Hey there, I am Crythane",
     intro_card:"Introduction",
@@ -548,8 +988,10 @@ const LANG={
     projects:"Project",
     contact:"Contact",
     friends:"Links",
-    donation:"Donation"
+    donation:"Donation",
+    copyright:"Copyright ©2023-2026 Crythane. All rights reserved."
   },
+
   jp:{
     intro:"ようこそ、凌绡（シノセン）へ",
     intro_card:"自己紹介",
@@ -558,40 +1000,102 @@ const LANG={
     projects:"プロジェクト",
     contact:"連絡",
     friends:"リンク",
-    donation:"寄付"
+    donation:"寄付",
+    copyright:"Copyright ©2023-2026 Crythane All Rights Reserved."
   }
+
 };
 
 function setLang(lang){
+
   localStorage.setItem("lang",lang);
 
-  document.querySelectorAll("[data-i18n]").forEach(el=>{
-    const key=el.dataset.i18n;
-    if(LANG[lang][key]) el.textContent=LANG[lang][key];
-  });
+  document.body.classList.remove(
+    "lang-zh",
+    "lang-en",
+    "lang-jp"
+  );
 
-  document.body.classList.remove("lang-jp");
-  if(lang==="jp"){
-    document.body.classList.add("lang-jp");
-  }
+  document.body.classList.add(
+    `lang-${lang}`
+  );
 
-  playAppleText(document.querySelector(".intro"));
+  document.querySelectorAll("[data-i18n]")
+    .forEach(el=>{
+
+      const key = el.dataset.i18n;
+
+      if(LANG[lang][key]){
+
+        el.textContent =
+          LANG[lang][key];
+
+      }
+
+    });
+
+  document.getElementById("copyright")
+    .textContent =
+      LANG[lang].copyright;
+
+  playAppleText(
+    document.querySelector(".intro")
+  );
+
 }
 
-const savedLang=localStorage.getItem("lang")||"zh";
+/* Init */
+
+const savedLang =
+  localStorage.getItem("lang")
+  || "zh";
+
 setLang(savedLang);
 
-const btn=document.getElementById("langBtn");
-const menu=document.getElementById("langMenu");
+/* ================= Menu ================= */
 
-btn.onclick=()=>menu.classList.toggle("show");
+const btn =
+  document.getElementById("langBtn");
 
-menu.querySelectorAll("[data-lang]").forEach(item=>{
-  item.onclick=()=>{
-    setLang(item.dataset.lang);
+const menu =
+  document.getElementById("langMenu");
+
+btn.onclick=(e)=>{
+
+  e.stopPropagation();
+
+  menu.classList.toggle("show");
+
+};
+
+menu
+  .querySelectorAll("[data-lang]")
+  .forEach(item=>{
+
+    item.onclick=()=>{
+
+      setLang(item.dataset.lang);
+
+      menu.classList.remove("show");
+
+    };
+
+  });
+
+document.addEventListener("click",(e)=>{
+
+  if(
+    !menu.contains(e.target)
+    &&
+    !btn.contains(e.target)
+  ){
+
     menu.classList.remove("show");
-  };
+
+  }
+
 });
+
 </script>
 
 </body>
