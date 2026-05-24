@@ -40,14 +40,54 @@
   font-display:swap;
 }
 
-/* ================= Root ================= */
+/* ================= Theme Variables ================= */
 
+/* 深色（默认） */
 :root{
-  --bg:#0e1620;
-  --text:#eef7f8;
-  --accent:#73e6eb;
-  --radius:32px;
+  --bg:        #0e1620;
+  --bg2:       rgba(20,31,38,.74);
+  --bg3:       rgba(16,24,31,.68);
+  --header-bg: rgba(15,22,30,.52);
+  --menu-bg:   rgba(18,26,34,.92);
+  --text:      #eef7f8;
+  --text2:     rgba(255,255,255,.94);
+  --text3:     rgba(255,255,255,.72);
+  --border:    rgba(255,255,255,.05);
+  --border2:   rgba(255,255,255,.06);
+  --border3:   rgba(255,255,255,.08);
+  --btn-bg:    rgba(255,255,255,.05);
+  --accent:    #73e6eb;
+  --accent-border: rgba(115,230,235,.35);
+  --card-img-overlay: rgba(14,22,28,.16);
+  --splash-bg: #0e1620;
+  --radius:    32px;
+  --shadow:    0 16px 40px rgba(0,0,0,.28);
+  --avatar-shadow: 0 12px 40px rgba(0,0,0,.36);
 }
+
+/* 浅色 */
+body.theme-light{
+  --bg:        #f0f4f8;
+  --bg2:       rgba(255,255,255,.82);
+  --bg3:       rgba(240,244,250,.90);
+  --header-bg: rgba(240,244,250,.70);
+  --menu-bg:   rgba(255,255,255,.95);
+  --text:      #1a2535;
+  --text2:     rgba(20,35,55,.92);
+  --text3:     rgba(20,35,55,.55);
+  --border:    rgba(0,0,0,.07);
+  --border2:   rgba(0,0,0,.08);
+  --border3:   rgba(0,0,0,.10);
+  --btn-bg:    rgba(0,0,0,.04);
+  --accent:    #0097a7;
+  --accent-border: rgba(0,151,167,.35);
+  --card-img-overlay: rgba(240,244,250,.08);
+  --splash-bg: #f0f4f8;
+  --shadow:    0 16px 40px rgba(0,0,0,.10);
+  --avatar-shadow: 0 12px 40px rgba(0,0,0,.14);
+}
+
+/* ================= Base ================= */
 
 *{
   box-sizing:border-box;
@@ -64,30 +104,24 @@ body{
   color:var(--text);
   font-family:"Urbanist","Alimama",-apple-system,sans-serif;
   overflow:hidden;
+  transition:background .35s, color .35s;
 }
 
-body.lang-zh{
-  font-family:"Urbanist","Alimama",-apple-system,sans-serif;
-}
-
-body.lang-en{
-  font-family:"Urbanist",-apple-system,sans-serif;
-}
-
-body.lang-jp{
-  font-family:"Kazesawa","Urbanist",sans-serif;
-}
+body.lang-zh{ font-family:"Urbanist","Alimama",-apple-system,sans-serif; }
+body.lang-en{ font-family:"Urbanist",-apple-system,sans-serif; }
+body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 
 /* ================= Splash ================= */
 
 #splash{
   position:fixed;
   inset:0;
-  background:#0e1620;
+  background:var(--splash-bg);
   display:flex;
   align-items:center;
   justify-content:center;
   z-index:999;
+  transition:background .35s;
 }
 
 #logo{
@@ -105,14 +139,14 @@ body.lang-jp{
   stroke-dashoffset:700;
   animation:
     draw 1.7s cubic-bezier(.22,.61,.36,1) forwards,
-    fill .55s ease forwards 1.65s;
+    fill-text .55s ease forwards 1.65s;
 }
 
 @keyframes draw{
   to{ stroke-dashoffset:0; }
 }
 
-@keyframes fill{
+@keyframes fill-text{
   to{ fill:var(--accent); }
 }
 
@@ -144,9 +178,10 @@ body.lang-jp{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:rgba(15,22,30,.52);
+  background:var(--header-bg);
   backdrop-filter:blur(26px) saturate(160%);
   -webkit-backdrop-filter:blur(26px) saturate(160%);
+  transition:background .35s;
 }
 
 .title{
@@ -154,15 +189,62 @@ body.lang-jp{
   font-size:30px;
   letter-spacing:.5px;
   color:var(--accent);
+  /* 修复点点bug：用 visibility 代替纯 opacity */
   opacity:0;
+  visibility:hidden;
   transform:translateY(-10px);
-  transition:.55s cubic-bezier(.22,.61,.36,1);
+  transition:
+    opacity .55s cubic-bezier(.22,.61,.36,1),
+    transform .55s cubic-bezier(.22,.61,.36,1),
+    visibility .55s,
+    color .35s;
 }
 
 .header.show-title .title{
   opacity:1;
+  visibility:visible;
   transform:translateY(0);
 }
+
+/* ================= Theme Switch ================= */
+
+.theme-switch{
+  position:absolute;
+  left:24px;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+.theme-btn{
+  width:40px;
+  height:32px;
+  border-radius:10px;
+  border:1px solid var(--accent-border);
+  background:var(--btn-bg);
+  color:var(--accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:border-color .35s, background .35s, color .35s, transform .18s;
+}
+
+.theme-btn:active{
+  transform:scale(.92);
+}
+
+.theme-btn svg{
+  width:18px;
+  height:18px;
+  transition:opacity .2s, transform .35s;
+}
+
+/* 图标切换：深色时显示月亮，浅色时显示太阳 */
+.theme-btn .icon-moon{ display:block; }
+.theme-btn .icon-sun { display:none;  }
+
+body.theme-light .theme-btn .icon-moon{ display:none;  }
+body.theme-light .theme-btn .icon-sun { display:block; }
 
 /* ================= Language ================= */
 
@@ -177,14 +259,14 @@ body.lang-jp{
   width:40px;
   height:32px;
   border-radius:10px;
-  border:1px solid rgba(115,230,235,.35);
-  background:rgba(255,255,255,.04);
+  border:1px solid var(--accent-border);
+  background:var(--btn-bg);
   color:var(--accent);
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  transition:.18s;
+  transition:border-color .35s, background .35s, color .35s, transform .18s;
 }
 
 .lang-btn:active{
@@ -202,7 +284,7 @@ body.lang-jp{
   top:42px;
   display:flex;
   flex-direction:column;
-  background:rgba(18,26,34,.92);
+  background:var(--menu-bg);
   border-radius:12px;
   padding:8px 0;
   opacity:0;
@@ -211,7 +293,8 @@ body.lang-jp{
   transition:.25s;
   backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);
-  box-shadow:0 10px 35px rgba(0,0,0,.35);
+  box-shadow:0 10px 35px rgba(0,0,0,.18);
+  border:1px solid var(--border2);
 }
 
 .lang-menu.show{
@@ -225,11 +308,12 @@ body.lang-jp{
   cursor:pointer;
   font-size:14px;
   white-space:nowrap;
-  transition:.18s;
+  color:var(--text);
+  transition:background .18s, color .18s;
 }
 
 .lang-menu div:hover{
-  background:rgba(255,255,255,.08);
+  background:var(--border);
 }
 
 /* ================= Avatar ================= */
@@ -248,7 +332,8 @@ body.lang-jp{
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
-  box-shadow:0 12px 40px rgba(0,0,0,.36);
+  box-shadow:var(--avatar-shadow);
+  transition:box-shadow .35s;
 }
 
 /* ================= Intro ================= */
@@ -258,6 +343,7 @@ body.lang-jp{
   font-size:26px;
   margin-bottom:54px;
   transition:.55s cubic-bezier(.22,.61,.36,1);
+  color:var(--text);
 }
 
 .intro.absorb{
@@ -269,17 +355,21 @@ body.lang-jp{
 
 .apple-text span{
   display:inline-block;
+  /* 修复点点bug：visibility:hidden 代替纯 opacity:0 */
   opacity:0;
+  visibility:hidden;
   transform:translateY(14px);
   will-change:transform,opacity;
 }
 
 .apple-text span.show{
   opacity:1;
+  visibility:visible;
   transform:translateY(0);
   transition:
     opacity .55s cubic-bezier(.22,.61,.36,1),
-    transform .55s cubic-bezier(.22,.61,.36,1);
+    transform .55s cubic-bezier(.22,.61,.36,1),
+    visibility .55s;
 }
 
 /* ================= Cards ================= */
@@ -294,17 +384,20 @@ body.lang-jp{
 .card{
   border-radius:var(--radius);
   overflow:hidden;
+  /* 修复点点bug：加 visibility:hidden */
   opacity:0;
+  visibility:hidden;
   transform:translateY(48px) scale(.965);
   filter:blur(8px);
   transition:.9s cubic-bezier(.16,1,.3,1);
-  background:rgba(20,31,38,.74);
-  border:1px solid rgba(255,255,255,.05);
-  box-shadow:0 16px 40px rgba(0,0,0,.28);
+  background:var(--bg2);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
 }
 
 .card.show{
   opacity:1;
+  visibility:visible;
   transform:translateY(0) scale(1);
   filter:blur(0);
 }
@@ -322,14 +415,14 @@ body.lang-jp{
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(14,22,28,.16);
+  background:var(--card-img-overlay);
 }
 
 .card-main::after{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.30),rgba(0,0,0,0));
+  background:linear-gradient(to top,rgba(0,0,0,.22),rgba(0,0,0,0));
 }
 
 .card-footer{
@@ -337,25 +430,27 @@ body.lang-jp{
   justify-content:space-between;
   align-items:center;
   padding:20px 24px;
-  background:rgba(16,24,31,.68);
-  border-top:1px solid rgba(255,255,255,.06);
+  background:var(--bg3);
+  border-top:1px solid var(--border2);
   font-size:20px;
-  color:rgba(255,255,255,.94);
+  color:var(--text2);
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
+  transition:background .35s, color .35s, border-color .35s;
 }
 
 .arrow-btn{
   width:52px;
   height:52px;
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.05);
-  color:rgba(255,255,255,.92);
+  border:1px solid var(--border3);
+  background:var(--btn-bg);
+  color:var(--text2);
   display:flex;
   align-items:center;
   justify-content:center;
-  transition:.14s;
+  cursor:pointer;
+  transition:background .35s, border-color .35s, color .35s, transform .14s;
 }
 
 .arrow-btn:active{
@@ -375,7 +470,8 @@ body.lang-jp{
   font-size:13px;
   opacity:.42;
   letter-spacing:.25px;
-  color:rgba(255,255,255,.72);
+  color:var(--text3);
+  transition:color .35s;
 }
 
 body.lang-zh .copyright{ font-family:"Harmony","Alimama",sans-serif; }
@@ -424,7 +520,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 /* ── Apple Watch ≤180px ── */
 @media (max-width:180px){
 
-  /* 跳过 splash */
   #splash{ display:none; }
   .page{ opacity:1 !important; }
   body{ overflow:auto; }
@@ -434,14 +529,14 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     justify-content:flex-start;
   }
 
-  /* 语言切换在手表上无意义，隐藏 */
   .lang-switch{ display:none; }
+  .theme-switch{ display:none; }
 
   .title{
     font-size:16px;
     opacity:1 !important;
+    visibility:visible !important;
     transform:none !important;
-    /* 手表上始终显示，不等滚动触发 */
   }
 
   .avatar-wrap{ margin:24px 0 14px; }
@@ -454,7 +549,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     line-height:1.5;
   }
 
-  /* 卡片：隐藏图片区域，只保留文字行 */
   .card-list{
     padding:0 8px 32px;
     gap:8px;
@@ -471,16 +565,8 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     border-top:none;
   }
 
-  .arrow-btn{
-    width:26px;
-    height:26px;
-    flex-shrink:0;
-  }
-
-  .arrow-btn svg{
-    width:13px;
-    height:13px;
-  }
+  .arrow-btn{ width:26px; height:26px; flex-shrink:0; }
+  .arrow-btn svg{ width:13px; height:13px; }
 
   .copyright{
     font-size:9px;
@@ -512,16 +598,36 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   <div class="header">
 
 ```
+<!-- 深浅模式（左） -->
+<div class="theme-switch">
+  <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+    <!-- 月亮：深色模式下显示 -->
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none">
+      <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <!-- 太阳：浅色模式下显示 -->
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="4"
+        stroke="currentColor" stroke-width="2"/>
+      <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42
+               M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+
 <div class="title">Crythane</div>
 
+<!-- 语言切换（右） -->
 <div class="lang-switch">
-
   <button class="lang-btn" id="langBtn" aria-label="Language">
-    <svg viewBox="0 0 24 24">
+    <svg viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="9"
-        stroke="currentColor" stroke-width="2" fill="none"/>
+        stroke="currentColor" stroke-width="2"/>
       <ellipse cx="12" cy="12" rx="4" ry="9"
-        stroke="currentColor" stroke-width="2" fill="none"/>
+        stroke="currentColor" stroke-width="2"/>
       <path d="M3 12h18"
         stroke="currentColor" stroke-width="2"/>
     </svg>
@@ -532,7 +638,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     <div data-lang="en">English</div>
     <div data-lang="jp">日本語</div>
   </div>
-
 </div>
 ```
 
@@ -560,8 +665,8 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   <div class="card-footer">
     <span data-i18n="intro_card">自介</span>
     <button class="arrow-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
       </svg>
     </button>
   </div>
@@ -572,8 +677,8 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   <div class="card-footer">
     <span data-i18n="gallery">图库</span>
     <button class="arrow-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
       </svg>
     </button>
   </div>
@@ -584,8 +689,8 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   <div class="card-footer">
     <span data-i18n="commission">约稿</span>
     <button class="arrow-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
       </svg>
     </button>
   </div>
@@ -596,8 +701,8 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   <div class="card-footer">
     <span data-i18n="projects">项目</span>
     <button class="arrow-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
       </svg>
     </button>
   </div>
@@ -608,8 +713,8 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   <div class="card-footer">
     <span data-i18n="contact">联络</span>
     <button class="arrow-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
       </svg>
     </button>
   </div>
@@ -620,8 +725,8 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   <div class="card-footer">
     <span data-i18n="friends">友链</span>
     <button class="arrow-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
       </svg>
     </button>
   </div>
@@ -632,8 +737,8 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   <div class="card-footer">
     <span data-i18n="donation">捐赠</span>
     <button class="arrow-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
       </svg>
     </button>
   </div>
@@ -656,7 +761,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
 window.addEventListener("load", () => {
 
-  // 手表端：跳过 splash，直接显示
   if (window.innerWidth <= 180) {
     document.body.style.overflow = "auto";
     document.querySelector(".page").style.opacity = 1;
@@ -676,20 +780,13 @@ window.addEventListener("load", () => {
 /* ================= Text Animation ================= */
 
 function playAppleText(el) {
-
   const text = el.textContent.trim();
   el.textContent = "";
-
-  const units = [...text];
-
-  units.forEach((u, i) => {
+  [...text].forEach((u, i) => {
     const s = document.createElement("span");
     s.innerHTML = u === " " ? "&nbsp;" : u;
     el.appendChild(s);
-
-    setTimeout(() => {
-      s.classList.add("show");
-    }, i * 38);
+    setTimeout(() => s.classList.add("show"), i * 38);
   });
 }
 
@@ -697,14 +794,11 @@ function playAppleText(el) {
 
 function startPage() {
 
-  // 手表端跳过复杂动画
   const isWatch = window.innerWidth <= 180;
 
   if (!isWatch) {
     playAppleText(document.querySelector(".intro"));
   }
-
-  const cards = [...document.querySelectorAll(".card")];
 
   const obs = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -716,9 +810,8 @@ function startPage() {
     });
   }, { threshold: .15 });
 
-  cards.forEach(c => obs.observe(c));
+  document.querySelectorAll(".card").forEach(c => obs.observe(c));
 
-  // 手表端不需要 header scroll 监听
   if (isWatch) return;
 
   const header = document.querySelector(".header");
@@ -732,13 +825,31 @@ function startPage() {
       header.classList.remove("show-title");
       intro.classList.remove("absorb");
     }
-  }, { passive: true }); // ← 节流修复：passive 避免阻塞滚动
+  }, { passive: true });
 }
+
+/* ================= Theme ================= */
+
+function setTheme(theme) {
+  localStorage.setItem("theme", theme);
+  if (theme === "light") {
+    document.body.classList.add("theme-light");
+  } else {
+    document.body.classList.remove("theme-light");
+  }
+}
+
+const savedTheme = localStorage.getItem("theme") || "dark";
+setTheme(savedTheme);
+
+document.getElementById("themeBtn").onclick = () => {
+  const isLight = document.body.classList.contains("theme-light");
+  setTheme(isLight ? "dark" : "light");
+};
 
 /* ================= Language ================= */
 
 const LANG = {
-
   zh: {
     intro:      "你好，这里是凌绡",
     intro_card: "自介",
@@ -750,7 +861,6 @@ const LANG = {
     donation:   "捐赠",
     copyright:  "版权所有 ©2023-2026 Crythane 保留所有权利"
   },
-
   en: {
     intro:      "Hey there, I am Crythane",
     intro_card: "Introduction",
@@ -762,7 +872,6 @@ const LANG = {
     donation:   "Donation",
     copyright:  "Copyright ©2023-2026 Crythane. All rights reserved."
   },
-
   jp: {
     intro:      "ようこそ、凌绡（シノセン）へ",
     intro_card: "自己紹介",
@@ -774,55 +883,48 @@ const LANG = {
     donation:   "寄付",
     copyright:  "Copyright ©2023-2026 Crythane All Rights Reserved."
   }
-
 };
 
 function setLang(lang, animate = false) {
-
   localStorage.setItem("lang", lang);
-
   document.body.classList.remove("lang-zh", "lang-en", "lang-jp");
   document.body.classList.add(`lang-${lang}`);
 
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.dataset.i18n;
-    if (LANG[lang][key]) {
-      el.textContent = LANG[lang][key];
-    }
+    if (LANG[lang][key]) el.textContent = LANG[lang][key];
   });
 
   document.getElementById("copyright").textContent = LANG[lang].copyright;
 
-  // 只在需要时播放文字动画（修复重复播放的 bug）
   if (animate) {
     playAppleText(document.querySelector(".intro"));
   }
 }
 
-/* Init：初始化时不播动画，等 startPage() 统一触发 */
 const savedLang = localStorage.getItem("lang") || "zh";
 setLang(savedLang, false);
 
 /* ================= Lang Menu ================= */
 
-const btn  = document.getElementById("langBtn");
-const menu = document.getElementById("langMenu");
+const langBtn  = document.getElementById("langBtn");
+const langMenu = document.getElementById("langMenu");
 
-btn.onclick = (e) => {
+langBtn.onclick = (e) => {
   e.stopPropagation();
-  menu.classList.toggle("show");
+  langMenu.classList.toggle("show");
 };
 
-menu.querySelectorAll("[data-lang]").forEach(item => {
+langMenu.querySelectorAll("[data-lang]").forEach(item => {
   item.onclick = () => {
-    setLang(item.dataset.lang, true); // 切换时播动画
-    menu.classList.remove("show");
+    setLang(item.dataset.lang, true);
+    langMenu.classList.remove("show");
   };
 });
 
 document.addEventListener("click", (e) => {
-  if (!menu.contains(e.target) && !btn.contains(e.target)) {
-    menu.classList.remove("show");
+  if (!langMenu.contains(e.target) && !langBtn.contains(e.target)) {
+    langMenu.classList.remove("show");
   }
 });
 
