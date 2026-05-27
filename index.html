@@ -490,56 +490,47 @@ body.theme-light .theme-btn .icon-sun{
 .arrow-btn:active{ transform:scale(.88); }
 .arrow-btn svg{ width:22px; height:22px; }
 
-/* ================= Page Transition ================= */
+/* ================= iOS Card Expand Transition ================= */
 
-#page-out{
+/* 展开克隆层：从卡片位置拉伸到全屏 */
+#card-expand{
+  position:fixed;
+  z-index:997;
+  border-radius:var(--radius);
+  overflow:hidden;
+  pointer-events:none;
+  opacity:0;
+  /* 初始位置由JS动态设置 */
+  background:var(--bg2);
+  will-change:transform,border-radius,opacity;
+}
+
+#card-expand.expanding{
+  opacity:1;
+  animation:cardExpand .46s cubic-bezier(.32,.72,0,1) forwards;
+}
+
+@keyframes cardExpand{
+  to{
+    top:0; left:0;
+    width:100vw; height:100vh;
+    border-radius:0;
+    transform:none;
+  }
+}
+
+/* 展开时背景轻微暗化 */
+#card-expand-bg{
   position:fixed;
   inset:0;
-  z-index:997;
-  opacity:0;
-  pointer-events:none;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  backdrop-filter:blur(0px) brightness(1);
-  -webkit-backdrop-filter:blur(0px) brightness(1);
+  z-index:996;
   background:rgba(0,0,0,0);
-  transition:
-    opacity .08s,
-    backdrop-filter .42s cubic-bezier(.4,0,.2,1),
-    -webkit-backdrop-filter .42s cubic-bezier(.4,0,.2,1),
-    background .42s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+  transition:background .38s;
 }
 
-#page-out.active{
-  opacity:1;
-  pointer-events:auto;
-  backdrop-filter:blur(28px) brightness(.72);
-  -webkit-backdrop-filter:blur(28px) brightness(.72);
-  background:rgba(0,0,0,.18);
-}
-
-.page-out-ring{
-  width:56px;
-  height:56px;
-  border-radius:50%;
-  border:3.5px solid rgba(255,255,255,.15);
-  border-top-color:var(--accent);
-  opacity:0;
-  transform:scale(.6);
-  transition:
-    opacity .22s .18s,
-    transform .38s .18s cubic-bezier(.34,1.56,.64,1);
-}
-
-#page-out.active .page-out-ring{
-  opacity:1;
-  transform:scale(1);
-  animation:ringSpin .8s linear infinite .36s;
-}
-
-@keyframes ringSpin{
-  to{ transform:rotate(360deg); }
+#card-expand-bg.active{
+  background:rgba(0,0,0,.22);
 }
 
 /* ================= Copyright ================= */
@@ -629,11 +620,10 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
 <div id="theme-ripple"></div>
 
-<!-- 页面退场遮罩 -->
+<!-- 卡片展开动画层 -->
 
-<div id="page-out">
-  <div class="page-out-ring"></div>
-</div>
+<div id="card-expand-bg"></div>
+<div id="card-expand"></div>
 
 <!-- ================= Splash ================= -->
 
@@ -825,12 +815,81 @@ function playAppleText(el) {
 
 /* ================= Page Out Transition ================= */
 
-function navigateTo(url) {
+/* ================= iOS Card Expand Navigate ================= */
+
+function navigateTo(url, cardEl) {
   if (!url || url === "#") return;
-  const mask = document.getElementById("page-out");
-  mask.classList.add("active");
-  setTimeout(() => { window.location.href = url; }, 520);
+
+  const expand = document.getElementById("card-expand");
+  const bg     = document.getElementById("card-expand-bg");
+  const rect   = cardEl.getBoundingClientRect();
+
+  // 把展开层定位到卡片当前位置
+  expand.style.cssText = `
+    top:    ${rect.top}px;
+    left:   ${rect.left}px;
+    width:  ${rect.width}px;
+    height: ${rect.height}px;
+    border-radius: var(--radius);
+    background: var(--bg2);
+  `;
+
+  // 复制卡片背景图（让展开层看起来像卡片本身）
+  const cardMain = cardEl.querySelector(".card-main");
+  if (cardMain) {
+    const bg2 = window.getComputedStyle(cardMain).backgroundImage;
+    expand.style.backgroundImage  = bg2;
+    expand.style.backgroundSize   = "cover";
+    expand.style.backgroundPosition = "center";
+  }
+
+  bg.classList.add("active");
+
+  // 强制重排后再加动画类，确保起始帧生效
+  expand.offsetHeight;
+
+  // 动态注入关键帧（目标是全屏）
+  const existingKf = document.getElementById("expand-kf");
+  if (existingKf) existingKf.remove();
+  const kfStyle = document.createElement("style");
+  kfStyle.id = "expand-kf";
+  kfStyle.textContent = `
+    @keyframes cardExpand{
+      from{
+        top:    ${rect.top}px;
+        left:   ${rect.left}px;
+        width:  ${rect.width}px;
+        height: ${rect.height}px;
+        border-radius: 32px;
+        opacity: 1;
+      }
+      to{
+        top:0; left:0;
+        width:100vw; height:100dvh;
+        border-radius:0px;
+        opacity:1;
+      }
+    }
+  `;
+  document.head.appendChild(kfStyle);
+
+  expand.classList.add("expanding");
+
+  setTimeout(() => {
+    window.location.href = url;
+  }, 440);
 }
+
+/* ================= bfcache 修复：返回时重置展开层 ================= */
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted) {
+    const expand = document.getElementById("card-expand");
+    const bg     = document.getElementById("card-expand-bg");
+    expand.classList.remove("expanding");
+    expand.style.cssText = "";
+    bg.classList.remove("active");
+  }
+});
 
 /* ================= Main ================= */
 
@@ -861,7 +920,7 @@ function startPage() {
   cards.forEach(card => {
     card.addEventListener("click", () => {
       const href = card.dataset.href;
-      navigateTo(href);
+      navigateTo(href, card);
     });
   });
 
