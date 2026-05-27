@@ -806,7 +806,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     <div data-lang="jp">日本語</div>
   </div>
 </div>
-```
 
   </div>
 
@@ -924,61 +923,25 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
 /* ================= Splash ================= */
 
-window.addEventListener("pageshow", (e) => {
+window.addEventListener("load", () => {
 
-  if (!e.persisted) return;
-
-  const expand = document.getElementById("card-expand");
-  const bg     = document.getElementById("card-expand-bg");
-
-  // 找到之前点击的卡片
-  const lastCardIndex = sessionStorage.getItem("last-card");
-
-  if (lastCardIndex !== null) {
-
-    const cards = document.querySelectorAll(".card, .contact-item");
-    const target = cards[lastCardIndex];
-
-    if (target) {
-
-      const rect = target.getBoundingClientRect();
-
-      // 当前是全屏状态
-      expand.style.cssText = `
-        position:fixed;
-        top:0;
-        left:0;
-        width:100vw;
-        height:100dvh;
-        border-radius:0;
-        z-index:997;
-        opacity:1;
-        background:var(--bg2);
-        transition:all .42s cubic-bezier(.32,.72,0,1);
-      `;
-
-      bg.classList.add("active");
-
-      requestAnimationFrame(() => {
-
-        expand.style.top = rect.top + "px";
-        expand.style.left = rect.left + "px";
-        expand.style.width = rect.width + "px";
-        expand.style.height = rect.height + "px";
-        expand.style.borderRadius = "32px";
-        expand.style.opacity = "0";
-
-        bg.classList.remove("active");
-
-      });
-
-      setTimeout(() => {
-        expand.classList.remove("expanding");
-        expand.style.cssText = "";
-      }, 450);
-    }
-
+  if (window.innerWidth <= 180) {
+    const page = document.querySelector(".page");
+    page.style.opacity = 1;
+    page.style.visibility = "visible";
+    document.body.style.overflow = "auto";
+    startPage();
+    return;
   }
+
+  setTimeout(() => {
+    document.getElementById("splash").classList.add("fade");
+    const page = document.querySelector(".page");
+    page.style.opacity = 1;
+    page.style.visibility = "visible";
+    document.body.style.overflow = "auto";
+    startPage();
+  }, 2000);
 
 });
 
@@ -1001,17 +964,13 @@ function playAppleText(el) {
 /* ================= iOS Card Expand Navigate ================= */
 
 function navigateTo(url, cardEl) {
-  
-  const allCards = [...document.querySelectorAll(".card, .contact-item")];
-sessionStorage.setItem("last-card", allCards.indexOf(cardEl));
-
   if (!url || url === "#") return;
 
   const expand = document.getElementById("card-expand");
   const bg     = document.getElementById("card-expand-bg");
   const rect   = cardEl.getBoundingClientRect();
 
-  // 把展开层定位到卡片当前位置
+  // 基础定位
   expand.style.cssText = `
     top:    ${rect.top}px;
     left:   ${rect.left}px;
@@ -1021,21 +980,24 @@ sessionStorage.setItem("last-card", allCards.indexOf(cardEl));
     background: var(--bg2);
   `;
 
-  // 复制卡片背景图（让展开层看起来像卡片本身）
+  // 有图片就复制图片，没有（联络条目）就用平台色
   const cardMain = cardEl.querySelector(".card-main");
   if (cardMain) {
-    const bg2 = window.getComputedStyle(cardMain).backgroundImage;
-    expand.style.backgroundImage  = bg2;
-    expand.style.backgroundSize   = "cover";
+    const bgImg = window.getComputedStyle(cardMain).backgroundImage;
+    expand.style.backgroundImage    = bgImg;
+    expand.style.backgroundSize     = "cover";
     expand.style.backgroundPosition = "center";
+  } else {
+    const platformColor = getComputedStyle(cardEl).getPropertyValue("--platform-color").trim();
+    if (platformColor) {
+      expand.style.background = platformColor;
+    }
   }
 
   bg.classList.add("active");
+  expand.offsetHeight; // 强制重排
 
-  // 强制重排后再加动画类，确保起始帧生效
-  expand.offsetHeight;
-
-  // 动态注入关键帧（目标是全屏）
+  // 动态注入关键帧
   const existingKf = document.getElementById("expand-kf");
   if (existingKf) existingKf.remove();
   const kfStyle = document.createElement("style");
@@ -1043,18 +1005,14 @@ sessionStorage.setItem("last-card", allCards.indexOf(cardEl));
   kfStyle.textContent = `
     @keyframes cardExpand{
       from{
-        top:    ${rect.top}px;
-        left:   ${rect.left}px;
-        width:  ${rect.width}px;
-        height: ${rect.height}px;
-        border-radius: 32px;
-        opacity: 1;
+        top:${rect.top}px; left:${rect.left}px;
+        width:${rect.width}px; height:${rect.height}px;
+        border-radius:18px; opacity:1;
       }
       to{
         top:0; left:0;
         width:100vw; height:100dvh;
-        border-radius:0px;
-        opacity:1;
+        border-radius:0px; opacity:1;
       }
     }
   `;
@@ -1062,9 +1020,7 @@ sessionStorage.setItem("last-card", allCards.indexOf(cardEl));
 
   expand.classList.add("expanding");
 
-  setTimeout(() => {
-    window.location.href = url;
-  }, 440);
+  setTimeout(() => { window.location.href = url; }, 440);
 }
 
 /* ================= bfcache 修复：返回时重置展开层 ================= */
@@ -1270,7 +1226,7 @@ function renderContacts(lang) {
 }
 
 /* ================= Language ================= */
-
+  
 const LANG = {
   zh: {
     intro:      "你好，这里是凌绡",
