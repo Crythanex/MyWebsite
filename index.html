@@ -924,25 +924,60 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
 /* ================= Splash ================= */
 
-window.addEventListener("load", () => {
+window.addEventListener("pageshow", (e) => {
 
-  if (window.innerWidth <= 180) {
-    const page = document.querySelector(".page");
-    page.style.opacity = 1;
-    page.style.visibility = "visible";
-    document.body.style.overflow = "auto";
-    startPage();
-    return;
+  if (!e.persisted) return;
+
+  const expand = document.getElementById("card-expand");
+  const bg     = document.getElementById("card-expand-bg");
+
+  // 找到之前点击的卡片
+  const lastCardIndex = sessionStorage.getItem("last-card");
+
+  if (lastCardIndex !== null) {
+
+    const cards = document.querySelectorAll(".card, .contact-item");
+    const target = cards[lastCardIndex];
+
+    if (target) {
+
+      const rect = target.getBoundingClientRect();
+
+      // 当前是全屏状态
+      expand.style.cssText = `
+        position:fixed;
+        top:0;
+        left:0;
+        width:100vw;
+        height:100dvh;
+        border-radius:0;
+        z-index:997;
+        opacity:1;
+        background:var(--bg2);
+        transition:all .42s cubic-bezier(.32,.72,0,1);
+      `;
+
+      bg.classList.add("active");
+
+      requestAnimationFrame(() => {
+
+        expand.style.top = rect.top + "px";
+        expand.style.left = rect.left + "px";
+        expand.style.width = rect.width + "px";
+        expand.style.height = rect.height + "px";
+        expand.style.borderRadius = "32px";
+        expand.style.opacity = "0";
+
+        bg.classList.remove("active");
+
+      });
+
+      setTimeout(() => {
+        expand.style.cssText = "";
+      }, 450);
+    }
+
   }
-
-  setTimeout(() => {
-    document.getElementById("splash").classList.add("fade");
-    const page = document.querySelector(".page");
-    page.style.opacity = 1;
-    page.style.visibility = "visible";
-    document.body.style.overflow = "auto";
-    startPage();
-  }, 2000);
 
 });
 
@@ -965,6 +1000,10 @@ function playAppleText(el) {
 /* ================= iOS Card Expand Navigate ================= */
 
 function navigateTo(url, cardEl) {
+  
+  const allCards = [...document.querySelectorAll(".card, .contact-item")];
+sessionStorage.setItem("last-card", allCards.indexOf(cardEl));
+
   if (!url || url === "#") return;
 
   const expand = document.getElementById("card-expand");
