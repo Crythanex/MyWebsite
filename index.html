@@ -1,40 +1,18 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Crythane</title>
-
 <style>
 
 /* ================= Fonts ================= */
 
-@font-face{
-  font-family:"Righteous";
-  src:url("fonts/Righteous-Regular.ttf");
-  font-display:swap;
-}
-@font-face{
-  font-family:"Urbanist";
-  src:url("fonts/Urbanist-Bold.ttf");
-  font-display:swap;
-}
-@font-face{
-  font-family:"Alimama";
-  src:url("fonts/AlimamaShuHeiTi-Bold.ttf");
-  font-display:swap;
-}
-@font-face{
-  font-family:"Harmony";
-  src:url("fonts/HarmonyOS_Sans_SC_Regular.ttf");
-  font-display:swap;
-}
-@font-face{
-  font-family:"Kazesawa";
-  src:url("fonts/Kazesawa-Bold.ttf");
-  font-display:swap;
-}
+@font-face{ font-family:"Righteous"; src:url("fonts/Righteous-Regular.ttf"); font-display:swap; }
+@font-face{ font-family:"Urbanist";  src:url("fonts/Urbanist-Bold.ttf");     font-display:swap; }
+@font-face{ font-family:"Alimama";   src:url("fonts/AlimamaShuHeiTi-Bold.ttf"); font-display:swap; }
+@font-face{ font-family:"Harmony";   src:url("fonts/HarmonyOS_Sans_SC_Regular.ttf"); font-display:swap; }
+@font-face{ font-family:"Kazesawa";  src:url("fonts/Kazesawa-Bold.ttf");     font-display:swap; }
 
 /* ================= Theme Variables ================= */
 
@@ -59,7 +37,6 @@
   --shadow:    0 16px 40px rgba(0,0,0,.28);
   --shadow-hover: 0 28px 60px rgba(0,0,0,.44);
   --avatar-shadow: 0 12px 40px rgba(0,0,0,.36);
-  --avatar-glow:   0 0 0 0 rgba(115,230,235,0);
 }
 
 body.theme-light{
@@ -82,16 +59,11 @@ body.theme-light{
   --shadow:    0 16px 40px rgba(0,0,0,.10);
   --shadow-hover: 0 28px 60px rgba(0,0,0,.18);
   --avatar-shadow: 0 12px 40px rgba(0,0,0,.14);
-  --avatar-glow:   0 0 0 0 rgba(42,184,196,0);
 }
 
 /* ================= Base ================= */
 
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html{ scroll-behavior:smooth; }
 
 body{
@@ -107,7 +79,7 @@ body.lang-zh{ font-family:"Urbanist","Alimama",-apple-system,sans-serif; }
 body.lang-en{ font-family:"Urbanist",-apple-system,sans-serif; }
 body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 
-/* ================= Theme Ripple Overlay ================= */
+/* ================= Theme Ripple ================= */
 
 #theme-ripple{
   position:fixed;
@@ -115,24 +87,6 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
   z-index:998;
   pointer-events:none;
   overflow:hidden;
-}
-
-#theme-ripple::after{
-  content:"";
-  position:absolute;
-  border-radius:50%;
-  transform:scale(0);
-  opacity:0;
-  transition:none;
-}
-
-#theme-ripple.ripple-play::after{
-  animation:themeRipple .6s cubic-bezier(.22,.61,.36,1) forwards;
-}
-
-@keyframes themeRipple{
-  0%  { transform:scale(0);   opacity:1; }
-  100%{ transform:scale(1);   opacity:0; }
 }
 
 /* ================= Splash ================= */
@@ -148,10 +102,7 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
   transition:background .35s;
 }
 
-#logo{
-  width:340px;
-  max-width:74vw;
-}
+#logo{ width:340px; max-width:74vw; }
 
 #logo text{
   font-family:"Righteous";
@@ -168,7 +119,6 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 
 @keyframes draw{ to{ stroke-dashoffset:0; } }
 @keyframes fill-text{ to{ fill:var(--accent); } }
-
 #splash.fade{ animation:splashOut .85s ease forwards; }
 @keyframes splashOut{ to{ opacity:0; visibility:hidden; } }
 
@@ -183,38 +133,48 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 /* ================= Header ================= */
 
 .header{
-  position:sticky;
+  position:fixed;
   top:0;
+  left:0;
+  right:0;
   z-index:10;
   padding:calc(16px + env(safe-area-inset-top)) 24px 16px;
   display:flex;
   justify-content:center;
   align-items:center;
+  background:transparent;
+  transition:background .4s, backdrop-filter .4s;
+}
+
+.header.scrolled{
   background:var(--header-bg);
   backdrop-filter:blur(26px) saturate(160%);
   -webkit-backdrop-filter:blur(26px) saturate(160%);
-  transition:background .35s;
 }
 
 .title{
   font-family:"Righteous";
   font-size:30px;
   letter-spacing:.5px;
-  color:var(--accent);
+  color:#fff;
   opacity:0;
   visibility:hidden;
   transform:translateY(-10px);
   transition:
     opacity .55s cubic-bezier(.22,.61,.36,1),
     transform .55s cubic-bezier(.22,.61,.36,1),
-    visibility .55s,
-    color .35s;
+    visibility .55s;
 }
 
 .header.show-title .title{
   opacity:1;
   visibility:visible;
   transform:translateY(0);
+}
+
+/* title 在浅色模式滚动后跟随主题色 */
+body.theme-light .header.scrolled .title{
+  color:var(--accent);
 }
 
 /* ================= Theme Switch ================= */
@@ -230,14 +190,21 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
   width:40px;
   height:32px;
   border-radius:10px;
-  border:1px solid var(--accent-border);
-  background:var(--btn-bg);
-  color:var(--accent);
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.08);
+  color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
   transition:border-color .35s, background .35s, color .35s, transform .18s;
+}
+
+/* 滚动后跟随主题 */
+.header.scrolled .theme-btn{
+  border-color:var(--accent-border);
+  background:var(--btn-bg);
+  color:var(--accent);
 }
 
 .theme-btn:active{ transform:scale(.92); }
@@ -249,24 +216,10 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
   transition:opacity .25s, transform .35s cubic-bezier(.34,1.56,.64,1);
 }
 
-/* 图标切换带弹性旋转 */
-.theme-btn .icon-moon{
-  opacity:1;
-  transform:rotate(0deg) scale(1);
-}
-.theme-btn .icon-sun{
-  opacity:0;
-  transform:rotate(-90deg) scale(.5);
-}
-
-body.theme-light .theme-btn .icon-moon{
-  opacity:0;
-  transform:rotate(90deg) scale(.5);
-}
-body.theme-light .theme-btn .icon-sun{
-  opacity:1;
-  transform:rotate(0deg) scale(1);
-}
+.theme-btn .icon-moon{ opacity:1; transform:rotate(0deg) scale(1); }
+.theme-btn .icon-sun{  opacity:0; transform:rotate(-90deg) scale(.5); }
+body.theme-light .theme-btn .icon-moon{ opacity:0; transform:rotate(90deg) scale(.5); }
+body.theme-light .theme-btn .icon-sun{  opacity:1; transform:rotate(0deg) scale(1); }
 
 /* ================= Language ================= */
 
@@ -281,14 +234,20 @@ body.theme-light .theme-btn .icon-sun{
   width:40px;
   height:32px;
   border-radius:10px;
-  border:1px solid var(--accent-border);
-  background:var(--btn-bg);
-  color:var(--accent);
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.08);
+  color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
   transition:border-color .35s, background .35s, color .35s, transform .18s;
+}
+
+.header.scrolled .lang-btn{
+  border-color:var(--accent-border);
+  background:var(--btn-bg);
+  color:var(--accent);
 }
 
 .lang-btn:active{ transform:scale(.92); }
@@ -314,11 +273,7 @@ body.theme-light .theme-btn .icon-sun{
   border:1px solid var(--border2);
 }
 
-.lang-menu.show{
-  opacity:1;
-  pointer-events:auto;
-  transform:translateY(0) scale(1);
-}
+.lang-menu.show{ opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
 
 .lang-menu div{
   padding:10px 18px;
@@ -326,65 +281,157 @@ body.theme-light .theme-btn .icon-sun{
   font-size:14px;
   white-space:nowrap;
   color:var(--text);
-  transition:background .18s, color .18s;
+  transition:background .18s;
 }
 
 .lang-menu div:hover{ background:var(--border); }
 
-/* ================= Avatar ================= */
+/* ================= Hero ================= */
 
-.avatar-wrap{
+.hero{
+  position:relative;
+  width:100%;
+  height:100dvh;
+  overflow:hidden;
   display:flex;
-  justify-content:center;
-  margin:58px 0 30px;
+  align-items:flex-end;
 }
 
-.avatar{
-  width:200px;
-  height:200px;
-  border-radius:50%;
-  background-image:url("fonts/1000075580.jpeg");
+.hero-bg{
+  position:absolute;
+  inset:0;
+  background-image:url("fonts/Background.jpeg");
   background-size:cover;
   background-position:center;
-  background-repeat:no-repeat;
-  box-shadow:var(--avatar-shadow);
-  transition:box-shadow .35s;
+  /* 视差：JS 驱动 */
+  will-change:transform;
+  transition:transform .05s linear;
 }
 
-/* ================= Intro ================= */
+/* 渐变遮罩：底部让文字可读，顶部不过曝 */
+.hero-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(8,25,33,.18) 0%,
+      rgba(8,25,33,0)   30%,
+      rgba(8,25,33,0)   50%,
+      rgba(8,25,33,.55) 80%,
+      rgba(8,25,33,.88) 100%
+    );
+}
 
-.intro{
-  text-align:center;
-  font-size:26px;
-  margin-bottom:54px;
+/* 浅色模式遮罩调整 */
+body.theme-light .hero-bg::after{
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(240,244,248,.22) 0%,
+      rgba(240,244,248,0)   30%,
+      rgba(240,244,248,0)   50%,
+      rgba(240,244,248,.55) 80%,
+      rgba(240,244,248,.92) 100%
+    );
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  padding:0 40px 64px;
+  width:100%;
+}
+
+/* 中文大标题 */
+.hero-name-zh{
+  font-family:"Alimama",sans-serif;
+  font-size:clamp(52px, 12vw, 96px);
+  line-height:1;
+  color:#fff;
+  letter-spacing:.04em;
+  margin:0 0 6px;
+  /* 入场 */
   opacity:0;
-  transition:.55s cubic-bezier(.22,.61,.36,1);
-  color:var(--text);
+  transform:translateY(30px);
+  transition:opacity .8s .1s cubic-bezier(.22,.61,.36,1), transform .8s .1s cubic-bezier(.22,.61,.36,1);
 }
 
-.intro.absorb{
-  transform:translateY(-70px);
+body.theme-light .hero-name-zh{ color:#1a2535; }
+
+/* 英文副标题 */
+.hero-name-en{
+  font-family:"Righteous",sans-serif;
+  font-size:clamp(22px, 5vw, 40px);
+  line-height:1;
+  color:var(--accent);
+  letter-spacing:.12em;
+  margin:0 0 20px;
   opacity:0;
+  transform:translateY(24px);
+  transition:opacity .8s .22s cubic-bezier(.22,.61,.36,1), transform .8s .22s cubic-bezier(.22,.61,.36,1);
 }
 
-/* ================= Apple Text ================= */
-
-.apple-text span{
-  display:inline-block;
+/* tagline */
+.hero-tagline{
+  font-size:clamp(13px, 3vw, 17px);
+  color:rgba(255,255,255,.62);
+  letter-spacing:.06em;
+  margin:0 0 36px;
   opacity:0;
-  visibility:hidden;
-  transform:translateY(14px);
-  will-change:transform,opacity;
+  transform:translateY(18px);
+  transition:opacity .8s .34s cubic-bezier(.22,.61,.36,1), transform .8s .34s cubic-bezier(.22,.61,.36,1);
 }
 
-.apple-text span.show{
+body.theme-light .hero-tagline{ color:rgba(20,35,55,.5); }
+
+/* 入场触发 */
+.hero-content.show .hero-name-zh,
+.hero-content.show .hero-name-en,
+.hero-content.show .hero-tagline,
+.hero-content.show .hero-scroll{
   opacity:1;
-  visibility:visible;
   transform:translateY(0);
-  transition:
-    opacity .55s cubic-bezier(.22,.61,.36,1),
-    transform .55s cubic-bezier(.22,.61,.36,1),
-    visibility .55s;
+}
+
+/* 向下滚动箭头 */
+.hero-scroll{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:rgba(255,255,255,.5);
+  font-size:13px;
+  letter-spacing:.1em;
+  cursor:pointer;
+  width:fit-content;
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .8s .48s cubic-bezier(.22,.61,.36,1), transform .8s .48s cubic-bezier(.22,.61,.36,1), color .2s;
+}
+
+.hero-scroll:hover{ color:rgba(255,255,255,.85); }
+
+body.theme-light .hero-scroll{ color:rgba(20,35,55,.4); }
+body.theme-light .hero-scroll:hover{ color:rgba(20,35,55,.75); }
+
+.hero-scroll svg{
+  width:20px;
+  height:20px;
+  animation:scrollBounce 2s ease-in-out infinite;
+}
+
+@keyframes scrollBounce{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(5px); }
+}
+
+/* ================= Section（卡片区） ================= */
+
+.section{
+  background:var(--bg);
+  padding-top:56px;
+  transition:background .35s;
 }
 
 /* ================= Cards ================= */
@@ -396,15 +443,13 @@ body.theme-light .theme-btn .icon-sun{
   gap:28px;
 }
 
-/* 奇数卡从左、偶数卡从右滑入 */
 .card{
   border-radius:var(--radius);
   overflow:hidden;
   opacity:0;
   visibility:hidden;
-  transform:translateY(48px) scale(.965);
-  filter:blur(8px);
-  transition:.9s cubic-bezier(.16,1,.3,1);
+  transform:translateY(32px);
+  transition:opacity .65s cubic-bezier(.22,.61,.36,1), transform .65s cubic-bezier(.22,.61,.36,1), visibility .65s;
   background:var(--bg2);
   border:1px solid var(--border);
   box-shadow:var(--shadow);
@@ -414,11 +459,9 @@ body.theme-light .theme-btn .icon-sun{
 .card.show{
   opacity:1;
   visibility:visible;
-  transform:translateY(0) scale(1);
-  filter:blur(0);
+  transform:translateY(0);
 }
 
-/* 桌面 hover 上浮 */
 @media (hover:hover){
   .card:hover{
     transform:translateY(-6px) scale(1.012);
@@ -426,11 +469,7 @@ body.theme-light .theme-btn .icon-sun{
   }
 }
 
-/* 移动端按下反馈 */
-.card:active{
-  transform:scale(.975);
-  transition:transform .12s;
-}
+.card:active{ transform:scale(.975); transition:transform .12s; }
 
 .card-main{
   aspect-ratio:5/3;
@@ -439,11 +478,8 @@ body.theme-light .theme-btn .icon-sun{
   background-repeat:no-repeat;
   position:relative;
   overflow:hidden;
-  /* 视差容器 */
-  will-change:transform;
 }
 
-/* 图片视差：由 JS 驱动，这里只设基础 */
 .card-main::before{
   content:"";
   position:absolute;
@@ -490,9 +526,8 @@ body.theme-light .theme-btn .icon-sun{
 .arrow-btn:active{ transform:scale(.88); }
 .arrow-btn svg{ width:22px; height:22px; }
 
-/* ================= iOS Card Expand Transition ================= */
+/* ================= iOS Card Expand ================= */
 
-/* 展开克隆层：从卡片位置拉伸到全屏 */
 #card-expand{
   position:fixed;
   z-index:997;
@@ -500,7 +535,6 @@ body.theme-light .theme-btn .icon-sun{
   overflow:hidden;
   pointer-events:none;
   opacity:0;
-  /* 初始位置由JS动态设置 */
   background:var(--bg2);
   will-change:transform,border-radius,opacity;
 }
@@ -511,15 +545,9 @@ body.theme-light .theme-btn .icon-sun{
 }
 
 @keyframes cardExpand{
-  to{
-    top:0; left:0;
-    width:100vw; height:100vh;
-    border-radius:0;
-    transform:none;
-  }
+  to{ top:0; left:0; width:100vw; height:100vh; border-radius:0; transform:none; }
 }
 
-/* 展开时背景轻微暗化 */
 #card-expand-bg{
   position:fixed;
   inset:0;
@@ -529,9 +557,7 @@ body.theme-light .theme-btn .icon-sun{
   transition:background .38s;
 }
 
-#card-expand-bg.active{
-  background:rgba(0,0,0,.22);
-}
+#card-expand-bg.active{ background:rgba(0,0,0,.22); }
 
 /* ================= Contact Divider ================= */
 
@@ -574,20 +600,12 @@ body.theme-light .theme-btn .icon-sun{
   border:1px solid var(--border);
   box-shadow:var(--shadow);
   cursor:pointer;
-  /* 入场动画复用card逻辑 */
   opacity:0;
   visibility:hidden;
-  transform:translateY(28px) scale(.97);
-  filter:blur(5px);
-  transition:.75s cubic-bezier(.16,1,.3,1);
+  transition:opacity .45s cubic-bezier(.22,.61,.36,1), visibility .45s, transform .18s, box-shadow .18s;
 }
 
-.contact-item.show{
-  opacity:1;
-  visibility:visible;
-  transform:translateY(0) scale(1);
-  filter:blur(0);
-}
+.contact-item.show{ opacity:1; visibility:visible; }
 
 @media (hover:hover){
   .contact-item:hover{
@@ -596,10 +614,7 @@ body.theme-light .theme-btn .icon-sun{
   }
 }
 
-.contact-item:active{
-  transform:scale(.975);
-  transition:transform .1s;
-}
+.contact-item:active{ transform:scale(.975); transition:transform .1s; }
 
 .contact-icon{
   width:42px;
@@ -614,10 +629,7 @@ body.theme-light .theme-btn .icon-sun{
   transition:background .35s;
 }
 
-.contact-icon svg{
-  width:20px;
-  height:20px;
-}
+.contact-icon svg{ width:20px; height:20px; }
 
 .contact-name{
   flex:1;
@@ -642,34 +654,9 @@ body.theme-light .theme-btn .icon-sun{
 }
 
 .contact-arrow:active{ transform:scale(.88); }
+.contact-arrow svg{ width:16px; height:16px; }
 
-.contact-arrow svg{
-  width:16px;
-  height:16px;
-}
-
-/* 响应式：iPad以上撑宽 */
-@media (min-width:900px) and (max-width:1299px){
-  .contact-list{ padding:0 40px 80px; }
-  .contact-divider{ padding:0 40px; }
-}
-
-@media (min-width:1300px){
-  .contact-list{ padding:0 12vw 90px; }
-  .contact-divider{ padding:0 12vw; }
-}
-
-/* Watch端 */
-@media (max-width:180px){
-  .contact-list{ padding:0 8px 32px; gap:6px; }
-  .contact-divider{ padding:0 8px; font-size:10px; }
-  .contact-item{ padding:10px 10px; border-radius:10px; gap:10px; }
-  .contact-icon{ width:30px; height:30px; border-radius:8px; }
-  .contact-icon svg{ width:14px; height:14px; }
-  .contact-name{ font-size:12px; }
-  .contact-arrow{ width:24px; height:24px; }
-  .contact-arrow svg{ width:11px; height:11px; }
-}
+/* ================= Copyright ================= */
 
 .copyright{
   text-align:center;
@@ -690,8 +677,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
    ============================================= */
 
 @media (max-width:320px){
-  .avatar{ width:110px; height:110px; }
-  .intro{ font-size:20px; margin-bottom:36px; }
+  .hero-content{ padding:0 20px 48px; }
   .card-list{ padding:0 14px 60px; gap:18px; }
   .card-footer{ font-size:17px; padding:16px 18px; }
   .arrow-btn{ width:42px; height:42px; }
@@ -699,222 +685,199 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 }
 
 @media (min-width:900px) and (max-width:1299px){
-  .card-list{
-    padding:0 40px 80px;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:28px;
-  }
-  .avatar{ width:180px; height:180px; }
-  .intro{ font-size:28px; }
-  .avatar-wrap{ margin:64px 0 32px; }
+  .card-list{ padding:0 40px 80px; display:grid; grid-template-columns:repeat(2,1fr); gap:28px; }
+  .contact-list{ padding:0 40px 80px; }
+  .contact-divider{ padding:0 40px; }
+  .hero-content{ padding:0 64px 80px; }
 }
 
 @media (min-width:1300px){
-  .card-list{
-    padding:0 12vw 90px;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:32px;
-  }
-  .avatar{ width:200px; height:200px; }
-  .intro{ font-size:28px; }
+  .card-list{ padding:0 12vw 90px; display:grid; grid-template-columns:repeat(2,1fr); gap:32px; }
+  .contact-list{ padding:0 12vw 90px; }
+  .contact-divider{ padding:0 12vw; }
+  .hero-content{ padding:0 10vw 90px; }
 }
 
+/* Watch */
 @media (max-width:180px){
   #splash{ display:none; }
   .page{ opacity:1 !important; visibility:visible !important; }
   body{ overflow:auto; }
-  .header{ padding:8px 10px; justify-content:flex-start; }
+  .hero{ height:50dvh; min-height:200px; }
+  .hero-name-zh{ font-size:28px; }
+  .hero-name-en{ font-size:14px; }
+  .hero-tagline{ display:none; }
+  .hero-scroll{ display:none; }
+  .hero-content{ padding:0 12px 28px; }
+  .header{ padding:6px 8px; }
   .lang-switch{ display:none; }
   .theme-switch{ display:none; }
-  .title{
-    font-size:16px;
-    opacity:1 !important;
-    visibility:visible !important;
-    transform:none !important;
-  }
-  .avatar-wrap{ margin:24px 0 14px; }
-  .avatar{ width:60px; height:60px; }
-  .intro{ font-size:12px; margin-bottom:16px; padding:0 8px; line-height:1.5; }
-  .card-list{ padding:0 8px 32px; gap:8px; display:flex; flex-direction:column; }
+  .title{ font-size:14px; opacity:1 !important; visibility:visible !important; transform:none !important; }
+  .section{ padding-top:24px; }
+  .card-list{ padding:0 8px 24px; gap:8px; display:flex; flex-direction:column; }
   .card{ border-radius:12px; }
   .card-main{ display:none; }
   .card-footer{ font-size:12px; padding:10px 12px; border-top:none; }
   .arrow-btn{ width:26px; height:26px; }
   .arrow-btn svg{ width:13px; height:13px; }
-  .copyright{ font-size:9px; padding:4px 8px 16px; letter-spacing:0; }
+  .contact-list{ padding:0 8px 24px; gap:6px; }
+  .contact-divider{ padding:0 8px; font-size:10px; }
+  .contact-item{ padding:10px; border-radius:10px; gap:10px; }
+  .contact-icon{ width:30px; height:30px; border-radius:8px; }
+  .contact-icon svg{ width:14px; height:14px; }
+  .contact-name{ font-size:12px; }
+  .contact-arrow{ width:24px; height:24px; }
+  .contact-arrow svg{ width:11px; height:11px; }
+  .copyright{ font-size:9px; padding:4px 8px 16px; }
 }
 
 </style>
-
 </head>
 
 <body class="lang-zh">
 
-<!-- 主题切换涟漪层 -->
-
 <div id="theme-ripple"></div>
-
-<!-- 卡片展开动画层 -->
-
 <div id="card-expand-bg"></div>
 <div id="card-expand"></div>
 
-<!-- ================= Splash ================= -->
-
+<!-- Splash -->
 <div id="splash">
   <svg id="logo" viewBox="0 0 600 160">
     <text x="50%" y="60%" text-anchor="middle">Crythane</text>
   </svg>
 </div>
 
-<!-- ================= Page ================= -->
-
 <div class="page">
 
-  <div class="header">
+  <!-- Header -->
+  <div class="header" id="mainHeader">
 
-<div class="theme-switch">
-  <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
-    <svg class="icon-moon" viewBox="0 0 24 24" fill="none">
-      <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
-        stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <svg class="icon-sun" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
-      <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  </button>
-</div>
+    <div class="theme-switch">
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none">
+          <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
 
-<div class="title">Crythane</div>
+    <div class="title">Crythane</div>
 
-<div class="lang-switch">
-  <button class="lang-btn" id="langBtn" aria-label="Language">
-    <svg viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-      <ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="2"/>
-      <path d="M3 12h18" stroke="currentColor" stroke-width="2"/>
-    </svg>
-  </button>
-  <div class="lang-menu" id="langMenu">
-    <div data-lang="zh">简体中文</div>
-    <div data-lang="en">English</div>
-    <div data-lang="jp">日本語</div>
-  </div>
-</div>
-
-  </div>
-
-  <div class="avatar-wrap">
-    <div class="avatar"></div>
-  </div>
-
-  <div class="intro apple-text" data-i18n="intro"></div>
-
-  <div class="card-list">
-
-<div class="card" data-href="https://sunland.dev">
-  <div class="card-main" style="background-image:url('fonts/card-1.jpeg')"></div>
-  <div class="card-footer">
-    <span data-i18n="intro_card">自介</span>
-    <button class="arrow-btn" type="button">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
-<div class="card" data-href="https://sunland.dev">
-  <div class="card-main" style="background-image:url('fonts/card-2.jpeg')"></div>
-  <div class="card-footer">
-    <span data-i18n="gallery">图库</span>
-    <button class="arrow-btn" type="button">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
-<div class="card" data-href="https://sunland.dev">
-  <div class="card-main" style="background-image:url('fonts/card-3.jpeg')"></div>
-  <div class="card-footer">
-    <span data-i18n="commission">约稿</span>
-    <button class="arrow-btn" type="button">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
-<div class="card" data-href="https://sunland.dev">
-  <div class="card-main" style="background-image:url('fonts/card-4.jpeg')"></div>
-  <div class="card-footer">
-    <span data-i18n="projects">博客</span>
-    <button class="arrow-btn" type="button">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
-<div class="card" data-href="https://sunland.dev">
-  <div class="card-main" style="background-image:url('fonts/card-5.jpeg')"></div>
-  <div class="card-footer">
-    <span data-i18n="contact">联络</span>
-    <button class="arrow-btn" type="button">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
-<div class="card" data-href="https://sunland.dev">
-  <div class="card-main" style="background-image:url('fonts/card-6.jpeg')"></div>
-  <div class="card-footer">
-    <span data-i18n="friends">友链</span>
-    <button class="arrow-btn" type="button">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
-<div class="card" data-href="https://sunland.dev">
-  <div class="card-main" style="background-image:url('fonts/card-7.jpeg')"></div>
-  <div class="card-footer">
-    <span data-i18n="donation">捐赠</span>
-    <button class="arrow-btn" type="button">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/>
-      </svg>
-    </button>
-  </div>
-</div>
+    <div class="lang-switch">
+      <button class="lang-btn" id="langBtn" aria-label="Language">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+          <ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="2"/>
+          <path d="M3 12h18" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+      <div class="lang-menu" id="langMenu">
+        <div data-lang="zh">简体中文</div>
+        <div data-lang="en">English</div>
+        <div data-lang="jp">日本語</div>
+      </div>
+    </div>
 
   </div>
 
-  <!-- 联络分割线 -->
-
-  <div class="contact-divider">
-    <span data-i18n="contact">联络</span>
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-content" id="heroContent">
+      <div class="hero-name-zh" data-i18n="hero_zh">凌绡</div>
+      <div class="hero-name-en">Crythane</div>
+      <div class="hero-tagline" data-i18n="hero_tag">Fursona · 内容创作 · 视觉设计</div>
+      <div class="hero-scroll" id="heroScroll">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span data-i18n="scroll">向下探索</span>
+      </div>
+    </div>
   </div>
 
-  <!-- 联络条目列表：由JS按语言动态渲染 -->
+  <!-- Section：卡片区 -->
+  <div class="section">
 
-  <div class="contact-list" id="contactList"></div>
+    <div class="card-list">
 
-  <div class="copyright" id="copyright">
-    版权所有 ©2023-2026 Crythane 保留所有权利
+      <div class="card" data-href="https://sunland.dev">
+        <div class="card-main" style="background-image:url('fonts/card-1.jpeg')"></div>
+        <div class="card-footer">
+          <span data-i18n="intro_card">自介</span>
+          <button class="arrow-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" data-href="https://sunland.dev">
+        <div class="card-main" style="background-image:url('fonts/card-2.jpeg')"></div>
+        <div class="card-footer">
+          <span data-i18n="gallery">图库</span>
+          <button class="arrow-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" data-href="https://sunland.dev">
+        <div class="card-main" style="background-image:url('fonts/card-3.jpeg')"></div>
+        <div class="card-footer">
+          <span data-i18n="commission">约稿</span>
+          <button class="arrow-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" data-href="https://sunland.dev">
+        <div class="card-main" style="background-image:url('fonts/card-4.jpeg')"></div>
+        <div class="card-footer">
+          <span data-i18n="projects">博客</span>
+          <button class="arrow-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" data-href="https://sunland.dev">
+        <div class="card-main" style="background-image:url('fonts/card-5.jpeg')"></div>
+        <div class="card-footer">
+          <span data-i18n="friends">友链</span>
+          <button class="arrow-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" data-href="https://sunland.dev">
+        <div class="card-main" style="background-image:url('fonts/card-6.jpeg')"></div>
+        <div class="card-footer">
+          <span data-i18n="donation">捐赠</span>
+          <button class="arrow-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="contact-divider">
+      <span data-i18n="contact">联络</span>
+    </div>
+
+    <div class="contact-list" id="contactList"></div>
+
+    <div class="copyright" id="copyright">
+      版权所有 ©2023-2026 Crythane 保留所有权利
+    </div>
+
   </div>
 
 </div>
@@ -924,7 +887,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 /* ================= Splash ================= */
 
 window.addEventListener("load", () => {
-
   if (window.innerWidth <= 180) {
     const page = document.querySelector(".page");
     page.style.opacity = 1;
@@ -933,7 +895,6 @@ window.addEventListener("load", () => {
     startPage();
     return;
   }
-
   setTimeout(() => {
     document.getElementById("splash").classList.add("fade");
     const page = document.querySelector(".page");
@@ -942,45 +903,22 @@ window.addEventListener("load", () => {
     document.body.style.overflow = "auto";
     startPage();
   }, 2000);
-
 });
 
-/* ================= Text Animation ================= */
-
-function playAppleText(el) {
-  el.style.opacity = "1";
-  const text = el.textContent.trim();
-  el.textContent = "";
-  [...text].forEach((u, i) => {
-    const s = document.createElement("span");
-    s.innerHTML = u === " " ? "&nbsp;" : u;
-    el.appendChild(s);
-    setTimeout(() => s.classList.add("show"), i * 42);
-  });
-}
-
-/* ================= Page Out Transition ================= */
-
-/* ================= iOS Card Expand Navigate ================= */
+/* ================= iOS Card Expand ================= */
 
 function navigateTo(url, cardEl) {
   if (!url || url === "#") return;
-
   const expand = document.getElementById("card-expand");
   const bg     = document.getElementById("card-expand-bg");
   const rect   = cardEl.getBoundingClientRect();
 
-  // 基础定位
   expand.style.cssText = `
-    top:    ${rect.top}px;
-    left:   ${rect.left}px;
-    width:  ${rect.width}px;
-    height: ${rect.height}px;
-    border-radius: var(--radius);
-    background: var(--bg2);
+    top:${rect.top}px; left:${rect.left}px;
+    width:${rect.width}px; height:${rect.height}px;
+    border-radius:var(--radius); background:var(--bg2);
   `;
 
-  // 有图片就复制图片，没有（联络条目）就用平台色
   const cardMain = cardEl.querySelector(".card-main");
   if (cardMain) {
     const bgImg = window.getComputedStyle(cardMain).backgroundImage;
@@ -988,42 +926,28 @@ function navigateTo(url, cardEl) {
     expand.style.backgroundSize     = "cover";
     expand.style.backgroundPosition = "center";
   } else {
-    const platformColor = getComputedStyle(cardEl).getPropertyValue("--platform-color").trim();
-    if (platformColor) {
-      expand.style.background = platformColor;
-    }
+    const pc = getComputedStyle(cardEl).getPropertyValue("--platform-color").trim();
+    if (pc) expand.style.background = pc;
   }
 
   bg.classList.add("active");
-  expand.offsetHeight; // 强制重排
+  expand.offsetHeight;
 
-  // 动态注入关键帧
   const existingKf = document.getElementById("expand-kf");
   if (existingKf) existingKf.remove();
   const kfStyle = document.createElement("style");
   kfStyle.id = "expand-kf";
   kfStyle.textContent = `
     @keyframes cardExpand{
-      from{
-        top:${rect.top}px; left:${rect.left}px;
-        width:${rect.width}px; height:${rect.height}px;
-        border-radius:18px; opacity:1;
-      }
-      to{
-        top:0; left:0;
-        width:100vw; height:100dvh;
-        border-radius:0px; opacity:1;
-      }
+      from{ top:${rect.top}px; left:${rect.left}px; width:${rect.width}px; height:${rect.height}px; border-radius:18px; opacity:1; }
+      to{   top:0; left:0; width:100vw; height:100dvh; border-radius:0px; opacity:1; }
     }
   `;
   document.head.appendChild(kfStyle);
-
   expand.classList.add("expanding");
-
   setTimeout(() => { window.location.href = url; }, 440);
 }
 
-/* ================= bfcache 修复：返回时重置展开层 ================= */
 window.addEventListener("pageshow", (e) => {
   if (e.persisted) {
     const expand = document.getElementById("card-expand");
@@ -1037,55 +961,63 @@ window.addEventListener("pageshow", (e) => {
 /* ================= Main ================= */
 
 function startPage() {
-
   const isWatch = window.innerWidth <= 180;
 
-  if (!isWatch) {
-    playAppleText(document.querySelector(".intro"));
-  }
+  /* Hero 入场 */
+  setTimeout(() => {
+    document.getElementById("heroContent").classList.add("show");
+  }, 100);
 
-  // 卡片交错入场（奇左偶右已由CSS设定，这里加延迟）
+  /* 向下滚动按钮 */
+  document.getElementById("heroScroll").addEventListener("click", () => {
+    document.querySelector(".section").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* 卡片入场 */
   const cards = [...document.querySelectorAll(".card")];
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add("show");
-      else entry.target.classList.remove("show");
+  const cardObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add("show");
+      else e.target.classList.remove("show");
     });
   }, {threshold:.12});
 
-  cards.forEach(c => obs.observe(c));
-
-  // 卡片点击退场跳转
+  cards.forEach(c => cardObs.observe(c));
   cards.forEach(card => {
-    card.addEventListener("click", () => {
-      const href = card.dataset.href;
-      navigateTo(href, card);
-    });
+    card.addEventListener("click", () => navigateTo(card.dataset.href, card));
   });
 
   if (isWatch) return;
 
-  const header = document.querySelector(".header");
-  const intro  = document.querySelector(".intro");
+  const header = document.getElementById("mainHeader");
+
+  /* Hero 视差 + header 状态 */
+  const heroBg = document.getElementById("heroBg");
+  const heroH  = document.querySelector(".hero").offsetHeight;
 
   addEventListener("scroll", () => {
-    if (scrollY > 80) {
-      header.classList.add("show-title");
-      intro.classList.add("absorb");
-    } else {
+    const sy = scrollY;
+
+    /* 视差：背景移动比滚动慢 */
+    heroBg.style.transform = `translateY(${sy * 0.38}px)`;
+
+    /* header 背景 & title */
+    if (sy > heroH * 0.6) {
+      header.classList.add("scrolled","show-title");
+    } else if (sy > 60) {
+      header.classList.add("scrolled");
       header.classList.remove("show-title");
-      intro.classList.remove("absorb");
+    } else {
+      header.classList.remove("scrolled","show-title");
     }
-  }, { passive: true });
+  }, {passive:true});
 }
 
-/* ================= Theme Ripple ================= */
+/* ================= Theme ================= */
 
 function setTheme(theme, originEl) {
   localStorage.setItem("theme", theme);
 
-  // 从按钮位置扩散涟漪
   if (originEl) {
     const ripple = document.getElementById("theme-ripple");
     const rect   = originEl.getBoundingClientRect();
@@ -1096,36 +1028,21 @@ function setTheme(theme, originEl) {
       Math.max(cy, window.innerHeight - cy)
     ) * 2;
 
-    const after = ripple;
-    after.style.setProperty("--cx", cx + "px");
-    after.style.setProperty("--cy", cy + "px");
-    after.style.setProperty("--r",  maxR + "px");
-
-    // 涟漪颜色：切到浅色用浅色，切到深色用深色
     const rippleColor = theme === "light" ? "#f0f4f8" : "#081921";
-
-    // 用伪元素模拟：直接插一个真实圆
     const circle = document.createElement("div");
     circle.style.cssText = `
-      position:absolute;
-      left:${cx}px; top:${cy}px;
-      width:0; height:0;
-      border-radius:50%;
+      position:absolute; left:${cx}px; top:${cy}px;
+      width:0; height:0; border-radius:50%;
       background:${rippleColor};
       transform:translate(-50%,-50%) scale(0);
       animation:rippleExpand .55s cubic-bezier(.22,.61,.36,1) forwards;
       pointer-events:none;
     `;
 
-    // 注入动画
     if (!document.getElementById("ripple-style")) {
       const st = document.createElement("style");
       st.id = "ripple-style";
-      st.textContent = `
-        @keyframes rippleExpand{
-          to{ width:${maxR}px; height:${maxR}px; opacity:0; }
-        }
-      `;
+      st.textContent = `@keyframes rippleExpand{ to{ width:${maxR}px; height:${maxR}px; opacity:0; } }`;
       document.head.appendChild(st);
     }
 
@@ -1133,13 +1050,9 @@ function setTheme(theme, originEl) {
     setTimeout(() => circle.remove(), 600);
   }
 
-  // 稍微延迟切换，让涟漪先出来
   setTimeout(() => {
-    if (theme === "light") {
-      document.body.classList.add("theme-light");
-    } else {
-      document.body.classList.remove("theme-light");
-    }
+    if (theme === "light") document.body.classList.add("theme-light");
+    else document.body.classList.remove("theme-light");
   }, 60);
 }
 
@@ -1147,11 +1060,10 @@ const savedTheme = localStorage.getItem("theme") || "dark";
 setTheme(savedTheme, null);
 
 document.getElementById("themeBtn").addEventListener("click", function() {
-  const isLight = document.body.classList.contains("theme-light");
-  setTheme(isLight ? "dark" : "light", this);
+  setTheme(document.body.classList.contains("theme-light") ? "dark" : "light", this);
 });
 
-/* ================= Contact Data & Render ================= */
+/* ================= Contact Data ================= */
 
 const ICONS = {
   qq:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.395 15.035a39.548 39.548 0 0 0-.803-2.264l-1.079-2.695c.001-.032.014-.562.014-.857C19.527 4.67 16.247 0 12 0S4.473 4.67 4.473 9.22c0 .295.012.825.014.857l-1.08 2.695a39.251 39.251 0 0 0-.802 2.264C1.584 18.756 1.547 20.07 2.53 20.07c.626 0 1.743-1.353 2.993-3.445-.096.27-.148.497-.148.497s1.468 1.609 3.55 2.209c-1.24.344-1.367 1.27-.567 1.794 1.354.886 3.99.338 3.99.338s2.635.548 3.989-.338c.8-.524.673-1.45-.567-1.794 2.082-.6 3.55-2.21 3.55-2.21s-.052-.226-.148-.496c1.25 2.092 2.367 3.445 2.993 3.445.983 0 1.02-1.314 0-4.721z"/></svg>`,
@@ -1168,11 +1080,11 @@ const ICONS = {
 
 const CONTACTS = {
   zh:[
-    {id:"qq",          name:"QQ",    color:"#1aabee", url:"https://qm.qq.com/q/xCpMb2NdXc"},
+    {id:"qq",          name:"QQ",     color:"#1aabee", url:"https://qm.qq.com/q/xCpMb2NdXc"},
     {id:"bilibili",    name:"哔哩哔哩", color:"#12b7f5", url:"https://m.bilibili.com/space/1126826084"},
-    {id:"douyin",      name:"抖音",  color:"#010101", url:"https://v.douyin.com/zYcu7KrJoZM/ 9@7.com :0pm"},
-    {id:"kuaishou",    name:"快手",  color:"#ff5000", url:"https://v.kuaishou.com/KNi25Pyw"},
-    {id:"xiaohongshu", name:"小红书", color:"#fe2c55", url:"https://xhslink.com/m/30nG9zd9BGC"},
+    {id:"douyin",      name:"抖音",   color:"#010101", url:"https://v.douyin.com/zYcu7KrJoZM/ 9@7.com :0pm"},
+    {id:"kuaishou",    name:"快手",   color:"#ff5000", url:"https://v.kuaishou.com/KNi25Pyw"},
+    {id:"xiaohongshu", name:"小红书",  color:"#fe2c55", url:"https://xhslink.com/m/30nG9zd9BGC"},
     {id:"github",      name:"GitHub", color:"#6e5494", url:"https://github.com/Crythanex"}
   ],
   en:[
@@ -1205,10 +1117,7 @@ const contactObs = new IntersectionObserver(entries => {
 function renderContacts(lang) {
   const list  = document.getElementById("contactList");
   const items = CONTACTS[lang] || CONTACTS.zh;
-
-  /* 先断开旧的观察 */
   list.querySelectorAll(".contact-item").forEach(el => contactObs.unobserve(el));
-
   list.innerHTML = items.map(p => `
     <div class="contact-item" style="--platform-color:${p.color};" data-url="${encodeURIComponent(p.url)}">
       <div class="contact-icon">${ICONS[p.id]||""}</div>
@@ -1216,90 +1125,67 @@ function renderContacts(lang) {
       <button class="contact-arrow" type="button" aria-label="打开">${EXTERNAL_ICON}</button>
     </div>
   `).join("");
-
   list.querySelectorAll(".contact-item").forEach(item => {
-    item.addEventListener("click", () => {
-      navigateTo(decodeURIComponent(item.dataset.url), item);
-    });
+    item.addEventListener("click", () => navigateTo(decodeURIComponent(item.dataset.url), item));
     contactObs.observe(item);
   });
 }
 
 /* ================= Language ================= */
-  
+
 const LANG = {
-  zh: {
-    intro:      "你好，这里是凌绡",
-    intro_card: "自介",
-    gallery:    "图库",
-    commission: "约稿",
-    projects:   "博客",
-    contact:    "联络",
-    friends:    "友链",
-    donation:   "捐赠",
-    copyright:  "版权所有 ©2023-2026 Crythane 保留所有权利"
+  zh:{
+    hero_zh:"凌绡",
+    hero_tag:"福瑞文化 · 内容创作 · 视觉设计",
+    scroll:"向下探索",
+    intro_card:"自介", gallery:"图库", commission:"约稿", projects:"博客",
+    contact:"联络", friends:"友链", donation:"捐赠",
+    copyright:"版权所有 ©2023-2026 Crythane 保留所有权利"
   },
-  en: {
-    intro:      "Hey there, I am Crythane",
-    intro_card: "Introduction",
-    gallery:    "Gallery",
-    commission: "Commission",
-    projects:   "Blog",
-    contact:    "Contact",
-    friends:    "Links",
-    donation:   "Donation",
-    copyright:  "Copyright ©2023-2026 Crythane. All rights reserved."
+  en:{
+    hero_zh:"凌绡",
+    hero_tag:"Fursona · Content Creator · Visual Design",
+    scroll:"Explore",
+    intro_card:"Introduction", gallery:"Gallery", commission:"Commission", projects:"Blog",
+    contact:"Contact", friends:"Links", donation:"Donation",
+    copyright:"Copyright ©2023-2026 Crythane. All rights reserved."
   },
-  jp: {
-    intro:      "ようこそ、凌绡（シノセン）へ",
-    intro_card: "自己紹介",
-    gallery:    "ギャラリー",
-    commission: "コミッション",
-    projects:   "ブログ",
-    contact:    "連絡",
-    friends:    "リンク",
-    donation:   "寄付",
-    copyright:  "Copyright ©2023-2026 Crythane All Rights Reserved."
+  jp:{
+    hero_zh:"凌绡",
+    hero_tag:"ファーソナ · コンテンツ · ビジュアル",
+    scroll:"スクロール",
+    intro_card:"自己紹介", gallery:"ギャラリー", commission:"コミッション", projects:"ブログ",
+    contact:"連絡", friends:"リンク", donation:"寄付",
+    copyright:"Copyright ©2023-2026 Crythane All Rights Reserved."
   }
 };
 
 function setLang(lang, animate = false) {
   localStorage.setItem("lang", lang);
-  document.body.classList.remove("lang-zh", "lang-en", "lang-jp");
+  document.body.classList.remove("lang-zh","lang-en","lang-jp");
   document.body.classList.add(`lang-${lang}`);
 
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.dataset.i18n;
-    if (LANG[lang][key]) el.textContent = LANG[lang][key];
+    if (LANG[lang] && LANG[lang][key]) el.textContent = LANG[lang][key];
   });
 
   document.getElementById("copyright").textContent = LANG[lang].copyright;
-
   renderContacts(lang);
-
-  if (animate) {
-    playAppleText(document.querySelector(".intro"));
-  }
 }
 
 const savedLang = localStorage.getItem("lang") || "zh";
-setLang(savedLang, false);
+setLang(savedLang);
 
 /* ================= Lang Menu ================= */
 
 const langBtn  = document.getElementById("langBtn");
 const langMenu = document.getElementById("langMenu");
 
-langBtn.onclick = (e) => {
-  e.stopPropagation();
-  langMenu.classList.toggle("show");
-};
+langBtn.onclick = (e) => { e.stopPropagation(); langMenu.classList.toggle("show"); };
 
 langMenu.querySelectorAll("[data-lang]").forEach(item => {
-  item.onclick = () => {
-    setLang(item.dataset.lang, true);
-    langMenu.classList.remove("show");
-  };
+  item.onclick = () => { setLang(item.dataset.lang); langMenu.classList.remove("show"); };
 });
 
 document.addEventListener("click", (e) => {
@@ -1309,6 +1195,5 @@ document.addEventListener("click", (e) => {
 });
 
 </script>
-
 </body>
 </html>
