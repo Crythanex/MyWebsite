@@ -8,7 +8,7 @@
 
 /* ================= Fonts ================= */
 
-@font-face{ font-family:"Righteous"; src:url("fonts/Righteous-Regular.ttf"); font-display:swap; }
+@font-face{ font-family:"CaviarDreams"; src:url("fonts/CaviarDreams-Bold-2.ttf"); font-display:swap; }
 @font-face{ font-family:"Urbanist";  src:url("fonts/Urbanist-Bold.ttf");     font-display:swap; }
 @font-face{ font-family:"Alimama";   src:url("fonts/AlimamaShuHeiTi-Bold.ttf"); font-display:swap; }
 @font-face{ font-family:"Harmony";   src:url("fonts/HarmonyOS_Sans_SC_Regular.ttf"); font-display:swap; }
@@ -105,7 +105,7 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 #logo{ width:340px; max-width:74vw; }
 
 #logo text{
-  font-family:"Righteous";
+  font-family:"CaviarDreams";
   font-size:96px;
   fill:none;
   stroke:var(--accent);
@@ -153,7 +153,7 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 }
 
 .title{
-  font-family:"Righteous";
+  font-family:"CaviarDreams";
   font-size:30px;
   letter-spacing:.5px;
   color:#fff;
@@ -299,13 +299,16 @@ body.theme-light .theme-btn .icon-sun{  opacity:1; transform:rotate(0deg) scale(
 
 .hero-bg{
   position:absolute;
-  inset:0;
+  /* 上下留出视差移动的空间，防止边缘露白 */
+  inset:-20% 0;
   background-image:url("img/Background.PNG");
   background-size:cover;
   background-position:center;
-  /* 视差：JS 驱动 */
+  /* GPU合成层，消除抖动 */
   will-change:transform;
-  transition:transform .05s linear;
+  transform:translate3d(0,0,0);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
 }
 
 /* 渐变遮罩：底部让文字可读，顶部不过曝 */
@@ -362,7 +365,7 @@ body.theme-light .hero-name-zh{ color:#1a2535; }
 
 /* 英文副标题 */
 .hero-name-en{
-  font-family:"Righteous",sans-serif;
+  font-family:"CaviarDreams",sans-serif;
   font-size:clamp(22px, 5vw, 40px);
   line-height:1;
   color:var(--accent);
@@ -998,8 +1001,8 @@ function startPage() {
   addEventListener("scroll", () => {
     const sy = scrollY;
 
-    /* 视差：背景移动比滚动慢 */
-    heroBg.style.transform = `translateY(${sy * 0.38}px)`;
+    /* 视差：translate3d 强制GPU合成，消除抖动 */
+    heroBg.style.transform = `translate3d(0,${sy * 0.32}px,0)`;
 
     /* header 背景 & title */
     if (sy > heroH * 0.6) {
@@ -1136,7 +1139,7 @@ function renderContacts(lang) {
 const LANG = {
   zh:{
     hero_zh:"凌绡",
-    hero_tag:"福瑞文化 · 内容创作 · 视觉设计",
+    hero_tag:"Fursona · 内容创作 · 视觉设计",
     scroll:"向下探索",
     intro_card:"自介", gallery:"图库", commission:"约稿", projects:"博客",
     contact:"联络", friends:"友链", donation:"捐赠",
