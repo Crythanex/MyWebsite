@@ -72,6 +72,7 @@ body{
   color:var(--text);
   font-family:"Urbanist","Alimama",-apple-system,sans-serif;
   overflow:hidden;
+  touch-action:manipulation;
   transition:background .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1);
 }
 
@@ -554,12 +555,38 @@ body.theme-light .hero-scroll:hover{ color:rgba(20,35,55,.75); }
   align-items:center;
   justify-content:center;
   cursor:pointer;
+  position:relative;
+  overflow:hidden;
   transition:background .35s cubic-bezier(.22,.61,.36,1), border-color .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.34,1.56,.64,1);
   flex-shrink:0;
 }
 
 .arrow-btn:active{ transform:scale(.88); }
-.arrow-btn svg{ width:22px; height:22px; }
+.arrow-btn svg{ width:22px; height:22px; transition:opacity .15s cubic-bezier(.22,.61,.36,1); }
+
+/* 旋转进度圆弧 */
+.arrow-btn::after{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border-radius:50%;
+  border:2px solid transparent;
+  border-top-color:var(--accent);
+  opacity:0;
+  transform:rotate(0deg);
+  transition:opacity .15s cubic-bezier(.22,.61,.36,1);
+  pointer-events:none;
+}
+
+.arrow-btn.loading svg{ opacity:0; }
+.arrow-btn.loading::after{
+  opacity:1;
+  animation:spinArc .7s linear infinite;
+}
+
+@keyframes spinArc{
+  to{ transform:rotate(360deg); }
+}
 
 /* ================= Contact Divider ================= */
 
@@ -1070,7 +1097,14 @@ function startPage() {
 
   cards.forEach(c => cardObs.observe(c));
   cards.forEach(card => {
-    card.addEventListener("click", () => navigateTo(card.dataset.href));
+    const btn = card.querySelector(".arrow-btn");
+    if (!btn) return;
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (btn.classList.contains("loading")) return;
+      btn.classList.add("loading");
+      navigateTo(card.dataset.href);
+    });
   });
 
   if (isWatch) return;
@@ -1212,8 +1246,12 @@ function renderContacts(lang) {
     </div>
   `).join("");
   list.querySelectorAll(".contact-item").forEach(item => {
-    item.addEventListener("click", () => navigateTo(decodeURIComponent(item.dataset.url)));
-    /* 箭头按钮只做视觉，阻止冒泡防止双重触发 */
+    item.addEventListener("click", () => {
+      const btn = item.querySelector(".contact-arrow");
+      if (btn) btn.classList.add("loading");
+      navigateTo(decodeURIComponent(item.dataset.url));
+    });
+    /* 箭头按钮阻止冒泡，避免双重触发 */
     const btn = item.querySelector(".contact-arrow");
     if (btn) btn.addEventListener("click", e => e.stopPropagation());
     contactObs.observe(item);
