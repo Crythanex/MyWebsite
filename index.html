@@ -123,7 +123,7 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 
 /* 退场由JS直接控制 */
 #splash.fade{
-  animation:splashBgOut .35s cubic-bezier(.22,.61,.36,1) .7s forwards;
+  animation:splashBgOut .35s cubic-bezier(.22,.61,.36,1) .18s forwards;
 }
 
 @keyframes splashBgOut{
@@ -132,8 +132,7 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 
 @keyframes logoPressZoom{
   0%   { transform:translate(0,0) scale(1);      opacity:1; }
-  18%  { transform:translate(0,0) scale(.82);    opacity:1; }
-  58%  { transform:translate(0,0) scale(.82);    opacity:1; }
+  22%  { transform:translate(0,0) scale(.82);    opacity:1; }
   100% { transform:translate(12vw,0) scale(22);  opacity:0; }
 }
 
@@ -487,6 +486,10 @@ body.theme-light .hero-scroll:hover{ color:rgba(20,35,55,.75); }
   border:1px solid var(--border);
   box-shadow:var(--shadow);
   cursor:pointer;
+  padding:10px 10px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:0;
 }
 
 .card.show{
@@ -496,24 +499,23 @@ body.theme-light .hero-scroll:hover{ color:rgba(20,35,55,.75); }
 }
 
 @media (hover:hover){
-  .card:hover{
-    transform:translateY(-6px) scale(1.012);
-    box-shadow:var(--shadow-hover);
-  }
+  .card:hover{ box-shadow:var(--shadow-hover); transform:translateY(-4px); }
 }
 
-.card:active{ transform:scale(.975); transition:transform .12s cubic-bezier(.4,0,.2,1); }
+.card:active{ transform:scale(.977); transition:transform .12s cubic-bezier(.4,0,.2,1); }
 
+/* 图片内嵌，自身带圆角 */
 .card-main{
   aspect-ratio:5/3;
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
-  /* 图片加载失败时的fallback渐变 */
   background-color:var(--bg3);
-  background-image:linear-gradient(135deg, rgba(115,230,235,.10) 0%, rgba(8,25,33,.35) 100%);
+  background-image:linear-gradient(135deg, rgba(115,230,235,.12) 0%, rgba(8,25,33,.4) 100%);
+  border-radius:calc(var(--radius) - 6px);
   position:relative;
   overflow:hidden;
+  flex-shrink:0;
 }
 
 .card-main::before{
@@ -523,69 +525,72 @@ body.theme-light .hero-scroll:hover{ color:rgba(20,35,55,.75); }
   background:var(--card-img-overlay);
 }
 
-.card-main::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.22),rgba(0,0,0,0));
-}
-
+/* 底栏透明，和卡片背景融合 */
 .card-footer{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:20px 24px;
-  background:var(--bg3);
-  border-top:1px solid var(--border2);
-  font-size:20px;
-  color:var(--text2);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  transition:background .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1), border-color .35s cubic-bezier(.22,.61,.36,1);
+  padding:16px 8px 6px;
+  background:transparent;
+  border-top:none;
+  font-size:28px;
+  font-weight:700;
+  color:var(--text);
+  letter-spacing:-.01em;
+  transition:color .35s cubic-bezier(.22,.61,.36,1);
 }
 
+/* 箭头：空心圆圈，苹果同心圆角比例 */
 .arrow-btn{
   width:52px;
   height:52px;
   border-radius:50%;
-  border:1px solid var(--border3);
-  background:var(--btn-bg);
-  color:var(--text2);
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
   position:relative;
-  overflow:hidden;
-  transition:background .35s cubic-bezier(.22,.61,.36,1), border-color .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.34,1.56,.64,1);
+  overflow:visible;
   flex-shrink:0;
+  transition:border-color .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.34,1.56,.64,1);
 }
 
 .arrow-btn:active{ transform:scale(.88); }
-.arrow-btn svg{ width:22px; height:22px; transition:opacity .15s cubic-bezier(.22,.61,.36,1); }
 
-/* 旋转进度圆弧 */
-.arrow-btn::after{
-  content:"";
+/* 箭头svg */
+.arrow-btn .arrow-icon{
+  width:22px;
+  height:22px;
+  transition:opacity .18s cubic-bezier(.22,.61,.36,1);
+}
+
+/* Win10风格进度环：粗细不均的扫动弧 */
+.arrow-btn .spin-ring{
   position:absolute;
-  inset:6px;
+  inset:-2px;
   border-radius:50%;
-  border:2px solid transparent;
+  border:2.5px solid transparent;
   border-top-color:var(--accent);
+  border-right-color:var(--accent);
   opacity:0;
-  transform:rotate(0deg);
-  transition:opacity .15s cubic-bezier(.22,.61,.36,1);
+  transition:opacity .18s cubic-bezier(.22,.61,.36,1);
   pointer-events:none;
 }
 
-.arrow-btn.loading svg{ opacity:0; }
-.arrow-btn.loading::after{
+.arrow-btn.loading .arrow-icon{ opacity:0; }
+.arrow-btn.loading{ border-color:transparent; }
+.arrow-btn.loading .spin-ring{
   opacity:1;
-  animation:spinArc .7s linear infinite;
+  animation:win10Spin .9s cubic-bezier(.4,0,.2,1) infinite;
 }
 
-@keyframes spinArc{
-  to{ transform:rotate(360deg); }
+@keyframes win10Spin{
+  0%  { transform:rotate(0deg);   border-top-color:var(--accent); border-right-color:var(--accent); border-bottom-color:transparent; border-left-color:transparent; }
+  50% { transform:rotate(180deg); border-top-color:transparent;   border-right-color:var(--accent); border-bottom-color:var(--accent); border-left-color:transparent; }
+  100%{ transform:rotate(360deg); border-top-color:var(--accent); border-right-color:var(--accent); border-bottom-color:transparent; border-left-color:transparent; }
 }
 
 /* ================= Contact Divider ================= */
@@ -718,11 +723,21 @@ body.theme-light .contact-item[style*="010101"] .contact-icon{
   justify-content:center;
   flex-shrink:0;
   cursor:pointer;
-  transition:background .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1), transform .14s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+  overflow:visible;
+  transition:background .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1), border-color .35s cubic-bezier(.22,.61,.36,1), transform .14s cubic-bezier(.34,1.56,.64,1);
 }
 
 .contact-arrow:active{ transform:scale(.88); }
+.contact-arrow .arrow-icon{ display:flex; align-items:center; justify-content:center; transition:opacity .18s cubic-bezier(.22,.61,.36,1); }
 .contact-arrow svg{ width:16px; height:16px; }
+.contact-arrow .spin-ring{ inset:-1px; }
+.contact-arrow.loading .arrow-icon{ opacity:0; }
+.contact-arrow.loading{ border-color:transparent; }
+.contact-arrow.loading .spin-ring{
+  opacity:1;
+  animation:win10Spin .9s cubic-bezier(.4,0,.2,1) infinite;
+}
 
 /* ================= Copyright ================= */
 
@@ -856,9 +871,9 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
   /* 卡片：只保留底栏文字，不显示图片 */
   .card-list{ padding:0 6px 16px; gap:6px; display:flex; flex-direction:column; }
-  .card{ border-radius:10px; }
-  .card-main{ display:none; }
-  .card-footer{ font-size:11px; padding:9px 10px; border-top:none; }
+  .card{ border-radius:10px; padding:5px 5px 8px; }
+  .card-main{ border-radius:7px; }
+  .card-footer{ font-size:11px; padding:7px 4px 2px; font-weight:700; }
   .arrow-btn{ width:22px; height:22px; flex-shrink:0; }
   .arrow-btn svg{ width:11px; height:11px; }
 
@@ -949,61 +964,67 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     <div class="card-list">
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('fonts/1000075580.jpeg')"></div>
+        <div class="card-main" style="background-image:url('img/Card1.jpg')"></div>
         <div class="card-footer">
           <span data-i18n="intro_card">自介</span>
           <button class="arrow-btn" type="button">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <div class="spin-ring"></div>
           </button>
         </div>
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('fonts/card-2.jpeg')"></div>
+        <div class="card-main" style="background-image:url('img/Card2.jpg')"></div>
         <div class="card-footer">
           <span data-i18n="gallery">图库</span>
           <button class="arrow-btn" type="button">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <div class="spin-ring"></div>
           </button>
         </div>
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('fonts/card-3.jpeg')"></div>
+        <div class="card-main" style="background-image:url('img/Card3.jpg')"></div>
         <div class="card-footer">
           <span data-i18n="commission">约稿</span>
           <button class="arrow-btn" type="button">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <div class="spin-ring"></div>
           </button>
         </div>
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('fonts/card-4.jpeg')"></div>
+        <div class="card-main" style="background-image:url('img/Card4.jpg')"></div>
         <div class="card-footer">
           <span data-i18n="projects">博客</span>
           <button class="arrow-btn" type="button">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <div class="spin-ring"></div>
           </button>
         </div>
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('fonts/card-5.jpeg')"></div>
+        <div class="card-main" style="background-image:url('img/Card5.jpg')"></div>
         <div class="card-footer">
           <span data-i18n="friends">友链</span>
           <button class="arrow-btn" type="button">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <div class="spin-ring"></div>
           </button>
         </div>
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('fonts/card-6.jpeg')"></div>
+        <div class="card-main" style="background-image:url('img/Card6.jpg')"></div>
         <div class="card-footer">
           <span data-i18n="donation">捐赠</span>
           <button class="arrow-btn" type="button">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
+            <div class="spin-ring"></div>
           </button>
         </div>
       </div>
@@ -1043,7 +1064,7 @@ window.addEventListener("load", () => {
     const logo = document.getElementById("logo");
     /* 直接用JS设，绕过CSS选择器优先级问题 */
     logo.style.transformOrigin = "50% 88%";
-    logo.style.animation = "logoPressZoom 1.1s cubic-bezier(.4,0,.2,1) forwards";
+    logo.style.animation = "logoPressZoom .8s cubic-bezier(.4,0,.2,1) forwards";
 
     requestAnimationFrame(() => {
       document.getElementById("splash").classList.add("fade");
@@ -1058,7 +1079,13 @@ window.addEventListener("load", () => {
     page.style.visibility = "visible";
     document.body.style.overflow = "auto";
     startPage();
-  }, 2700);
+  }, 2400);
+});
+
+/* 返回页面时重置所有loading箭头 */
+window.addEventListener("pageshow", () => {
+  document.querySelectorAll(".arrow-btn.loading, .contact-arrow.loading")
+    .forEach(btn => btn.classList.remove("loading"));
 });
 
 /* ================= Navigate ================= */
@@ -1242,7 +1269,7 @@ function renderContacts(lang) {
     <div class="contact-item" style="--platform-color:${p.color};" data-url="${encodeURIComponent(p.url)}">
       <div class="contact-icon">${ICONS[p.id]||""}</div>
       <span class="contact-name">${p.name}</span>
-      <button class="contact-arrow" type="button" aria-label="打开">${EXTERNAL_ICON}</button>
+      <button class="contact-arrow" type="button" aria-label="打开"><span class="arrow-icon">${EXTERNAL_ICON}</span><div class="spin-ring"></div></button>
     </div>
   `).join("");
   list.querySelectorAll(".contact-item").forEach(item => {
