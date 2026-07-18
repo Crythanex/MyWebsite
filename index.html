@@ -120,16 +120,9 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 @keyframes draw{ to{ stroke-dashoffset:0; } }
 @keyframes fill-text{ to{ fill:var(--accent); } }
 
-/* 退场三段：缩小(按压) → 以a为中心放大穿屏 */
+/* 退场由JS直接控制 */
 #splash.fade{
-  animation:splashBgOut .35s cubic-bezier(.22,.61,.36,1) .42s forwards;
-}
-#splash.fade #logo{
-  /* transform-origin对应"a"字母在logo中的位置：
-     水平约38%（C-r-y-t-h-a，a在6字母中第6个，居中文本左起约38%）
-     垂直约60%（文字基线位置） */
-  transform-origin: 38% 60%;
-  animation: logoPressZoom .72s cubic-bezier(.4,0,.2,1) forwards;
+  animation:splashBgOut .35s cubic-bezier(.22,.61,.36,1) .7s forwards;
 }
 
 @keyframes splashBgOut{
@@ -137,13 +130,10 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 }
 
 @keyframes logoPressZoom{
-  /* 按压缩小 */
-  0%   { transform:scale(1);    opacity:1; }
-  28%  { transform:scale(.82);  opacity:1; }
-  /* 短暂停顿在最小 */
-  38%  { transform:scale(.82);  opacity:1; }
-  /* 急速放大冲出 */
-  100% { transform:scale(22);   opacity:0; }
+  0%   { transform:translate(0,0) scale(1);      opacity:1; }
+  18%  { transform:translate(0,0) scale(.82);    opacity:1; }
+  58%  { transform:translate(0,0) scale(.82);    opacity:1; }
+  100% { transform:translate(12vw,0) scale(22);  opacity:0; }
 }
 
 /* ================= Page ================= */
@@ -1020,20 +1010,28 @@ window.addEventListener("load", () => {
     startPage();
     return;
   }
+
+  /* 填色完成后立刻触发退场 */
   setTimeout(() => {
-    /* logo开始放大的同时，主界面已在后面就位 */
+    const logo = document.getElementById("logo");
+    /* 直接用JS设，绕过CSS选择器优先级问题 */
+    logo.style.transformOrigin = "50% 88%";
+    logo.style.animation = "logoPressZoom 1.1s cubic-bezier(.4,0,.2,1) forwards";
+
+    requestAnimationFrame(() => {
+      document.getElementById("splash").classList.add("fade");
+    });
+  }, 2050);
+
+  /* 放大段开始时主界面就位（缩小+停留约0.64s后） */
+  setTimeout(() => {
     const page = document.querySelector(".page");
-    page.style.transition = "opacity .3s cubic-bezier(.22,.61,.36,1)";
+    page.style.transition = "opacity .4s cubic-bezier(.22,.61,.36,1)";
     page.style.opacity = 1;
     page.style.visibility = "visible";
     document.body.style.overflow = "auto";
     startPage();
-
-    /* 稍等一帧再触发fade，让主界面先渲染出来 */
-    requestAnimationFrame(() => {
-      document.getElementById("splash").classList.add("fade");
-    });
-  }, 2000);
+  }, 2700);
 });
 
 /* ================= Navigate ================= */
