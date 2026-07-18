@@ -4,6 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Crythane</title>
+<meta property="og:title" content="凌绡 | Crythane" />
+<meta property="og:description" content="Fursona · 内容创作 · 视觉设计" />
+<meta property="og:image" content="img/Background.PNG" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="凌绡 | Crythane" />
+<meta name="twitter:description" content="Fursona · 内容创作 · 视觉设计" />
+<meta name="twitter:image" content="img/Background.PNG" />
 <style>
 
 /* ================= Fonts ================= */
@@ -86,8 +94,7 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 
 .page.nav-out{
   opacity:0;
-  transform:scale(.97);
-  transition:opacity .38s cubic-bezier(.4,0,1,1), transform .38s cubic-bezier(.4,0,1,1);
+  transition:opacity .38s cubic-bezier(.4,0,1,1);
 }
 
 /* ================= Splash ================= */
@@ -121,19 +128,20 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 @keyframes draw{ to{ stroke-dashoffset:0; } }
 @keyframes fill-text{ to{ fill:var(--accent); } }
 
-/* 退场由JS直接控制 */
+/* 退场：logo上移淡出 + 背景同步淡出 */
 #splash.fade{
-  animation:splashBgOut .35s cubic-bezier(.22,.61,.36,1) .18s forwards;
+  animation:splashBgOut .5s cubic-bezier(.22,.61,.36,1) forwards;
+}
+#splash.fade #logo{
+  animation:logoSlideUp .5s cubic-bezier(.4,0,.2,1) forwards;
 }
 
 @keyframes splashBgOut{
   to{ opacity:0; visibility:hidden; }
 }
-
-@keyframes logoPressZoom{
-  0%   { transform:translate(0,0) scale(1);      opacity:1; }
-  22%  { transform:translate(0,0) scale(.82);    opacity:1; }
-  100% { transform:translate(12vw,0) scale(22);  opacity:0; }
+@keyframes logoSlideUp{
+  0%  { transform:translateY(0);    opacity:1; }
+  100%{ transform:translateY(-60px); opacity:0; }
 }
 
 /* ================= Page ================= */
@@ -427,6 +435,12 @@ body.theme-light .hero-tagline{ color:rgba(20,35,55,.5); }
   transition:opacity .8s .48s cubic-bezier(.22,.61,.36,1), transform .8s .48s cubic-bezier(.22,.61,.36,1), color .2s cubic-bezier(.22,.61,.36,1);
 }
 
+.hero-scroll.hide{
+  opacity:0 !important;
+  pointer-events:none;
+  transition:opacity .4s cubic-bezier(.22,.61,.36,1);
+}
+
 .hero-scroll:hover{ color:rgba(255,255,255,.85); }
 
 body.theme-light .hero-scroll{ color:rgba(20,35,55,.4); }
@@ -500,16 +514,14 @@ body.theme-light .hero-scroll:hover{ color:rgba(20,35,55,.75); }
 
 @media (hover:hover){
   .card:hover{ box-shadow:var(--shadow-hover); transform:translateY(-4px); }
+  .card:hover .arrow-btn{ border-color:var(--accent); color:var(--accent); }
 }
 
-.card:active{ transform:scale(.977); transition:transform .12s cubic-bezier(.4,0,.2,1); }
+.card:active{ transition:transform .12s cubic-bezier(.4,0,.2,1); }
 
 /* 图片内嵌，自身带圆角 */
 .card-main{
   aspect-ratio:5/3;
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
   background-color:var(--bg3);
   background-image:linear-gradient(135deg, rgba(115,230,235,.12) 0%, rgba(8,25,33,.4) 100%);
   border-radius:calc(var(--radius) - 6px);
@@ -518,11 +530,23 @@ body.theme-light .hero-scroll:hover{ color:rgba(20,35,55,.75); }
   flex-shrink:0;
 }
 
+/* 懒加载图片填满card-main */
+.card-img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
+
 .card-main::before{
   content:"";
   position:absolute;
   inset:0;
   background:var(--card-img-overlay);
+  z-index:1;
 }
 
 /* 底栏透明，和卡片背景融合 */
@@ -661,11 +685,14 @@ body.theme-light .hero-scroll:hover{ color:rgba(20,35,55,.75); }
 }
 
 @media (hover:hover){
+  .contact-item:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); }
   .contact-item:hover::before{
     opacity:1;
-    top:12%;
-    bottom:12%;
+    top:8%;
+    bottom:8%;
+    filter:brightness(1.2);
   }
+  .contact-item:hover .contact-name{ color:var(--text); }
 }
 
 .contact-item.show{ opacity:1; visibility:visible; }
@@ -923,7 +950,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
       </button>
     </div>
 
-    <div class="title">Crythane</div>
+    <div class="title" id="headerTitle" style="cursor:pointer">Crythane</div>
 
     <div class="lang-switch">
       <button class="lang-btn" id="langBtn" aria-label="Language">
@@ -964,7 +991,9 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     <div class="card-list">
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('img/Card1.jpg')"></div>
+        <div class="card-main">
+          <img class="card-img" src="img/Card1.jpg" loading="lazy" alt="" />
+        </div>
         <div class="card-footer">
           <span data-i18n="intro_card">自介</span>
           <button class="arrow-btn" type="button">
@@ -975,7 +1004,9 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('img/Card2.jpg')"></div>
+        <div class="card-main">
+          <img class="card-img" src="img/Card2.jpg" loading="lazy" alt="" />
+        </div>
         <div class="card-footer">
           <span data-i18n="gallery">图库</span>
           <button class="arrow-btn" type="button">
@@ -986,7 +1017,9 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('img/Card3.jpg')"></div>
+        <div class="card-main">
+          <img class="card-img" src="img/Card3.jpg" loading="lazy" alt="" />
+        </div>
         <div class="card-footer">
           <span data-i18n="commission">约稿</span>
           <button class="arrow-btn" type="button">
@@ -997,7 +1030,9 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('img/Card4.jpg')"></div>
+        <div class="card-main">
+          <img class="card-img" src="img/Card4.jpg" loading="lazy" alt="" />
+        </div>
         <div class="card-footer">
           <span data-i18n="projects">博客</span>
           <button class="arrow-btn" type="button">
@@ -1008,7 +1043,9 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('img/Card5.jpg')"></div>
+        <div class="card-main">
+          <img class="card-img" src="img/Card5.jpg" loading="lazy" alt="" />
+        </div>
         <div class="card-footer">
           <span data-i18n="friends">友链</span>
           <button class="arrow-btn" type="button">
@@ -1019,7 +1056,9 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
       </div>
 
       <div class="card" data-href="https://sunland.dev">
-        <div class="card-main" style="background-image:url('img/Card6.jpg')"></div>
+        <div class="card-main">
+          <img class="card-img" src="img/Card6.jpg" loading="lazy" alt="" />
+        </div>
         <div class="card-footer">
           <span data-i18n="donation">捐赠</span>
           <button class="arrow-btn" type="button">
@@ -1059,27 +1098,15 @@ window.addEventListener("load", () => {
     return;
   }
 
-  /* 填色完成后立刻触发退场 */
+  /* 填色完成后（1.55+0.5=2.05s）logo上移淡出，主界面同步淡入 */
   setTimeout(() => {
-    const logo = document.getElementById("logo");
-    /* 直接用JS设，绕过CSS选择器优先级问题 */
-    logo.style.transformOrigin = "50% 88%";
-    logo.style.animation = "logoPressZoom .8s cubic-bezier(.4,0,.2,1) forwards";
-
-    requestAnimationFrame(() => {
-      document.getElementById("splash").classList.add("fade");
-    });
-  }, 2050);
-
-  /* 放大段开始时主界面就位（缩小+停留约0.64s后） */
-  setTimeout(() => {
+    document.getElementById("splash").classList.add("fade");
     const page = document.querySelector(".page");
-    page.style.transition = "opacity .4s cubic-bezier(.22,.61,.36,1)";
     page.style.opacity = 1;
     page.style.visibility = "visible";
     document.body.style.overflow = "auto";
     startPage();
-  }, 2400);
+  }, 2050);
 });
 
 /* 返回页面时重置所有loading箭头 */
@@ -1136,16 +1163,22 @@ function startPage() {
 
   if (isWatch) return;
 
-  const header = document.getElementById("mainHeader");
+  const header     = document.getElementById("mainHeader");
+  const heroScroll = document.getElementById("heroScroll");
 
-  /* Hero 视差 + header 状态 */
+  /* header title 点击回顶部 */
+  document.getElementById("headerTitle").addEventListener("click", () => {
+    window.scrollTo({ top:0, behavior:"smooth" });
+  });
+
+  /* Hero 视差 + header 状态 + scroll箭头隐藏 */
   const heroBg = document.getElementById("heroBg");
   const heroH  = document.querySelector(".hero").offsetHeight;
 
   addEventListener("scroll", () => {
     const sy = scrollY;
 
-    /* 视差：translate3d 强制GPU合成，消除抖动 */
+    /* 视差 */
     heroBg.style.transform = `translate3d(0,${sy * 0.32}px,0)`;
 
     /* header 背景 & title */
@@ -1157,6 +1190,10 @@ function startPage() {
     } else {
       header.classList.remove("scrolled","show-title");
     }
+
+    /* scroll箭头：滚动超过80px隐藏 */
+    if (sy > 80) heroScroll.classList.add("hide");
+    else heroScroll.classList.remove("hide");
   }, {passive:true});
 }
 
