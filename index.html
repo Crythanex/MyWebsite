@@ -27,7 +27,7 @@
 :root{
   --bg:        #081921;
   --bg2:       rgba(20,31,38,.74);
-  --bg3:       rgba(16,24,31,.68);
+  --bg3:       #0d2330;
   --header-bg: rgba(8,25,33,.52);
   --menu-bg:   rgba(18,26,34,.92);
   --text:      #eef7f8;
@@ -41,7 +41,7 @@
   --accent-border: rgba(115,230,235,.35);
   --card-img-overlay: rgba(14,22,28,.16);
   --splash-bg: #081921;
-  --radius:    16px;
+  --radius:    8px;
   --shadow:    none;
   --shadow-hover: none;
   --avatar-shadow: none;
@@ -49,6 +49,7 @@
 
 body.theme-light{
   /* Apple color system */
+  /* radius override */
   --bg:        #f5f5f7;   /* Frost — page canvas */
   --bg2:       #ffffff;   /* pure white card surface */
   --bg3:       #f4f8fb;   /* Ice — elevated wash */
@@ -57,11 +58,13 @@ body.theme-light{
   --text:      #1d1d1f;   /* Carbon — primary text */
   --text2:     #333333;   /* Smoke — secondary */
   --text3:     #707070;   /* Ash — muted */
-  --border:    #e2e2e5;   /* Pebble — hairline */
-  --border2:   #d2d2d7;
+  --border:    #d2d2d7;   /* hairline divider */
+  --border2:   #c7c7cc;
   --border3:   #c7c7cc;
   --btn-bg:    #e2e2e5;
-  --accent:    #0071e3;   /* Apple Blue — single action color */
+  --accent:        #0071e3;   /* Apple Blue — filled buttons only */
+  --accent-link:   #0066cc;   /* Link Blue — outlined/secondary/hover */
+  --accent-signal: #2997ff;   /* Signal Blue — decorative only */
   --accent-border: rgba(0,113,227,.25);
   --card-img-overlay: rgba(244,248,251,.06);
   --splash-bg: #f5f5f7;
@@ -119,8 +122,8 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
   font-family:"CaviarDreams";
   font-size:96px;
   fill:none;
-  stroke:var(--accent);
-  stroke-width:3.2;
+  stroke:var(--text);
+  stroke-width:2.4;
   stroke-dasharray:700;
   stroke-dashoffset:700;
   animation:
@@ -129,7 +132,7 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 }
 
 @keyframes draw{ to{ stroke-dashoffset:0; } }
-@keyframes fill-text{ to{ fill:var(--accent); } }
+@keyframes fill-text{ to{ fill:var(--text); } }
 
 /* 退场：logo上移淡出 + 背景同步淡出 */
 #splash.fade{
@@ -152,6 +155,8 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 .page{
   opacity:0;
   visibility:hidden;
+  max-width:1440px;
+  margin:0 auto;
   transition:opacity .7s cubic-bezier(.22,.61,.36,1), visibility .7s cubic-bezier(.22,.61,.36,1);
 }
 
@@ -163,12 +168,23 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
   left:0;
   right:0;
   z-index:10;
-  padding:calc(16px + env(safe-area-inset-top)) 24px 16px;
+  padding:calc(12px + env(safe-area-inset-top)) 24px 12px;
   display:flex;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
   background:transparent;
   transition:background .4s cubic-bezier(.22,.61,.36,1), backdrop-filter .4s cubic-bezier(.22,.61,.36,1);
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
 .header.scrolled{
@@ -179,12 +195,12 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 
 .title{
   font-family:"CaviarDreams";
-  font-size:30px;
-  letter-spacing:.5px;
+  font-size:20px;
+  letter-spacing:.02em;
   color:#fff;
   opacity:0;
   visibility:hidden;
-  transform:translateY(-10px);
+  transform:translateY(-8px);
   transition:
     opacity .55s cubic-bezier(.22,.61,.36,1),
     transform .55s cubic-bezier(.22,.61,.36,1),
@@ -197,10 +213,8 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
   transform:translateY(0);
 }
 
-/* title 在浅色模式滚动后跟随主题色 */
-body.theme-light .header.scrolled .title{
-  color:#1d1d1f;
-}
+/* 浅色模式 */
+body.theme-light .header.scrolled .title{ color:#1d1d1f; }
 body.theme-light .header.scrolled{
   border-bottom:1px solid #d2d2d7;
 }
@@ -208,14 +222,11 @@ body.theme-light .header.scrolled{
 /* ================= Theme Switch ================= */
 
 .theme-switch{
-  position:absolute;
-  left:24px;
-  top:50%;
-  transform:translateY(-50%);
+  position:relative;
 }
 
 .theme-btn{
-  width:40px;
+  width:36px;
   height:32px;
   border-radius:6px;
   border:1px solid rgba(255,255,255,.3);
@@ -230,16 +241,23 @@ body.theme-light .header.scrolled{
 
 /* 滚动后跟随主题 */
 .header.scrolled .theme-btn{
-  border-color:var(--accent-border);
+  border-color:var(--border3);
   background:var(--btn-bg);
-  color:var(--accent);
+  color:var(--text2);
+}
+
+/* 浅色模式按钮 */
+body.theme-light .header.scrolled .theme-btn{
+  border-color:#858585;
+  background:#e2e2e5;
+  color:#474747;
 }
 
 .theme-btn:active{ transform:scale(.92); }
 
 .theme-btn svg{
-  width:18px;
-  height:18px;
+  width:16px;
+  height:16px;
   position:absolute;
   transition:opacity .25s, transform .35s cubic-bezier(.34,1.56,.64,1);
 }
@@ -252,10 +270,7 @@ body.theme-light .theme-btn .icon-sun{  opacity:1; transform:rotate(0deg) scale(
 /* ================= Language ================= */
 
 .lang-switch{
-  position:absolute;
-  right:24px;
-  top:50%;
-  transform:translateY(-50%);
+  position:relative;
 }
 
 .lang-btn{
@@ -273,13 +288,19 @@ body.theme-light .theme-btn .icon-sun{  opacity:1; transform:rotate(0deg) scale(
 }
 
 .header.scrolled .lang-btn{
-  border-color:var(--accent-border);
+  border-color:var(--border3);
   background:var(--btn-bg);
-  color:var(--accent);
+  color:var(--text2);
+}
+
+body.theme-light .header.scrolled .lang-btn{
+  border-color:#858585;
+  background:#e2e2e5;
+  color:#474747;
 }
 
 .lang-btn:active{ transform:scale(.92); }
-.lang-btn svg{ width:18px; height:18px; }
+.lang-btn svg{ width:16px; height:16px; }
 
 .lang-menu{
   position:absolute;
@@ -359,11 +380,11 @@ body.theme-light .hero-bg::after{
   background:
     linear-gradient(
       to bottom,
-      rgba(240,244,248,.22) 0%,
-      rgba(240,244,248,0)   30%,
-      rgba(240,244,248,0)   50%,
-      rgba(240,244,248,.55) 80%,
-      rgba(240,244,248,.92) 100%
+      rgba(245,245,247,.04) 0%,
+      rgba(245,245,247,0)   30%,
+      rgba(245,245,247,0)   50%,
+      rgba(245,245,247,.18) 80%,
+      rgba(245,245,247,.72) 100%
     );
 }
 
@@ -372,6 +393,10 @@ body.theme-light .hero-bg::after{
   z-index:2;
   padding:0 40px 64px;
   width:100%;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
 /* 中文大标题 */
@@ -389,14 +414,14 @@ body.theme-light .hero-bg::after{
 }
 
 body.theme-light .hero-name-zh{ color:#1d1d1f; }
-body.theme-light .hero-name-en{ color:#333333; }
+body.theme-light .hero-name-en{ color:#1d1d1f; font-weight:300; }
 
 /* 英文副标题 */
 .hero-name-en{
   font-family:"CaviarDreams",sans-serif;
-  font-size:clamp(14px, 2.4vw, 21px);
-  line-height:1.24;
-  color:var(--accent);
+  font-size:14px;
+  line-height:1.29;
+  color:var(--text3);
   letter-spacing:.08em;
   font-weight:300;
   margin:0 0 20px;
@@ -417,6 +442,7 @@ body.theme-light .hero-name-en{ color:#333333; }
 .hero-meta{
   display:flex;
   align-items:center;
+  justify-content:center;
   gap:14px;
   margin-top:20px;
   opacity:0;
@@ -427,15 +453,18 @@ body.theme-light .hero-name-en{ color:#333333; }
 
 .hero-meta-line{
   display:block;
-  width:32px;
+  width:24px;
   height:1px;
-  background:var(--accent);
-  opacity:.6;
+  background:currentColor;
+  opacity:.35;
   flex-shrink:0;
 }
+body.theme-light .hero-meta-line{ background:#2997ff; opacity:.6; }
 
 .hero-meta-text{
   font-size:12px;
+  font-weight:300;
+  line-height:1.33;
   letter-spacing:.16em;
   text-transform:uppercase;
   color:rgba(255,255,255,.42);
@@ -445,15 +474,14 @@ body.theme-light .hero-meta-text{ color:#707070; }
 /* ================= Section（卡片区） ================= */
 
 .section{
-  background:var(--bg);
+  background:var(--bg3);
   padding-top:64px;
   position:relative;
   transition:background .35s cubic-bezier(.22,.61,.36,1);
 }
 
 /* 浅色模式卡片区用Ice背景 */
-body.theme-light .section{ background:var(--bg3); }
-body.theme-light .section::before{ background:linear-gradient(to bottom, transparent, var(--bg3)); }
+/* 浅色Ice，深色bg3，融合层跟随 */
 
 /* Hero → Section 融合层 */
 .section::before{
@@ -463,7 +491,7 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
   left:0;
   right:0;
   height:80px;
-  background:linear-gradient(to bottom, transparent, var(--bg));
+  background:linear-gradient(to bottom, transparent, var(--bg3));
   pointer-events:none;
   z-index:1;
   transition:background .35s cubic-bezier(.22,.61,.36,1);
@@ -476,6 +504,9 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
   display:flex;
   flex-direction:column;
   gap:32px;
+  max-width:980px;
+  margin:0 auto;
+  width:100%;
 }
 
 .card{
@@ -489,25 +520,11 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
   border:1px solid var(--border);
   box-shadow:var(--shadow);
   cursor:pointer;
-  padding:10px 10px 14px;
+  padding:12px 12px 16px;
   display:flex;
   flex-direction:column;
   gap:0;
   position:relative;
-  isolation:isolate;
-}
-
-/* 从左到右填充的accent色背景 */
-.card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:var(--accent);
-  transform:scaleX(0);
-  transform-origin:left center;
-  transition:transform .42s cubic-bezier(.22,.61,.36,1);
-  z-index:0;
-  border-radius:inherit;
 }
 
 .card.show{
@@ -516,19 +533,15 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
   transform:translateY(0);
 }
 
-/* card内部元素需在伪元素上层 */
-.card-main, .card-footer{ position:relative; z-index:1; }
+.card-main{ position:relative; }
 
 @media (hover:hover){
-  /* 触发填充 */
-  .card:hover::before{ transform:scaleX(1); }
-  /* 文字和箭头反色 */
-  .card:hover .card-footer{ color:var(--bg); }
-  .card:hover .arrow-btn{
-    border-color:var(--bg);
-    color:var(--bg);
-  }
+  .card:hover{ border-color:var(--accent-border); }
+  .card:hover .arrow-btn{ border-color:var(--accent-border); color:var(--accent); }
 }
+
+body.theme-light .card:hover{ border-color:#0066cc; }
+body.theme-light .card:hover .arrow-btn{ border-color:#0066cc; color:#0066cc; }
 
 .card:active{ transition:transform .12s cubic-bezier(.4,0,.2,1); }
 
@@ -537,7 +550,7 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
   aspect-ratio:5/3;
   background-color:var(--bg3);
   background-image:linear-gradient(135deg, rgba(115,230,235,.12) 0%, rgba(8,25,33,.4) 100%);
-  border-radius:calc(var(--radius) - 6px);
+  border-radius:calc(var(--radius) - 4px);
   position:relative;
   overflow:hidden;
   flex-shrink:0;
@@ -554,6 +567,10 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
   display:block;
 }
 
+body.theme-light .card-img{
+  box-shadow:rgba(0,0,0,.22) 3px 5px 30px 0px;
+}
+
 .card-main::before{
   content:"";
   position:absolute;
@@ -567,14 +584,14 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:16px 8px 6px;
+  padding:16px 8px 8px;
   background:transparent;
   border-top:none;
-  font-size:28px;
+  font-size:17px;
   font-weight:600;
   color:var(--text);
-  letter-spacing:-0.011em;
-  line-height:1.18;
+  letter-spacing:-0.016em;
+  line-height:1.47;
   transition:color .35s cubic-bezier(.22,.61,.36,1);
 }
 
@@ -635,13 +652,14 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
 
 .contact-divider{
   padding:0 24px;
-  margin:0 0 20px;
+  margin:0 auto 20px;
+  max-width:980px;
+  width:100%;
   color:var(--text3);
   font-size:12px;
   font-weight:600;
   letter-spacing:.08em;
   text-transform:uppercase;
-  border-top:1px solid var(--border2);
   padding-top:32px;
   opacity:0;
   transform:translateY(12px);
@@ -657,14 +675,19 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
 
 .contact-area{
   background:var(--bg);
-  transition:background .35s cubic-bezier(.22,.61,.36,1);
+  border-top:1px solid var(--border2);
+  padding-bottom:0;
+  transition:background .35s cubic-bezier(.22,.61,.36,1), border-color .35s cubic-bezier(.22,.61,.36,1);
 }
 
 .contact-list{
   padding:0 24px 70px;
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:12px;
+  max-width:980px;
+  margin:0 auto;
+  width:100%;
 }
 
 .contact-item{
@@ -686,8 +709,10 @@ body.theme-light .section::before{ background:linear-gradient(to bottom, transpa
 }
 
 @media (hover:hover){
-  .contact-item:hover .contact-name{ color:var(--accent); }
-  .contact-item:hover .contact-arrow{ border-color:var(--accent); color:var(--accent); }
+  .contact-item:hover .contact-name{ color:var(--text); }
+  .contact-item:hover .contact-arrow{ color:var(--text); }
+body.theme-light .contact-item:hover .contact-name{ color:var(--accent-link); }
+body.theme-light .contact-item:hover .contact-arrow{ color:var(--accent-link); }
 }
 
 .contact-item.show{ opacity:1; visibility:visible; transform:translateY(0); }
@@ -729,6 +754,7 @@ body.theme-light .contact-item[style*="010101"] .contact-icon{
   flex:1;
   font-size:17px;
   font-weight:400;
+  line-height:1.47;
   letter-spacing:-0.016em;
   color:var(--text2);
   transition:color .35s cubic-bezier(.22,.61,.36,1);
@@ -767,6 +793,9 @@ body.theme-light .contact-item[style*="010101"] .contact-icon{
 .copyright{
   text-align:left;
   padding:24px 24px 44px;
+  max-width:980px;
+  margin:0 auto;
+  width:100%;
   font-size:12px;
   letter-spacing:-0.264px;
   line-height:1.33;
@@ -809,18 +838,15 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   .hero-content{ padding:0 64px 88px; }
   .hero-name-zh{ font-size:clamp(72px,9vw,108px); }
   .card-list{
-    padding:0 40px 80px;
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:28px;
   }
   .contact-list{
-    padding:0 40px 80px;
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:12px;
   }
-  .contact-divider{ padding:0 40px; }
   .section{ padding-top:72px; }
 }
 
@@ -829,19 +855,16 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   .hero-content{ padding:0 10vw 100px; }
   .hero-name-zh{ font-size:clamp(88px,8vw,128px); }
   .card-list{
-    padding:0 10vw 90px;
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:32px;
   }
   .contact-list{
-    padding:0 10vw 90px;
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:14px;
   }
-  .contact-divider{ padding:0 10vw; }
-  .card-footer{ font-size:22px; padding:22px 28px; }
+  .card-footer{ font-size:17px; padding:18px 20px; }
   .arrow-btn{ width:56px; height:56px; }
   .section{ padding-top:80px; }
 }
@@ -851,19 +874,16 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   .hero-content{ padding:0 12vw 110px; }
   .hero-name-zh{ font-size:clamp(100px,7vw,160px); }
   .card-list{
-    padding:0 12vw 100px;
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:36px;
   }
   .contact-list{
-    padding:0 12vw 100px;
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:14px;
   }
-  .contact-divider{ padding:0 12vw; }
-  .card-footer{ font-size:24px; padding:24px 30px; }
+  .card-footer{ font-size:17px; padding:20px 24px; }
   .arrow-btn{ width:60px; height:60px; }
   .section{ padding-top:90px; }
 }
@@ -898,7 +918,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   .card-list{ padding:0 6px 16px; gap:6px; display:flex; flex-direction:column; }
   .card{ border-radius:10px; padding:5px 5px 8px; }
   .card-main{ border-radius:7px; }
-  .card-footer{ font-size:11px; padding:7px 4px 2px; font-weight:700; }
+  .card-footer{ font-size:11px; padding:7px 4px 2px; font-weight:600; }
   .arrow-btn{ width:22px; height:22px; flex-shrink:0; }
   .arrow-btn svg{ width:11px; height:11px; }
 
@@ -934,34 +954,38 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   <!-- Header -->
   <div class="header" id="mainHeader">
 
-    <div class="theme-switch">
-      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none">
-          <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
-          <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
+    <div class="header-left">
+      <div class="title" id="headerTitle" style="cursor:pointer">Crythane</div>
     </div>
 
-    <div class="title" id="headerTitle" style="cursor:pointer">Crythane</div>
+    <div class="header-right">
+      <div class="theme-switch">
+        <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none">
+            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
 
-    <div class="lang-switch">
-      <button class="lang-btn" id="langBtn" aria-label="Language">
-        <svg viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-          <ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="2"/>
-          <path d="M3 12h18" stroke="currentColor" stroke-width="2"/>
-        </svg>
-      </button>
-      <div class="lang-menu" id="langMenu">
-        <div data-lang="zh">简体中文</div>
-        <div data-lang="en">English</div>
-        <div data-lang="jp">日本語</div>
+      <div class="lang-switch">
+        <button class="lang-btn" id="langBtn" aria-label="Language">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M3 12h18" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+        <div class="lang-menu" id="langMenu">
+          <div data-lang="zh">简体中文</div>
+          <div data-lang="en">English</div>
+          <div data-lang="jp">日本語</div>
+        </div>
       </div>
     </div>
 
@@ -976,6 +1000,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
       <div class="hero-meta">
         <span class="hero-meta-line"></span>
         <span class="hero-meta-text" data-i18n="hero_tag">Fursona · 内容创作 · 视觉设计</span>
+        <span class="hero-meta-line"></span>
       </div>
     </div>
   </div>
@@ -1306,7 +1331,7 @@ const CONTACTS = {
   ]
 };
 
-const EXTERNAL_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+const EXTERNAL_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
 
 const contactObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
