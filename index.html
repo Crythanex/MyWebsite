@@ -48,22 +48,23 @@
 }
 
 body.theme-light{
-  --bg:        #f0f4f8;
-  --bg2:       rgba(255,255,255,.82);
-  --bg3:       rgba(240,244,250,.90);
-  --header-bg: rgba(240,244,250,.70);
-  --menu-bg:   rgba(255,255,255,.95);
-  --text:      #1a2535;
-  --text2:     rgba(20,35,55,.92);
-  --text3:     rgba(20,35,55,.55);
-  --border:    rgba(0,0,0,.07);
-  --border2:   rgba(0,0,0,.08);
-  --border3:   rgba(0,0,0,.10);
-  --btn-bg:    rgba(0,0,0,.04);
-  --accent:    #2ab8c4;
-  --accent-border: rgba(42,184,196,.38);
-  --card-img-overlay: rgba(240,244,250,.08);
-  --splash-bg: #f0f4f8;
+  /* Apple color system */
+  --bg:        #f5f5f7;   /* Frost — page canvas */
+  --bg2:       #ffffff;   /* pure white card surface */
+  --bg3:       #f4f8fb;   /* Ice — elevated wash */
+  --header-bg: rgba(245,245,247,.80);
+  --menu-bg:   rgba(255,255,255,.96);
+  --text:      #1d1d1f;   /* Carbon — primary text */
+  --text2:     #333333;   /* Smoke — secondary */
+  --text3:     #707070;   /* Ash — muted */
+  --border:    #e2e2e5;   /* Pebble — hairline */
+  --border2:   #d2d2d7;
+  --border3:   #c7c7cc;
+  --btn-bg:    #e2e2e5;
+  --accent:    #0071e3;   /* Apple Blue — single action color */
+  --accent-border: rgba(0,113,227,.25);
+  --card-img-overlay: rgba(244,248,251,.06);
+  --splash-bg: #f5f5f7;
   --shadow:    none;
   --shadow-hover: none;
   --avatar-shadow: none;
@@ -81,6 +82,8 @@ body{
   font-family:"Urbanist","Alimama",-apple-system,sans-serif;
   overflow:hidden;
   touch-action:manipulation;
+  letter-spacing:-0.016em;
+  line-height:1.47;
   transition:background .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1);
 }
 
@@ -196,7 +199,10 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 
 /* title 在浅色模式滚动后跟随主题色 */
 body.theme-light .header.scrolled .title{
-  color:var(--accent);
+  color:#1d1d1f;
+}
+body.theme-light .header.scrolled{
+  border-bottom:1px solid #d2d2d7;
 }
 
 /* ================= Theme Switch ================= */
@@ -371,10 +377,10 @@ body.theme-light .hero-bg::after{
 /* 中文大标题 */
 .hero-name-zh{
   font-family:"Alimama",sans-serif;
-  font-size:clamp(52px, 12vw, 96px);
+  font-size:clamp(80px, 14vw, 160px);
   line-height:1;
   color:#fff;
-  letter-spacing:.04em;
+  letter-spacing:.02em;
   margin:0 0 6px;
   /* 入场 */
   opacity:0;
@@ -382,15 +388,17 @@ body.theme-light .hero-bg::after{
   transition:opacity .8s .1s cubic-bezier(.22,.61,.36,1), transform .8s .1s cubic-bezier(.22,.61,.36,1);
 }
 
-body.theme-light .hero-name-zh{ color:#1a2535; }
+body.theme-light .hero-name-zh{ color:#1d1d1f; }
+body.theme-light .hero-name-en{ color:#333333; }
 
 /* 英文副标题 */
 .hero-name-en{
   font-family:"CaviarDreams",sans-serif;
-  font-size:clamp(22px, 5vw, 40px);
-  line-height:1;
+  font-size:clamp(14px, 2.4vw, 21px);
+  line-height:1.24;
   color:var(--accent);
-  letter-spacing:.12em;
+  letter-spacing:.08em;
+  font-weight:300;
   margin:0 0 20px;
   opacity:0;
   transform:translateY(24px);
@@ -432,16 +440,20 @@ body.theme-light .hero-name-zh{ color:#1a2535; }
   text-transform:uppercase;
   color:rgba(255,255,255,.42);
 }
-body.theme-light .hero-meta-text{ color:rgba(20,35,55,.38); }
+body.theme-light .hero-meta-text{ color:#707070; }
 
 /* ================= Section（卡片区） ================= */
 
 .section{
   background:var(--bg);
-  padding-top:56px;
+  padding-top:64px;
   position:relative;
   transition:background .35s cubic-bezier(.22,.61,.36,1);
 }
+
+/* 浅色模式卡片区用Ice背景 */
+body.theme-light .section{ background:var(--bg3); }
+body.theme-light .section::before{ background:linear-gradient(to bottom, transparent, var(--bg3)); }
 
 /* Hero → Section 融合层 */
 .section::before{
@@ -460,10 +472,10 @@ body.theme-light .hero-meta-text{ color:rgba(20,35,55,.38); }
 /* ================= Cards ================= */
 
 .card-list{
-  padding:0 24px 70px;
+  padding:0 24px 80px;
   display:flex;
   flex-direction:column;
-  gap:28px;
+  gap:32px;
 }
 
 .card{
@@ -559,9 +571,10 @@ body.theme-light .hero-meta-text{ color:rgba(20,35,55,.38); }
   background:transparent;
   border-top:none;
   font-size:28px;
-  font-weight:700;
+  font-weight:600;
   color:var(--text);
-  letter-spacing:-.01em;
+  letter-spacing:-0.011em;
+  line-height:1.18;
   transition:color .35s cubic-bezier(.22,.61,.36,1);
 }
 
@@ -621,26 +634,31 @@ body.theme-light .hero-meta-text{ color:rgba(20,35,55,.38); }
 /* ================= Contact Divider ================= */
 
 .contact-divider{
-  display:flex;
-  align-items:center;
-  gap:14px;
   padding:0 24px;
-  margin:8px 0 20px;
+  margin:0 0 20px;
   color:var(--text3);
-  font-size:13px;
+  font-size:12px;
+  font-weight:600;
   letter-spacing:.08em;
   text-transform:uppercase;
+  border-top:1px solid var(--border2);
+  padding-top:32px;
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity .5s cubic-bezier(.22,.61,.36,1), transform .5s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1), border-color .35s cubic-bezier(.22,.61,.36,1);
 }
 
-.contact-divider::before,
-.contact-divider::after{
-  content:"";
-  flex:1;
-  height:1px;
-  background:var(--border2);
+.contact-divider.show{
+  opacity:1;
+  transform:translateY(0);
 }
 
 /* ================= Contact Items ================= */
+
+.contact-area{
+  background:var(--bg);
+  transition:background .35s cubic-bezier(.22,.61,.36,1);
+}
 
 .contact-list{
   padding:0 24px 70px;
@@ -653,33 +671,34 @@ body.theme-light .hero-meta-text{ color:rgba(20,35,55,.38); }
   display:flex;
   align-items:center;
   gap:16px;
-  padding:14px 18px;
-  border-radius:12px;
-  background:var(--bg2);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
+  padding:12px 0;
+  border-radius:0;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--border);
   cursor:pointer;
   opacity:0;
   visibility:hidden;
   position:relative;
   overflow:hidden;
-  transition:opacity .45s cubic-bezier(.22,.61,.36,1), visibility .45s cubic-bezier(.22,.61,.36,1), transform .18s, box-shadow .18s;
+  transform:translateY(16px);
+  transition:opacity .45s cubic-bezier(.22,.61,.36,1), visibility .45s cubic-bezier(.22,.61,.36,1), transform .45s cubic-bezier(.22,.61,.36,1), border-color .35s cubic-bezier(.22,.61,.36,1);
 }
 
 @media (hover:hover){
-  .contact-item:hover{ border-color:var(--accent-border); }
-  .contact-item:hover .contact-name{ color:var(--text); }
+  .contact-item:hover .contact-name{ color:var(--accent); }
+  .contact-item:hover .contact-arrow{ border-color:var(--accent); color:var(--accent); }
 }
 
-.contact-item.show{ opacity:1; visibility:visible; }
+.contact-item.show{ opacity:1; visibility:visible; transform:translateY(0); }
 
-.contact-item:active{ transform:scale(.975); transition:transform .1s cubic-bezier(.4,0,.2,1); }
+.contact-item:active{ opacity:.7; transition:opacity .1s; }
 
 .contact-icon{
-  width:42px;
-  height:42px;
-  border-radius:8px;
-  background:color-mix(in srgb, var(--platform-color) 18%, transparent);
+  width:32px;
+  height:32px;
+  border-radius:6px;
+  background:color-mix(in srgb, var(--platform-color) 14%, transparent);
   color:var(--platform-color);
   display:flex;
   align-items:center;
@@ -688,31 +707,39 @@ body.theme-light .hero-meta-text{ color:rgba(20,35,55,.38); }
   transition:background .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1);
 }
 
+/* 浅色模式图标去彩色背景，用纯色更Apple */
+body.theme-light .contact-icon{
+  background:transparent;
+  color:var(--text3);
+}
+
 /* X和抖音品牌色#010101在深色背景下不可见，单独覆盖 */
 .contact-item[style*="010101"] .contact-icon{
   background:rgba(255,255,255,.10);
   color:rgba(255,255,255,.80);
 }
 body.theme-light .contact-item[style*="010101"] .contact-icon{
-  background:rgba(0,0,0,.08);
-  color:rgba(20,35,55,.75);
+  background:transparent;
+  color:#1d1d1f;
 }
 
-.contact-icon svg{ width:20px; height:20px; }
+.contact-icon svg{ width:18px; height:18px; }
 
 .contact-name{
   flex:1;
   font-size:17px;
+  font-weight:400;
+  letter-spacing:-0.016em;
   color:var(--text2);
   transition:color .35s cubic-bezier(.22,.61,.36,1);
 }
 
 .contact-arrow{
-  width:36px;
-  height:36px;
+  width:28px;
+  height:28px;
   border-radius:50%;
-  border:1px solid var(--border3);
-  background:var(--btn-bg);
+  border:none;
+  background:transparent;
   color:var(--text3);
   display:flex;
   align-items:center;
@@ -721,7 +748,7 @@ body.theme-light .contact-item[style*="010101"] .contact-icon{
   cursor:pointer;
   position:relative;
   overflow:visible;
-  transition:background .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1), border-color .35s cubic-bezier(.22,.61,.36,1), transform .14s cubic-bezier(.34,1.56,.64,1);
+  transition:color .35s cubic-bezier(.22,.61,.36,1), transform .14s cubic-bezier(.34,1.56,.64,1);
 }
 
 .contact-arrow:active{ transform:scale(.88); }
@@ -738,14 +765,18 @@ body.theme-light .contact-item[style*="010101"] .contact-icon{
 /* ================= Copyright ================= */
 
 .copyright{
-  text-align:center;
-  padding:8px 24px 44px;
-  font-size:13px;
-  opacity:.42;
-  letter-spacing:.25px;
+  text-align:left;
+  padding:24px 24px 44px;
+  font-size:12px;
+  letter-spacing:-0.264px;
+  line-height:1.33;
   color:var(--text3);
-  transition:color .35s cubic-bezier(.22,.61,.36,1);
+  border-top:1px solid var(--border2);
+  opacity:0;
+  transition:color .35s cubic-bezier(.22,.61,.36,1), border-color .35s cubic-bezier(.22,.61,.36,1), opacity .6s .2s cubic-bezier(.22,.61,.36,1);
 }
+
+.copyright.show{ opacity:1; }
 
 body.lang-zh .copyright{ font-family:"Harmony","Alimama",sans-serif; }
 body.lang-en .copyright{ font-family:"Urbanist",sans-serif; }
@@ -1034,14 +1065,16 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
     </div>
 
-    <div class="contact-divider">
-      <span data-i18n="contact">联络</span>
-    </div>
+    <div class="contact-area">
+      <div class="contact-divider">
+        <span data-i18n="contact">联络</span>
+      </div>
 
-    <div class="contact-list" id="contactList"></div>
+      <div class="contact-list" id="contactList"></div>
 
-    <div class="copyright" id="copyright">
-      版权所有 ©2023-2026 Crythane 保留所有权利
+      <div class="copyright" id="copyright">
+        版权所有 ©2023-2026 Crythane 保留所有权利
+      </div>
     </div>
 
   </div>
@@ -1110,6 +1143,20 @@ function startPage() {
   }, {threshold:.12});
 
   cards.forEach(c => cardObs.observe(c));
+
+  /* contact-divider 入场 */
+  const divider = document.querySelector(".contact-divider");
+  if (divider) {
+    const divObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add("show");
+          divObs.unobserve(e.target);
+        }
+      });
+    }, {threshold:.2});
+    divObs.observe(divider);
+  }
   cards.forEach(card => {
     const btn = card.querySelector(".arrow-btn");
     if (!btn) return;
@@ -1120,6 +1167,20 @@ function startPage() {
       navigateTo(card.dataset.href);
     });
   });
+
+  /* copyright 入场 */
+  const copy = document.getElementById("copyright");
+  if (copy) {
+    const copyObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add("show");
+          copyObs.unobserve(e.target);
+        }
+      });
+    }, {threshold:.3});
+    copyObs.observe(copy);
+  }
 
   if (isWatch) return;
 
@@ -1249,17 +1310,21 @@ const EXTERNAL_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 
 const contactObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add("show");
-    else e.target.classList.remove("show");
+    if (e.isIntersecting) {
+      /* stagger：每条延迟60ms */
+      const idx = parseInt(e.target.dataset.idx || 0);
+      setTimeout(() => e.target.classList.add("show"), idx * 60);
+      contactObs.unobserve(e.target);
+    }
   });
-}, {threshold:.12});
+}, {threshold:.08});
 
 function renderContacts(lang) {
   const list  = document.getElementById("contactList");
   const items = CONTACTS[lang] || CONTACTS.zh;
   list.querySelectorAll(".contact-item").forEach(el => contactObs.unobserve(el));
-  list.innerHTML = items.map(p => `
-    <div class="contact-item" style="--platform-color:${p.color};" data-url="${encodeURIComponent(p.url)}">
+  list.innerHTML = items.map((p, i) => `
+    <div class="contact-item" style="--platform-color:${p.color};" data-url="${encodeURIComponent(p.url)}" data-idx="${i}">
       <div class="contact-icon">${ICONS[p.id]||""}</div>
       <span class="contact-name">${p.name}</span>
       <button class="contact-arrow" type="button" aria-label="打开"><span class="arrow-icon">${EXTERNAL_ICON}</span><div class="spin-ring"></div></button>
