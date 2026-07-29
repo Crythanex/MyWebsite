@@ -195,8 +195,9 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 
 .title{
   font-family:"CaviarDreams";
-  font-size:20px;
-  letter-spacing:.02em;
+  font-size:21px;
+  font-weight:600;
+  letter-spacing:-0.005em;
   color:#fff;
   opacity:0;
   visibility:hidden;
@@ -402,10 +403,10 @@ body.theme-light .hero-bg::after{
 /* 中文大标题 */
 .hero-name-zh{
   font-family:"Alimama",sans-serif;
-  font-size:clamp(80px, 14vw, 160px);
-  line-height:1;
+  font-size:clamp(40px, 8vw, 56px);
+  line-height:1.07;
   color:#fff;
-  letter-spacing:.02em;
+  letter-spacing:0.011em;
   margin:0 0 6px;
   /* 入场 */
   opacity:0;
@@ -503,7 +504,7 @@ body.theme-light .hero-meta-text{ color:#707070; }
   padding:0 24px 80px;
   display:flex;
   flex-direction:column;
-  gap:32px;
+  gap:24px;
   max-width:980px;
   margin:0 auto;
   width:100%;
@@ -516,15 +517,15 @@ body.theme-light .hero-meta-text{ color:#707070; }
   visibility:hidden;
   transform:translateY(32px);
   transition:opacity .65s cubic-bezier(.22,.61,.36,1), transform .65s cubic-bezier(.22,.61,.36,1), visibility .65s cubic-bezier(.22,.61,.36,1);
-  background:var(--bg2);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
+  /* 无背景、无border、无padding — 图片就是卡片 */
+  background:var(--bg3);
+  border:none;
   cursor:pointer;
-  padding:12px 12px 16px;
+  padding:0;
   display:flex;
   flex-direction:column;
-  gap:0;
   position:relative;
+  aspect-ratio:16/9;
 }
 
 .card.show{
@@ -533,76 +534,94 @@ body.theme-light .hero-meta-text{ color:#707070; }
   transform:translateY(0);
 }
 
-.card-main{ position:relative; }
-
 @media (hover:hover){
-  .card:hover{ border-color:var(--accent-border); }
-  .card:hover .arrow-btn{ border-color:var(--accent-border); color:var(--accent); }
+  /* 轻微亮度提升，不用accent色 */
+  .card:hover .card-img{ filter:brightness(1.06); }
+  .card:hover .arrow-btn{ border-color:rgba(255,255,255,.8); }
 }
 
-body.theme-light .card:hover{ border-color:#0066cc; }
-body.theme-light .card:hover .arrow-btn{ border-color:#0066cc; color:#0066cc; }
+.card:active{ transform:scale(.99); transition:transform .12s cubic-bezier(.4,0,.2,1); }
 
-.card:active{ transition:transform .12s cubic-bezier(.4,0,.2,1); }
-
-/* 图片内嵌，自身带圆角 */
+/* 图片铺满整张卡片 */
 .card-main{
-  aspect-ratio:5/3;
-  background-color:var(--bg3);
-  background-image:linear-gradient(135deg, rgba(115,230,235,.12) 0%, rgba(8,25,33,.4) 100%);
-  border-radius:calc(var(--radius) - 4px);
-  position:relative;
-  overflow:hidden;
-  flex-shrink:0;
-}
-
-/* 懒加载图片填满card-main */
-.card-img{
   position:absolute;
   inset:0;
+  background-color:var(--bg3);
+  background-image:linear-gradient(135deg, rgba(115,230,235,.10) 0%, rgba(8,25,33,.5) 100%);
+}
+
+.card-img{
   width:100%;
   height:100%;
   object-fit:cover;
   object-position:center;
   display:block;
+  transition:filter .4s cubic-bezier(.22,.61,.36,1);
 }
 
-body.theme-light .card-img{
-  box-shadow:rgba(0,0,0,.22) 3px 5px 30px 0px;
-}
-
-.card-main::before{
+/* 底部渐变遮罩保证文字可读 */
+.card-main::after{
   content:"";
   position:absolute;
   inset:0;
-  background:var(--card-img-overlay);
-  z-index:1;
+  background:linear-gradient(
+    to bottom,
+    transparent 35%,
+    rgba(0,0,0,.18) 60%,
+    rgba(0,0,0,.62) 100%
+  );
+  pointer-events:none;
 }
 
-/* 底栏透明，和卡片背景融合 */
+/* 文字叠在图片底部 */
 .card-footer{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  padding:16px 8px 8px;
+  align-items:flex-end;
+  padding:20px 20px 18px;
   background:transparent;
   border-top:none;
-  font-size:17px;
-  font-weight:600;
-  color:var(--text);
-  letter-spacing:-0.016em;
-  line-height:1.47;
-  transition:color .35s cubic-bezier(.22,.61,.36,1);
+  z-index:2;
+  transition:none;
 }
 
-/* 箭头：空心圆圈，苹果同心圆角比例 */
+.card-footer-text{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+/* genre label — 12px caption */
+.card-label{
+  font-size:12px;
+  font-weight:400;
+  line-height:1.33;
+  letter-spacing:.08em;
+  color:rgba(255,255,255,.55);
+  text-transform:uppercase;
+}
+
+/* 卡片主标题 — 24px heading-sm */
+.card-title{
+  font-size:24px;
+  font-weight:600;
+  line-height:1.18;
+  letter-spacing:-0.011em;
+  color:#ffffff;
+}
+
+/* 箭头：白色空心圆，始终白色（在图片上） */
 .arrow-btn{
-  width:52px;
-  height:52px;
+  width:44px;
+  height:44px;
   border-radius:50%;
-  border:1px solid var(--border);
+  border:1.5px solid rgba(255,255,255,.6);
   background:transparent;
-  color:var(--text);
+  color:#ffffff;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -610,26 +629,25 @@ body.theme-light .card-img{
   position:relative;
   overflow:visible;
   flex-shrink:0;
-  transition:border-color .35s cubic-bezier(.22,.61,.36,1), color .35s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.34,1.56,.64,1);
+  transition:border-color .25s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.34,1.56,.64,1);
 }
 
 .arrow-btn:active{ transform:scale(.88); }
 
-/* 箭头svg */
 .arrow-btn .arrow-icon{
-  width:22px;
-  height:22px;
+  width:20px;
+  height:20px;
   transition:opacity .18s cubic-bezier(.22,.61,.36,1);
 }
 
-/* Win10风格进度环：粗细不均的扫动弧 */
+/* Win10风格进度环 */
 .arrow-btn .spin-ring{
   position:absolute;
   inset:-2px;
   border-radius:50%;
-  border:2.5px solid transparent;
-  border-top-color:var(--accent);
-  border-right-color:var(--accent);
+  border:2px solid transparent;
+  border-top-color:#ffffff;
+  border-right-color:#ffffff;
   opacity:0;
   transition:opacity .18s cubic-bezier(.22,.61,.36,1);
   pointer-events:none;
@@ -646,6 +664,43 @@ body.theme-light .card-img{
   0%  { transform:rotate(0deg);   border-top-color:var(--accent); border-right-color:var(--accent); border-bottom-color:transparent; border-left-color:transparent; }
   50% { transform:rotate(180deg); border-top-color:transparent;   border-right-color:var(--accent); border-bottom-color:var(--accent); border-left-color:transparent; }
   100%{ transform:rotate(360deg); border-top-color:var(--accent); border-right-color:var(--accent); border-bottom-color:transparent; border-left-color:transparent; }
+}
+
+/* ================= Contact CTA ================= */
+
+.contact-cta{
+  max-width:980px;
+  margin:0 auto;
+  width:100%;
+  padding:48px 24px 32px;
+  text-align:center;
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1);
+}
+
+.contact-cta.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.contact-cta-heading{
+  font-size:40px;
+  font-weight:600;
+  line-height:1.14;
+  letter-spacing:0.011em;
+  color:var(--text);
+  margin-bottom:12px;
+  transition:color .35s cubic-bezier(.22,.61,.36,1);
+}
+
+.contact-cta-sub{
+  font-size:21px;
+  font-weight:300;
+  line-height:1.24;
+  letter-spacing:-0.005em;
+  color:var(--text3);
+  transition:color .35s cubic-bezier(.22,.61,.36,1);
 }
 
 /* ================= Contact Divider ================= */
@@ -819,7 +874,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 @media (max-width:320px){
   .hero-content{ padding:0 20px 48px; }
   .card-list{ padding:0 14px 60px; gap:18px; }
-  .card-footer{ font-size:17px; padding:16px 18px; }
   .arrow-btn{ width:42px; height:42px; }
   .arrow-btn svg{ width:18px; height:18px; }
 }
@@ -864,8 +918,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     grid-template-columns:repeat(2,1fr);
     gap:14px;
   }
-  .card-footer{ font-size:17px; padding:18px 20px; }
-  .arrow-btn{ width:56px; height:56px; }
   .section{ padding-top:80px; }
 }
 
@@ -883,8 +935,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     grid-template-columns:repeat(3,1fr);
     gap:14px;
   }
-  .card-footer{ font-size:17px; padding:20px 24px; }
-  .arrow-btn{ width:60px; height:60px; }
   .section{ padding-top:90px; }
 }
 
@@ -917,8 +967,6 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   /* 卡片：只保留底栏文字，不显示图片 */
   .card-list{ padding:0 6px 16px; gap:6px; display:flex; flex-direction:column; }
   .card{ border-radius:10px; padding:5px 5px 8px; }
-  .card-main{ border-radius:7px; }
-  .card-footer{ font-size:11px; padding:7px 4px 2px; font-weight:600; }
   .arrow-btn{ width:22px; height:22px; flex-shrink:0; }
   .arrow-btn svg{ width:11px; height:11px; }
 
@@ -1015,7 +1063,10 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card1.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <span data-i18n="intro_card">自介</span>
+          <div class="card-footer-text">
+            <span class="card-label" data-i18n="intro_label">CRYTHANE</span>
+            <span class="card-title" data-i18n="intro_card">自介</span>
+          </div>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1028,7 +1079,10 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card2.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <span data-i18n="gallery">图库</span>
+          <div class="card-footer-text">
+            <span class="card-label" data-i18n="gallery_label">GALLERY</span>
+            <span class="card-title" data-i18n="gallery">图库</span>
+          </div>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1041,7 +1095,10 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card3.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <span data-i18n="commission">约稿</span>
+          <div class="card-footer-text">
+            <span class="card-label" data-i18n="commission_label">COMMISSION</span>
+            <span class="card-title" data-i18n="commission">约稿</span>
+          </div>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1054,7 +1111,10 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card4.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <span data-i18n="projects">博客</span>
+          <div class="card-footer-text">
+            <span class="card-label" data-i18n="projects_label">BLOG</span>
+            <span class="card-title" data-i18n="projects">博客</span>
+          </div>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1067,7 +1127,10 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card5.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <span data-i18n="friends">友链</span>
+          <div class="card-footer-text">
+            <span class="card-label" data-i18n="friends_label">LINKS</span>
+            <span class="card-title" data-i18n="friends">友链</span>
+          </div>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1080,7 +1143,10 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card6.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <span data-i18n="donation">捐赠</span>
+          <div class="card-footer-text">
+            <span class="card-label" data-i18n="donation_label">SUPPORT</span>
+            <span class="card-title" data-i18n="donation">捐赠</span>
+          </div>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1091,6 +1157,10 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     </div>
 
     <div class="contact-area">
+      <div class="contact-cta">
+        <div class="contact-cta-heading" data-i18n="cta_heading">找到我</div>
+        <div class="contact-cta-sub" data-i18n="cta_sub">欢迎通过以下平台联系我</div>
+      </div>
       <div class="contact-divider">
         <span data-i18n="contact">联络</span>
       </div>
@@ -1110,7 +1180,11 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
 /* ================= Splash ================= */
 
-window.addEventListener("load", () => {
+/* 保底：最多等4秒，不管资源有没有加载完 */
+const splashStart = Date.now();
+function showPage() {
+  if (window.__pageShown) return;
+  window.__pageShown = true;
   if (window.innerWidth <= 180) {
     const page = document.querySelector(".page");
     page.style.opacity = 1;
@@ -1119,8 +1193,6 @@ window.addEventListener("load", () => {
     startPage();
     return;
   }
-
-  /* 填色完成后（1.55+0.5=2.05s）logo上移淡出，主界面同步淡入 */
   setTimeout(() => {
     document.getElementById("splash").classList.add("fade");
     const page = document.querySelector(".page");
@@ -1129,7 +1201,10 @@ window.addEventListener("load", () => {
     document.body.style.overflow = "auto";
     startPage();
   }, 2050);
-});
+}
+
+window.addEventListener("load", showPage);
+setTimeout(showPage, 4000); /* 保底4秒 */
 
 /* 返回页面时重置所有状态 */
 window.addEventListener("pageshow", () => {
@@ -1168,6 +1243,17 @@ function startPage() {
   }, {threshold:.12});
 
   cards.forEach(c => cardObs.observe(c));
+
+  /* contact-cta 入场 */
+  const cta = document.querySelector(".contact-cta");
+  if (cta) {
+    const ctaObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("show"); ctaObs.unobserve(e.target); }
+      });
+    }, {threshold:.2});
+    ctaObs.observe(cta);
+  }
 
   /* contact-divider 入场 */
   const divider = document.querySelector(".contact-divider");
@@ -1381,24 +1467,42 @@ const LANG = {
     hero_zh:"凌绡",
     hero_tag:"Fursona · 内容创作 · 视觉设计",
     scroll:"向下探索",
-    intro_card:"自介", gallery:"图库", commission:"约稿", projects:"博客",
-    contact:"联络", friends:"友链", donation:"捐赠",
+    intro_card:"自介",    intro_label:"CRYTHANE",
+    gallery:"图库",       gallery_label:"GALLERY",
+    commission:"约稿",    commission_label:"COMMISSION",
+    projects:"博客",      projects_label:"BLOG",
+    contact:"联络",
+    friends:"友链",       friends_label:"LINKS",
+    donation:"捐赠",      donation_label:"SUPPORT",
+    cta_heading:"找到我", cta_sub:"欢迎通过以下平台联系我",
     copyright:"版权所有 ©2023-2026 Crythane 保留所有权利"
   },
   en:{
     hero_zh:"凌绡",
     hero_tag:"Fursona · Content Creator · Visual Design",
     scroll:"Explore",
-    intro_card:"Introduction", gallery:"Gallery", commission:"Commission", projects:"Blog",
-    contact:"Contact", friends:"Links", donation:"Donation",
+    intro_card:"Introduction", intro_label:"CRYTHANE",
+    gallery:"Gallery",         gallery_label:"GALLERY",
+    commission:"Commission",   commission_label:"COMMISSION",
+    projects:"Blog",           projects_label:"BLOG",
+    contact:"Contact",
+    friends:"Links",           friends_label:"LINKS",
+    donation:"Donation",       donation_label:"SUPPORT",
+    cta_heading:"Find Me",     cta_sub:"Reach out through any of the platforms below",
     copyright:"Copyright ©2023-2026 Crythane. All rights reserved."
   },
   jp:{
     hero_zh:"凌绡",
     hero_tag:"ファーソナ · コンテンツ · ビジュアル",
     scroll:"スクロール",
-    intro_card:"自己紹介", gallery:"ギャラリー", commission:"コミッション", projects:"ブログ",
-    contact:"連絡", friends:"リンク", donation:"寄付",
+    intro_card:"自己紹介",     intro_label:"CRYTHANE",
+    gallery:"ギャラリー",      gallery_label:"GALLERY",
+    commission:"コミッション", commission_label:"COMMISSION",
+    projects:"ブログ",         projects_label:"BLOG",
+    contact:"連絡",
+    friends:"リンク",          friends_label:"LINKS",
+    donation:"寄付",           donation_label:"SUPPORT",
+    cta_heading:"見つけて",    cta_sub:"以下のプラットフォームからご連絡ください",
     copyright:"Copyright ©2023-2026 Crythane All Rights Reserved."
   }
 };
