@@ -25,9 +25,9 @@
 /* ================= Theme Variables ================= */
 
 :root{
-  --bg:        #081921;
-  --bg2:       rgba(20,31,38,.74);
-  --bg3:       #0d2330;
+  --bg:        #071720;
+  --bg2:       rgba(12,26,36,.85);
+  --bg3:       #091a24;
   --header-bg: rgba(8,25,33,.52);
   --menu-bg:   rgba(18,26,34,.92);
   --text:      #eef7f8;
@@ -37,10 +37,11 @@
   --border2:   rgba(255,255,255,.06);
   --border3:   rgba(255,255,255,.08);
   --btn-bg:    rgba(255,255,255,.05);
-  --accent:    #73e6eb;
-  --accent-border: rgba(115,230,235,.35);
+  --accent:        #00e9f4;              /* 主行动色 — spinner/CTA */
+  --accent-signal:  #73e6eb;              /* 装饰信号色 — meta line/hover装饰 */
+  --accent-border:  rgba(0,233,244,.28);  /* 主行动色边框 */
   --card-img-overlay: rgba(14,22,28,.16);
-  --splash-bg: #081921;
+  --splash-bg: #071720;
   --radius:    8px;
   --shadow:    none;
   --shadow-hover: none;
@@ -196,7 +197,7 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 .title{
   font-family:"CaviarDreams";
   font-size:21px;
-  font-weight:600;
+  font-weight:700;
   letter-spacing:-0.005em;
   color:#fff;
   opacity:0;
@@ -229,7 +230,7 @@ body.theme-light .header.scrolled{
 .theme-btn{
   width:36px;
   height:32px;
-  border-radius:6px;
+  border-radius:980px;
   border:1px solid rgba(255,255,255,.3);
   background:rgba(255,255,255,.08);
   color:#fff;
@@ -277,7 +278,7 @@ body.theme-light .theme-btn .icon-sun{  opacity:1; transform:rotate(0deg) scale(
 .lang-btn{
   width:40px;
   height:32px;
-  border-radius:6px;
+  border-radius:980px;
   border:1px solid rgba(255,255,255,.3);
   background:rgba(255,255,255,.08);
   color:#fff;
@@ -310,7 +311,7 @@ body.theme-light .header.scrolled .lang-btn{
   display:flex;
   flex-direction:column;
   background:var(--menu-bg);
-  border-radius:10px;
+  border-radius:16px;
   padding:8px 0;
   opacity:0;
   pointer-events:none;
@@ -415,7 +416,7 @@ body.theme-light .hero-bg::after{
 }
 
 body.theme-light .hero-name-zh{ color:#1d1d1f; }
-body.theme-light .hero-name-en{ color:#1d1d1f; font-weight:300; }
+body.theme-light .hero-name-en{ color:#1d1d1f; font-weight:400; }
 
 /* 英文副标题 */
 .hero-name-en{
@@ -424,7 +425,7 @@ body.theme-light .hero-name-en{ color:#1d1d1f; font-weight:300; }
   line-height:1.29;
   color:var(--text3);
   letter-spacing:.08em;
-  font-weight:300;
+  font-weight:400;
   margin:0 0 20px;
   opacity:0;
   transform:translateY(24px);
@@ -461,10 +462,11 @@ body.theme-light .hero-name-en{ color:#1d1d1f; font-weight:300; }
   flex-shrink:0;
 }
 body.theme-light .hero-meta-line{ background:#2997ff; opacity:.6; }
+.hero-meta-line{ background:var(--accent-signal); opacity:.5; }
 
 .hero-meta-text{
   font-size:12px;
-  font-weight:300;
+  font-weight:400;
   line-height:1.33;
   letter-spacing:.16em;
   text-transform:uppercase;
@@ -475,14 +477,14 @@ body.theme-light .hero-meta-text{ color:#707070; }
 /* ================= Section（卡片区） ================= */
 
 .section{
-  background:var(--bg3);
+  background:var(--bg);
   padding-top:64px;
   position:relative;
   transition:background .35s cubic-bezier(.22,.61,.36,1);
 }
 
 /* 浅色模式卡片区用Ice背景 */
-/* 浅色Ice，深色bg3，融合层跟随 */
+body.theme-light .section{ background:var(--bg3); }
 
 /* Hero → Section 融合层 */
 .section::before{
@@ -492,10 +494,14 @@ body.theme-light .hero-meta-text{ color:#707070; }
   left:0;
   right:0;
   height:80px;
-  background:linear-gradient(to bottom, transparent, var(--bg3));
+  background:linear-gradient(to bottom, transparent, var(--bg));
   pointer-events:none;
   z-index:1;
   transition:background .35s cubic-bezier(.22,.61,.36,1);
+}
+
+body.theme-light .section::before{
+  background:linear-gradient(to bottom, transparent, var(--bg3));
 }
 
 /* ================= Cards ================= */
@@ -517,15 +523,16 @@ body.theme-light .hero-meta-text{ color:#707070; }
   visibility:hidden;
   transform:translateY(32px);
   transition:opacity .65s cubic-bezier(.22,.61,.36,1), transform .65s cubic-bezier(.22,.61,.36,1), visibility .65s cubic-bezier(.22,.61,.36,1);
-  /* 无背景、无border、无padding — 图片就是卡片 */
   background:var(--bg3);
-  border:none;
+  border:1px solid var(--border);
   cursor:pointer;
   padding:0;
   display:flex;
   flex-direction:column;
   position:relative;
   aspect-ratio:16/9;
+  overflow:hidden;
+  border-radius:25px;
 }
 
 .card.show{
@@ -548,6 +555,8 @@ body.theme-light .hero-meta-text{ color:#707070; }
   inset:0;
   background-color:var(--bg3);
   background-image:linear-gradient(135deg, rgba(115,230,235,.10) 0%, rgba(8,25,33,.5) 100%);
+  border-radius:25px;
+  overflow:hidden;
 }
 
 .card-img{
@@ -589,36 +598,23 @@ body.theme-light .hero-meta-text{ color:#707070; }
   transition:none;
 }
 
-.card-footer-text{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
 
-/* genre label — 12px caption */
-.card-label{
-  font-size:12px;
-  font-weight:400;
-  line-height:1.33;
-  letter-spacing:.08em;
-  color:rgba(255,255,255,.55);
-  text-transform:uppercase;
-}
 
 /* 卡片主标题 — 24px heading-sm */
 .card-title{
   font-size:24px;
-  font-weight:600;
+  font-weight:700;
   line-height:1.18;
   letter-spacing:-0.011em;
   color:#ffffff;
+  flex:1;
 }
 
 /* 箭头：白色空心圆，始终白色（在图片上） */
 .arrow-btn{
   width:44px;
   height:44px;
-  border-radius:50%;
+  border-radius:980px;
   border:1.5px solid rgba(255,255,255,.6);
   background:transparent;
   color:#ffffff;
@@ -686,7 +682,7 @@ body.theme-light .hero-meta-text{ color:#707070; }
 
 .contact-cta-heading{
   font-size:40px;
-  font-weight:600;
+  font-weight:700;
   line-height:1.14;
   letter-spacing:0.011em;
   color:var(--text);
@@ -696,7 +692,7 @@ body.theme-light .hero-meta-text{ color:#707070; }
 
 .contact-cta-sub{
   font-size:21px;
-  font-weight:300;
+  font-weight:400;
   line-height:1.24;
   letter-spacing:-0.005em;
   color:var(--text3);
@@ -712,7 +708,7 @@ body.theme-light .hero-meta-text{ color:#707070; }
   width:100%;
   color:var(--text3);
   font-size:12px;
-  font-weight:600;
+  font-weight:700;
   letter-spacing:.08em;
   text-transform:uppercase;
   padding-top:32px;
@@ -764,11 +760,12 @@ body.theme-light .hero-meta-text{ color:#707070; }
 }
 
 @media (hover:hover){
-  .contact-item:hover .contact-name{ color:var(--text); }
-  .contact-item:hover .contact-arrow{ color:var(--text); }
+  .contact-item:hover .contact-name{ color:var(--accent); }
+  .contact-item:hover .contact-arrow{ color:var(--accent); }
+}
+
 body.theme-light .contact-item:hover .contact-name{ color:var(--accent-link); }
 body.theme-light .contact-item:hover .contact-arrow{ color:var(--accent-link); }
-}
 
 .contact-item.show{ opacity:1; visibility:visible; transform:translateY(0); }
 
@@ -818,7 +815,7 @@ body.theme-light .contact-item[style*="010101"] .contact-icon{
 .contact-arrow{
   width:28px;
   height:28px;
-  border-radius:50%;
+  border-radius:980px;
   border:none;
   background:transparent;
   color:var(--text3);
@@ -1063,10 +1060,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card1.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <div class="card-footer-text">
-            <span class="card-label" data-i18n="intro_label">CRYTHANE</span>
-            <span class="card-title" data-i18n="intro_card">自介</span>
-          </div>
+          <span class="card-title" data-i18n="intro_card">自介</span>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1079,10 +1073,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card2.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <div class="card-footer-text">
-            <span class="card-label" data-i18n="gallery_label">GALLERY</span>
-            <span class="card-title" data-i18n="gallery">图库</span>
-          </div>
+          <span class="card-title" data-i18n="gallery">图库</span>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1095,10 +1086,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card3.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <div class="card-footer-text">
-            <span class="card-label" data-i18n="commission_label">COMMISSION</span>
-            <span class="card-title" data-i18n="commission">约稿</span>
-          </div>
+          <span class="card-title" data-i18n="commission">约稿</span>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1111,10 +1099,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card4.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <div class="card-footer-text">
-            <span class="card-label" data-i18n="projects_label">BLOG</span>
-            <span class="card-title" data-i18n="projects">博客</span>
-          </div>
+          <span class="card-title" data-i18n="projects">博客</span>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1127,10 +1112,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card5.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <div class="card-footer-text">
-            <span class="card-label" data-i18n="friends_label">LINKS</span>
-            <span class="card-title" data-i18n="friends">友链</span>
-          </div>
+          <span class="card-title" data-i18n="friends">友链</span>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1143,10 +1125,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
           <img class="card-img" src="img/Card6.jpg" loading="lazy" alt="" />
         </div>
         <div class="card-footer">
-          <div class="card-footer-text">
-            <span class="card-label" data-i18n="donation_label">SUPPORT</span>
-            <span class="card-title" data-i18n="donation">捐赠</span>
-          </div>
+          <span class="card-title" data-i18n="donation">捐赠</span>
           <button class="arrow-btn" type="button">
             <svg class="arrow-icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5"/></svg>
             <div class="spin-ring"></div>
@@ -1340,7 +1319,7 @@ function setTheme(theme, originEl) {
       Math.max(cy, window.innerHeight - cy)
     ) * 2;
 
-    const rippleColor = theme === "light" ? "#f0f4f8" : "#081921";
+    const rippleColor = theme === "light" ? "#f0f4f8" : "#071720";
     const circle = document.createElement("div");
     circle.style.cssText = `
       position:absolute; left:${cx}px; top:${cy}px;
@@ -1467,13 +1446,13 @@ const LANG = {
     hero_zh:"凌绡",
     hero_tag:"Fursona · 内容创作 · 视觉设计",
     scroll:"向下探索",
-    intro_card:"自介",    intro_label:"CRYTHANE",
-    gallery:"图库",       gallery_label:"GALLERY",
-    commission:"约稿",    commission_label:"COMMISSION",
-    projects:"博客",      projects_label:"BLOG",
+    intro_card:"自介",
+    gallery:"图库",
+    commission:"约稿",
+    projects:"博客",
     contact:"联络",
-    friends:"友链",       friends_label:"LINKS",
-    donation:"捐赠",      donation_label:"SUPPORT",
+    friends:"友链",
+    donation:"捐赠",
     cta_heading:"找到我", cta_sub:"欢迎通过以下平台联系我",
     copyright:"版权所有 ©2023-2026 Crythane 保留所有权利"
   },
@@ -1481,13 +1460,13 @@ const LANG = {
     hero_zh:"凌绡",
     hero_tag:"Fursona · Content Creator · Visual Design",
     scroll:"Explore",
-    intro_card:"Introduction", intro_label:"CRYTHANE",
-    gallery:"Gallery",         gallery_label:"GALLERY",
-    commission:"Commission",   commission_label:"COMMISSION",
-    projects:"Blog",           projects_label:"BLOG",
+    intro_card:"Introduction",
+    gallery:"Gallery",
+    commission:"Commission",
+    projects:"Blog",
     contact:"Contact",
-    friends:"Links",           friends_label:"LINKS",
-    donation:"Donation",       donation_label:"SUPPORT",
+    friends:"Links",
+    donation:"Donation",
     cta_heading:"Find Me",     cta_sub:"Reach out through any of the platforms below",
     copyright:"Copyright ©2023-2026 Crythane. All rights reserved."
   },
@@ -1495,13 +1474,13 @@ const LANG = {
     hero_zh:"凌绡",
     hero_tag:"ファーソナ · コンテンツ · ビジュアル",
     scroll:"スクロール",
-    intro_card:"自己紹介",     intro_label:"CRYTHANE",
-    gallery:"ギャラリー",      gallery_label:"GALLERY",
-    commission:"コミッション", commission_label:"COMMISSION",
-    projects:"ブログ",         projects_label:"BLOG",
+    intro_card:"自己紹介",
+    gallery:"ギャラリー",
+    commission:"コミッション",
+    projects:"ブログ",
     contact:"連絡",
-    friends:"リンク",          friends_label:"LINKS",
-    donation:"寄付",           donation_label:"SUPPORT",
+    friends:"リンク",
+    donation:"寄付",
     cta_heading:"見つけて",    cta_sub:"以下のプラットフォームからご連絡ください",
     copyright:"Copyright ©2023-2026 Crythane All Rights Reserved."
   }
