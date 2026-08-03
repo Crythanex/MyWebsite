@@ -184,12 +184,12 @@ body.theme-light .theme-btn .icon-sun{  opacity:1; transform:scale(1); }
   grid-template-columns:28px 1fr;
   gap:0 12px;
   opacity:0;
-  transform:translateY(12px);
+  transform:translateX(-24px);
   transition:border-color .35s;
 }
 
 .term-item.show{
-  animation:fadeUp .5s cubic-bezier(.22,.61,.36,1) forwards;
+  animation:fadeLeft .5s cubic-bezier(.22,.61,.36,1) forwards;
 }
 
 .term-num{
@@ -262,6 +262,10 @@ body.theme-light .theme-btn .icon-sun{  opacity:1; transform:scale(1); }
 
 @keyframes fadeUp{
   to{ opacity:1; transform:translateY(0); }
+}
+
+@keyframes fadeLeft{
+  to{ opacity:1; transform:translateX(0); }
 }
 
 </style>
