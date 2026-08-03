@@ -1187,11 +1187,12 @@ setTimeout(showPage, 4000); /* 保底4秒 */
 /* 返回页面时重置所有状态 */
 window.addEventListener("pageshow", (e) => {
   document.querySelector(".page")?.classList.remove("nav-out");
-  /* 返回时重置所有扩展中的卡片 */
+  /* 返回时瞬间重置扩展的卡片，不播放反向动画 */
   document.querySelectorAll(".card-main.expanding").forEach(el => {
+    el.style.transition = "none";
     el.classList.remove("expanding");
-    /* 强制reflow，确保transition重置生效 */
-    void el.offsetWidth;
+    void el.offsetWidth; /* 强制reflow */
+    el.style.transition = "";
   });
 });
 
