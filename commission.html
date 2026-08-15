@@ -33,6 +33,7 @@
 }
 
 body.theme-light{
+  --header-bg-commission: rgba(245,245,247,.80);
   --bg:     #f5f5f7;
   --bg2:    #ffffff;
   --bg3:    #f4f8fb;
@@ -66,11 +67,11 @@ html,body{
   display:flex;
   align-items:center;
   gap:8px;
-  background:var(--bg);
-  border:1px solid var(--border);
+  background:rgba(7,23,32,.72);
+  border:1px solid rgba(255,255,255,.1);
   border-radius:980px;
-  backdrop-filter:blur(20px) saturate(160%);
-  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
   white-space:nowrap;
   transition:background .35s, border-color .35s;
 }
@@ -125,11 +126,16 @@ html,body{
 body.theme-light .theme-btn .icon-moon{ opacity:0; transform:scale(.5) rotate(90deg); }
 body.theme-light .theme-btn .icon-sun{  opacity:1; transform:scale(1); }
 
+body.theme-light .header{
+  background:rgba(245,245,247,.80);
+  border-color:#d2d2d7;
+}
+
 /* ── Page ── */
 .page{
   max-width:680px;
   margin:0 auto;
-  padding:calc(80px + env(safe-area-inset-top)) 24px 64px;
+  padding:calc(88px + env(safe-area-inset-top)) 32px 80px;
   width:100%;
 }
 
@@ -219,6 +225,61 @@ body.theme-light .theme-btn .icon-sun{  opacity:1; transform:scale(1); }
   font-weight:300;
   line-height:1.29;
   letter-spacing:-0.016em;
+  color:var(--text3);
+  transition:color .35s;
+}
+
+/* ── 店铺 ── */
+.shop-section{
+  margin-top:40px;
+  opacity:0;
+  transform:translateX(-24px);
+}
+.shop-section.show{
+  animation:fadeLeft .6s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+.shop-label{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:14px;
+  transition:color .35s;
+}
+
+.shop-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.shop-btn{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  padding:14px 20px;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  font-size:17px;
+  font-weight:700;
+  color:var(--text);
+  text-decoration:none;
+  letter-spacing:-0.016em;
+  cursor:pointer;
+  transition:background .25s, border-color .25s, color .25s, transform .15s cubic-bezier(.34,1.56,.64,1);
+}
+.shop-btn:hover{ border-color:var(--accent); color:var(--accent); }
+.shop-btn:active{ transform:scale(.98); }
+
+.shop-note{
+  margin-top:10px;
+  font-size:12px;
+  line-height:1.33;
   color:var(--text3);
   transition:color .35s;
 }
@@ -353,6 +414,26 @@ body.theme-light .theme-btn .icon-sun{  opacity:1; transform:scale(1); }
 
   </div>
 
+  <div class="shop-section" id="shopSection">
+    <div class="shop-label">联系 · 店铺</div>
+    <div class="shop-row">
+      <a class="shop-btn" href="https://qm.qq.com/q/xCpMb2NdXc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <path d="M12 2C6.48 2 2 6.27 2 11.5c0 2.87 1.35 5.43 3.47 7.17-.18.58-.67 2.11-.77 2.44 0 0-.04.13.07.18.11.06.22 0 .22 0 .29-.04 3.35-2.2 3.95-2.62.97.25 2 .38 3.06.38 5.52 0 10-4.27 10-9.55C22 6.27 17.52 2 12 2z"/>
+        </svg>
+        QQ
+      </a>
+      <a class="shop-btn" href="https://m.tb.cn/h.8in7xFv?tk=7MxyTZAvkus CZ356" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+        闲鱼店铺
+      </a>
+    </div>
+    <div class="shop-note">可通过 QQ 咨询 · 或前往闲鱼店铺直接下单</div>
+  </div>
+
   <div class="thanks" id="thanks">
     <div class="thanks-zh">诚挚感谢您的信任与委托</div>
     <div class="thanks-en">Thanks for your trust and support</div>
@@ -418,8 +499,8 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 items.forEach(el => obs.observe(el));
 
-/* ── payment / thanks 入場 ── */
-["thanks"].forEach(id => {
+/* ── shop / thanks 入場 ── */
+["shopSection","thanks"].forEach(id => {
   const el = document.getElementById(id);
   const o = new IntersectionObserver(entries => {
     entries.forEach(e => {
