@@ -9,31 +9,28 @@
 <meta property="og:image" content="img/Background.PNG" />
 <style>
 
-@font-face{ font-family:"CaviarDreams"; src:url("fonts/CaviarDreams-Bold-2.ttf"); font-display:swap; }
-@font-face{ font-family:"Urbanist";     src:url("fonts/Urbanist-Bold.ttf");        font-display:swap; }
-@font-face{ font-family:"Alimama";      src:url("fonts/AlimamaShuHeiTi-Bold.ttf"); font-display:swap; }
-@font-face{ font-family:"Harmony";      src:url("fonts/HarmonyOS_Sans_SC_Regular.ttf"); font-display:swap; }
-@font-face{ font-family:"Kazesawa";     src:url("fonts/Kazesawa-Bold.ttf");        font-display:swap; }
-@font-face{ font-family:"GeosansLight"; src:url("fonts/GeosansLight.ttf");         font-display:swap; }
+@font-face{ font-family:"CaviarDreams";  src:url("fonts/CaviarDreams-Bold-2.ttf"); font-display:swap; }
+@font-face{ font-family:"Alimama";       src:url("fonts/AlimamaShuHeiTi-Bold.ttf"); font-display:swap; }
+@font-face{ font-family:"Harmony";       src:url("fonts/HarmonyOS_Sans_SC_Regular.ttf"); font-display:swap; }
+@font-face{ font-family:"Kazesawa";      src:url("fonts/Kazesawa-Bold.ttf"); font-display:swap; }
+@font-face{ font-family:"GoogleSans";    src:url("fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf"); font-display:swap; }
 
 *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
 
 :root{
-  --bg:     #081921;
+  --bg:     #071720;
   --bg2:    #0d2330;
-  --bg3:    #0a1e2a;
+  --bg3:    #091a24;
   --text:   #eef7f8;
   --text2:  rgba(255,255,255,.72);
   --text3:  rgba(255,255,255,.45);
   --border: rgba(255,255,255,.08);
   --border2:rgba(255,255,255,.05);
   --accent: #00e9f4;
-  --accent-signal: #73e6eb;
   --radius: 8px;
 }
 
 body.theme-light{
-  --header-bg-commission: rgba(245,245,247,.80);
   --bg:     #f5f5f7;
   --bg2:    #ffffff;
   --bg3:    #f4f8fb;
@@ -45,15 +42,33 @@ body.theme-light{
   --accent: #0071e3;
 }
 
+/* ── 语言字体 ── */
+body.lang-zh{ font-family:"Harmony","Alimama",sans-serif; }
+body.lang-en{ font-family:"GoogleSans","Urbanist",sans-serif; }
+body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
+
+/* ── 语言显示控制 ── */
+.zh{ display:none; }
+.en{ display:none; }
+.jp{ display:none; }
+body.lang-zh .zh{ display:block; }
+body.lang-en .en{ display:block; }
+body.lang-jp .jp{ display:block; }
+
+/* inline元素 */
+body.lang-zh .zh-inline{ display:inline; }
+body.lang-en .en-inline{ display:inline; }
+body.lang-jp .jp-inline{ display:inline; }
+
 html,body{
   min-height:100vh;
   background:var(--bg);
   color:var(--text);
-  font-family:"GeosansLight","Urbanist",sans-serif;
   letter-spacing:-0.016em;
   line-height:1.47;
-  touch-action:manipulation;
+  touch-action:pan-y;
   transition:background .35s, color .35s;
+  overflow-x:hidden;
 }
 
 /* ── Header ── */
@@ -74,6 +89,11 @@ html,body{
   -webkit-backdrop-filter:blur(24px) saturate(160%);
   white-space:nowrap;
   transition:background .35s, border-color .35s;
+}
+
+body.theme-light .header{
+  background:rgba(245,245,247,.80);
+  border-color:#d2d2d7;
 }
 
 .header-back{
@@ -100,7 +120,6 @@ html,body{
   font-size:15px;
   color:var(--text);
   letter-spacing:.02em;
-  padding:0 8px;
   transition:color .35s;
 }
 
@@ -113,7 +132,6 @@ html,body{
   display:flex; align-items:center; justify-content:center;
   cursor:pointer;
   position:relative;
-  flex-shrink:0;
   transition:background .35s, border-color .35s;
 }
 .theme-btn svg{
@@ -125,11 +143,6 @@ html,body{
 .theme-btn .icon-sun{  opacity:0; transform:scale(.5) rotate(-90deg); }
 body.theme-light .theme-btn .icon-moon{ opacity:0; transform:scale(.5) rotate(90deg); }
 body.theme-light .theme-btn .icon-sun{  opacity:1; transform:scale(1); }
-
-body.theme-light .header{
-  background:rgba(245,245,247,.80);
-  border-color:#d2d2d7;
-}
 
 /* ── Page ── */
 .page{
@@ -167,10 +180,16 @@ body.theme-light .header{
   transition:color .35s;
 }
 
+body.lang-en .hero-title{
+  font-family:"GoogleSans",sans-serif;
+}
+body.lang-jp .hero-title{
+  font-family:"Kazesawa",sans-serif;
+}
+
 .hero-sub{
-  font-family:"GeosansLight","Urbanist",sans-serif;
   font-size:17px;
-  font-weight:300;
+  font-weight:400;
   line-height:1.47;
   color:var(--text2);
   transition:color .35s;
@@ -200,32 +219,18 @@ body.theme-light .header{
 
 .term-num{
   font-size:12px;
-  font-weight:600;
+  font-weight:700;
   letter-spacing:.04em;
   color:var(--accent);
   padding-top:2px;
   transition:color .35s;
 }
 
-.term-content{}
-
-.term-zh{
-  font-family:"Harmony","Alimama",sans-serif;
+.term-text{
   font-size:17px;
   font-weight:400;
   line-height:1.47;
   color:var(--text);
-  margin-bottom:4px;
-  transition:color .35s;
-}
-
-.term-en{
-  font-family:"GeosansLight","Urbanist",sans-serif;
-  font-size:14px;
-  font-weight:300;
-  line-height:1.29;
-  letter-spacing:-0.016em;
-  color:var(--text3);
   transition:color .35s;
 }
 
@@ -295,20 +300,21 @@ body.theme-light .header{
 }
 .thanks.show{ animation:fadeUp .6s cubic-bezier(.22,.61,.36,1) forwards; }
 
-.thanks-zh{
-  font-family:"Harmony","Alimama",sans-serif;
+.thanks-main{
   font-size:21px;
   font-weight:600;
   line-height:1.24;
-  letter-spacing:-0.005em;
   color:var(--text);
   margin-bottom:4px;
   transition:color .35s;
 }
-.thanks-en{
-  font-family:"GeosansLight","Urbanist",sans-serif;
+body.lang-zh .thanks-main{ font-family:"Harmony","Alimama",sans-serif; }
+body.lang-en .thanks-main{ font-family:"GoogleSans",sans-serif; }
+body.lang-jp .thanks-main{ font-family:"Kazesawa",sans-serif; }
+
+.thanks-sub{
   font-size:14px;
-  font-weight:300;
+  font-weight:400;
   color:var(--text3);
   transition:color .35s;
 }
@@ -325,7 +331,6 @@ body.theme-light .header{
 @keyframes fadeUp{
   to{ opacity:1; transform:translateY(0); }
 }
-
 @keyframes fadeLeft{
   to{ opacity:1; transform:translateX(0); }
 }
@@ -339,7 +344,9 @@ body.theme-light .header{
     <svg viewBox="0 0 24 24" fill="none">
       <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    返回
+    <span class="zh">返回</span>
+    <span class="en">Back</span>
+    <span class="jp">戻る</span>
   </a>
   <div class="header-title">Crythane</div>
   <button class="theme-btn" id="themeBtn" aria-label="切换主题">
@@ -356,91 +363,104 @@ body.theme-light .header{
 <div class="page">
 
   <div class="hero">
-    <div class="hero-eyebrow">COMMISSION TERMS</div>
-    <div class="hero-title">约稿须知</div>
-    <div class="hero-sub">请在委托前仔细阅读以下条款。</div>
+    <div class="hero-eyebrow zh">约稿须知</div>
+    <div class="hero-eyebrow en">COMMISSION TERMS</div>
+    <div class="hero-eyebrow jp">コミッション規約</div>
+    <div class="hero-title zh">委托须知</div>
+    <div class="hero-title en">Commission</div>
+    <div class="hero-title jp">コミッション</div>
+    <div class="hero-sub zh">请在委托前仔细阅读以下条款。</div>
+    <div class="hero-sub en">Please read the following terms carefully before placing a commission.</div>
+    <div class="hero-sub jp">ご依頼の前に以下の規約をよくお読みください。</div>
   </div>
 
   <div class="terms" id="terms">
+
     <div class="term-item">
       <div class="term-num">1</div>
-      <div class="term-content">
-        <div class="term-zh">橱窗展示例图均为模板，无常稿无定制。</div>
-        <div class="term-en">All samples shown are YCH. No custom commissions.</div>
-      </div>
+      <div class="term-text zh">橱窗展示例图均为模板，无常稿无定制。</div>
+      <div class="term-text en">All samples shown are YCH. No custom commissions.</div>
+      <div class="term-text jp">サンプルはすべて YCH です。カスタムコミッションは受け付けておりません。</div>
     </div>
+
     <div class="term-item">
       <div class="term-num">2</div>
-      <div class="term-content">
-        <div class="term-zh">所有稿件严禁投喂 AI。</div>
-        <div class="term-en">Any use of commission for AI training is strictly prohibited.</div>
-      </div>
+      <div class="term-text zh">所有稿件严禁投喂 AI。</div>
+      <div class="term-text en">Any use of commission for AI training is strictly prohibited.</div>
+      <div class="term-text jp">AI学習への使用を厳禁とします。</div>
     </div>
+
     <div class="term-item">
       <div class="term-num">3</div>
-      <div class="term-content">
-        <div class="term-zh">未成年人约稿，须事先取得监护人的同意。</div>
-        <div class="term-en">Commissioners who are minors must obtain parental or guardian consent in advance.</div>
-      </div>
+      <div class="term-text zh">未成年人约稿，须事先取得监护人的同意。</div>
+      <div class="term-text en">Commissioners who are minors must obtain parental or guardian consent in advance.</div>
+      <div class="term-text jp">未成年者はご依頼前に保護者の同意を得てください。</div>
     </div>
+
     <div class="term-item">
       <div class="term-num">4</div>
-      <div class="term-content">
-        <div class="term-zh">不接花纹怪、文字设及任何可能侵权的设定等。</div>
-        <div class="term-en">Text-only, overly complex or copyright-risky fursonas are not accepted.</div>
-      </div>
+      <div class="term-text zh">不接花纹怪、文字设及任何可能侵权的设定等。</div>
+      <div class="term-text en">Text-only, overly complex or copyright-risky fursonas are not accepted.</div>
+      <div class="term-text jp">文字設定・複雑すぎるデザイン・著作権リスクのあるキャラクターはお断りします。</div>
     </div>
+
     <div class="term-item">
       <div class="term-num">5</div>
-      <div class="term-content">
-        <div class="term-zh">加急需支付额外加急费（稿件原始价格的 50%）。</div>
-        <div class="term-en">A 50% rush fee will be applied to the base price for urgent commissions.</div>
-      </div>
+      <div class="term-text zh">加急需支付额外加急费（稿件原始价格的 50%）。</div>
+      <div class="term-text en">A 50% rush fee will be applied to the base price for urgent commissions.</div>
+      <div class="term-text jp">急ぎの依頼には基本料金の50%の特急料金が加算されます。</div>
     </div>
+
     <div class="term-item">
       <div class="term-num">6</div>
-      <div class="term-content">
-        <div class="term-zh">截稿 12 小时后不接受改动（非客观原因）。</div>
-        <div class="term-en">No revisions will be accepted 12 hours after final delivery, except for objective errors on my part.</div>
-      </div>
+      <div class="term-text zh">截稿 12 小时后不接受改动（非客观原因）。</div>
+      <div class="term-text en">No revisions will be accepted 12 hours after final delivery, except for objective errors on my part.</div>
+      <div class="term-text jp">納品後12時間を過ぎた修正依頼は、私の客観的ミスを除き受け付けません。</div>
     </div>
+
     <div class="term-item">
       <div class="term-num">7</div>
-      <div class="term-content">
-        <div class="term-zh">先画后付，支持微信、支付宝付款。</div>
-        <div class="term-en">Commissions are delivered first. Payment via WeChat Pay or Alipay is required afterward.</div>
-      </div>
+      <div class="term-text zh">先画后付，支持微信、支付宝付款。</div>
+      <div class="term-text en">Commissions are delivered first. Payment via WeChat Pay or Alipay is required afterward.</div>
+      <div class="term-text jp">制作後にお支払いをお願いします。WeChat Pay または Alipay に対応しています。</div>
     </div>
-  </div>
 
   </div>
 
   <div class="shop-section" id="shopSection">
-    <div class="shop-label">联系 · 店铺</div>
+    <div class="shop-label zh">联系 · 店铺</div>
+    <div class="shop-label en">Contact · Shop</div>
+    <div class="shop-label jp">連絡 · ショップ</div>
     <div class="shop-row">
       <a class="shop-btn" href="https://qm.qq.com/q/xCpMb2NdXc" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
           <path d="M12 2C6.48 2 2 6.27 2 11.5c0 2.87 1.35 5.43 3.47 7.17-.18.58-.67 2.11-.77 2.44 0 0-.04.13.07.18.11.06.22 0 .22 0 .29-.04 3.35-2.2 3.95-2.62.97.25 2 .38 3.06.38 5.52 0 10-4.27 10-9.55C22 6.27 17.52 2 12 2z"/>
         </svg>
         QQ
       </a>
       <a class="shop-btn" href="https://m.tb.cn/h.8in7xFv?tk=7MxyTZAvkus CZ356" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
           <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
         </svg>
-        闲鱼店铺
+        <span class="zh">闲鱼店铺</span>
+        <span class="en">Xianyu Shop</span>
+        <span class="jp">閑魚ショップ</span>
       </a>
     </div>
-    <div class="shop-note">可通过 QQ 咨询 · 或前往闲鱼店铺直接下单</div>
+    <div class="shop-note zh">可通过 QQ 咨询 · 或前往闲鱼店铺直接下单</div>
+    <div class="shop-note en">Contact via QQ · or visit the Xianyu shop to place an order</div>
+    <div class="shop-note jp">QQ でお問い合わせ · または閑魚ショップで直接注文</div>
   </div>
 
   <div class="thanks" id="thanks">
-    <div class="thanks-zh">诚挚感谢您的信任与委托</div>
-    <div class="thanks-en">Thanks for your trust and support</div>
+    <div class="thanks-main zh">诚挚感谢您的信任与委托</div>
+    <div class="thanks-main en">Thank you for your trust and commission.</div>
+    <div class="thanks-main jp">ご依頼とご信頼に心より感謝申し上げます。</div>
+    <div class="thanks-sub zh">Copyright ©2023-2026 Crythane 保留所有权利</div>
+    <div class="thanks-sub en">Copyright ©2023-2026 Crythane. All rights reserved.</div>
+    <div class="thanks-sub jp">Copyright ©2023-2026 Crythane All Rights Reserved.</div>
   </div>
-
-  <div class="footer">Copyright ©2023-2026 Crythane All rights reserved.</div>
 
 </div>
 
@@ -455,39 +475,14 @@ document.getElementById("themeBtn").addEventListener("click", () => {
 
 /* ── 语言跟随主界面 ── */
 const lang = localStorage.getItem("lang") || "zh";
+const langMap = { zh:"zh-CN", en:"en", jp:"ja" };
+const titleMap = { zh:"约稿须知 · Crythane", en:"Commission · Crythane", jp:"コミッション · Crythane" };
 
-/* 字体随语言 */
-const fontMap = {
-  zh: '"GeosansLight","Harmony","Alimama",sans-serif',
-  en: '"Urbanist",-apple-system,sans-serif',
-  jp: '"Kazesawa","Urbanist",sans-serif'
-};
-document.body.style.fontFamily = fontMap[lang];
+document.documentElement.lang = langMap[lang] || "zh-CN";
+document.title = titleMap[lang] || "约稿须知 · Crythane";
+document.body.classList.add(`lang-${lang}`);
 
-/* 中文元素始终用Harmony，英文元素始终用GeosansLight（不受语言切换影响） */
-/* term-zh/thanks-zh已在CSS里指定Harmony，term-en/thanks-en指定GeosansLight */
-
-/* 语言内容切换 */
-if (lang === "en") {
-  document.documentElement.lang = "en";
-  document.title = "Commission · Crythane";
-  document.querySelector(".hero-eyebrow").textContent = "COMMISSION TERMS";
-  document.querySelector(".hero-title").textContent = "Commission";
-  document.querySelector(".hero-sub").textContent = "Please read the following terms carefully before placing a commission.";
-  document.querySelector(".header-back").innerHTML = `<svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back`;
-  document.querySelector(".thanks-zh").textContent = "Thank you for your trust and commission.";
-  document.querySelector(".footer").textContent = "Copyright ©2023-2026 Crythane. All rights reserved.";
-} else if (lang === "jp") {
-  document.documentElement.lang = "ja";
-  document.title = "コミッション · Crythane";
-  document.querySelector(".hero-eyebrow").textContent = "コミッション規約";
-  document.querySelector(".hero-title").textContent = "約稿";
-  document.querySelector(".hero-sub").textContent = "ご依頼の前に以下の規約をよくお読みください。";
-  document.querySelector(".header-back").innerHTML = `<svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>戻る`;
-  document.querySelector(".footer").textContent = "Copyright ©2023-2026 Crythane All Rights Reserved.";
-}
-
-/* ── 条款 stagger 入場 ── */
+/* ── 条款 stagger 入场 ── */
 const items = document.querySelectorAll(".term-item");
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -500,9 +495,10 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 items.forEach(el => obs.observe(el));
 
-/* ── shop / thanks 入場 ── */
+/* ── shop / thanks 入场 ── */
 ["shopSection","thanks"].forEach(id => {
   const el = document.getElementById(id);
+  if (!el) return;
   const o = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add("show"); o.unobserve(e.target); }
