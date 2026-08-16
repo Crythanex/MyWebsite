@@ -188,12 +188,24 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 .header-left{
   display:flex;
   align-items:center;
-  width:130px;
   overflow:hidden;
+  width:0;
+  padding-left:0;
+  transition:width .42s cubic-bezier(.22,.61,.36,1),
+             padding-left .42s cubic-bezier(.22,.61,.36,1);
+}
+
+.header.show-title .header-left{
+  width:130px;
   padding-left:10px;
 }
 
-/* title默认向右偏移隐藏，show时滑回原位 */
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
 .title{
   font-family:"CaviarDreams";
   font-size:17px;
@@ -203,23 +215,16 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
   padding-right:4px;
   white-space:nowrap;
   opacity:0;
-  transform:translateX(20px);
-  transition:
-    opacity .42s cubic-bezier(.22,.61,.36,1),
-    transform .42s cubic-bezier(.22,.61,.36,1),
-    color .35s cubic-bezier(.22,.61,.36,1);
+  transform:translateX(8px);
+  transition:opacity .35s .08s cubic-bezier(.22,.61,.36,1),
+             transform .35s .08s cubic-bezier(.22,.61,.36,1),
+             color .35s cubic-bezier(.22,.61,.36,1);
   will-change:transform, opacity;
 }
 
 .header.show-title .title{
   opacity:1;
   transform:translateX(0);
-}
-
-/* 初始胶囊不显示左侧留白，header-left clip掉 */
-.header:not(.show-title) .header-left{
-  width:0;
-  padding-left:0;
 }
 
 /* 浅色模式 */
