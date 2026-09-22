@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>自介 · Crythane</title>
+<meta property="og:title" content="自介 · Crythane" />
+<meta property="og:image" content="img/avatar.png" />
+<style>
+
+@font-face{ font-family:"CaviarDreams"; src:url("fonts/CaviarDreams-Bold-2.ttf"); font-display:swap; }
+@font-face{ font-family:"Alimama";      src:url("fonts/AlimamaShuHeiTi-Bold.ttf"); font-display:swap; }
+@font-face{ font-family:"Harmony";      src:url("fonts/HarmonyOS_Sans_SC_Regular.ttf"); font-display:swap; }
+@font-face{ font-family:"Kazesawa";     src:url("fonts/Kazesawa-Bold.ttf"); font-display:swap; }
+@font-face{ font-family:"GoogleSans";   src:url("fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf"); font-display:swap; }
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+:root{
+  --bg:     #071720;
+  --bg2:    #0d2330;
+  --bg3:    #091a24;
+  --text:   #eef7f8;
+  --text2:  rgba(255,255,255,.72);
+  --text3:  rgba(255,255,255,.45);
+  --border: rgba(255,255,255,.08);
+  --border2:rgba(255,255,255,.05);
+  --accent: #00e9f4;
+  --radius: 8px;
+}
+
+body.theme-light{
+  --bg:     #f5f5f7;
+  --bg2:    #ffffff;
+  --bg3:    #f4f8fb;
+  --text:   #1d1d1f;
+  --text2:  #333333;
+  --text3:  #707070;
+  --border: #d2d2d7;
+  --border2:#e2e2e5;
+  --accent: #0071e3;
+}
+
+body.lang-zh{ font-family:"Harmony","Alimama",sans-serif; }
+body.lang-en{ font-family:"GoogleSans","Urbanist",sans-serif; }
+body.lang-jp{ font-family:"Kazesawa",sans-serif; }
+
+.zh,.en,.jp{ display:none; }
+body.lang-zh .zh{ display:block; }
+body.lang-en .en{ display:block; }
+body.lang-jp .jp{ display:block; }
+
+html,body{
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  letter-spacing:-0.016em;
+  line-height:1.47;
+  touch-action:pan-y;
+  overflow-x:hidden;
+  transition:background .35s, color .35s;
+}
+
+/* ── Header ── */
+.header{
+  position:fixed;
+  top:calc(16px + env(safe-area-inset-top));
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  padding:8px 8px 8px 12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(7,23,32,.72);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:980px;
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
+  white-space:nowrap;
+  transition:background .35s, border-color .35s;
+}
+body.theme-light .header{ background:rgba(245,245,247,.80); border-color:#d2d2d7; }
+
+.header-back{
+  display:flex; align-items:center; gap:6px;
+  font-size:14px; font-weight:400;
+  color:var(--text2);
+  text-decoration:none;
+  padding:6px 14px 6px 10px;
+  border:1px solid var(--border);
+  border-radius:980px;
+  transition:color .25s, border-color .25s;
+}
+.header-back:hover{ border-color:var(--accent); color:var(--accent); }
+.header-back svg{ width:14px; height:14px; flex-shrink:0; }
+
+.header-title{
+  font-family:"CaviarDreams";
+  font-size:15px;
+  color:var(--text);
+  letter-spacing:.02em;
+  transition:color .35s;
+}
+
+.theme-btn{
+  width:44px; height:32px; border-radius:980px;
+  border:1px solid var(--border); background:transparent;
+  color:var(--text2);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; position:relative;
+  transition:background .35s, border-color .35s;
+}
+.theme-btn svg{ width:16px; height:16px; position:absolute; transition:opacity .25s, transform .35s cubic-bezier(.34,1.56,.64,1); }
+.theme-btn .icon-moon{ opacity:1; transform:scale(1); }
+.theme-btn .icon-sun{  opacity:0; transform:scale(.5) rotate(-90deg); }
+body.theme-light .theme-btn .icon-moon{ opacity:0; transform:scale(.5) rotate(90deg); }
+body.theme-light .theme-btn .icon-sun{  opacity:1; transform:scale(1); }
+
+/* ── Page ── */
+.page{
+  max-width:680px;
+  margin:0 auto;
+  padding:calc(88px + env(safe-area-inset-top)) 32px 80px;
+}
+
+/* ── 头像 ── */
+.avatar-wrap{
+  display:flex;
+  justify-content:center;
+  padding:40px 0 32px;
+  opacity:0;
+  animation:fadeUp .7s .1s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+.avatar{
+  width:120px;
+  height:120px;
+  border-radius:980px;
+  object-fit:cover;
+  border:2px solid var(--border);
+  transition:border-color .35s;
+}
+
+/* ── 名字区 ── */
+.name-block{
+  text-align:center;
+  margin-bottom:40px;
+  opacity:0;
+  animation:fadeUp .7s .18s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+.name-zh{
+  font-family:"Alimama",sans-serif;
+  font-size:40px;
+  font-weight:600;
+  line-height:1.14;
+  letter-spacing:.02em;
+  color:var(--text);
+  transition:color .35s;
+}
+
+.name-en{
+  font-family:"CaviarDreams";
+  font-size:20px;
+  color:var(--accent);
+  letter-spacing:.08em;
+  margin-top:6px;
+  transition:color .35s;
+}
+
+.name-tag{
+  display:inline-block;
+  margin-top:12px;
+  font-size:12px;
+  font-weight:400;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text3);
+}
+
+/* ── 内容块 ── */
+.section-block{
+  border-top:1px solid var(--border);
+  padding:24px 0;
+  opacity:0;
+  transform:translateX(-24px);
+  transition:border-color .35s;
+}
+.section-block.show{
+  animation:fadeLeft .55s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+.section-label{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:12px;
+  transition:color .35s;
+}
+
+.section-text{
+  font-size:17px;
+  font-weight:400;
+  line-height:1.6;
+  color:var(--text2);
+  transition:color .35s;
+}
+
+/* ── 标签组 ── */
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:4px;
+}
+
+.tag{
+  padding:6px 16px;
+  border:1px solid var(--border);
+  border-radius:980px;
+  font-size:14px;
+  font-weight:400;
+  color:var(--text2);
+  letter-spacing:-.01em;
+  transition:border-color .35s, color .35s;
+}
+
+/* ── Footer ── */
+.footer{
+  margin-top:48px;
+  padding-top:24px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+  color:var(--text3);
+  transition:border-color .35s, color .35s;
+}
+
+@keyframes fadeUp{  to{ opacity:1; transform:translateY(0); } }
+@keyframes fadeLeft{ to{ opacity:1; transform:translateX(0); } }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="header-back" href="index.html">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="zh">返回</span>
+    <span class="en">Back</span>
+    <span class="jp">戻る</span>
+  </a>
+  <div class="header-title">Crythane</div>
+  <button class="theme-btn" id="themeBtn" aria-label="切换主题">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none">
+      <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+      <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+
+<div class="page">
+
+  <div class="avatar-wrap">
+    <img class="avatar" src="img/avatar.png" alt="Crythane" />
+  </div>
+
+  <div class="name-block">
+    <div class="name-zh">凌绡</div>
+    <div class="name-en">Crythane</div>
+    <div class="name-tag zh">Fursona 内容创作者</div>
+    <div class="name-tag en">Fursona Content Creator</div>
+    <div class="name-tag jp">ファーソナクリエイター</div>
+  </div>
+
+  <div class="section-block" id="s1">
+    <div class="section-label zh">关于我</div>
+    <div class="section-label en">About</div>
+    <div class="section-label jp">プロフィール</div>
+    <div class="section-text zh">嗨，我是凌绡，一名专注于 Fursona 创作的数字艺术家。热衷于将兽设角色的个性与情感通过视觉作品表达出来，风格偏向清冷治愈系。</div>
+    <div class="section-text en">Hi, I'm Crythane — a digital artist focused on Fursona content creation. I love expressing the personality and emotion of fursona characters through visual art, with a cool and healing aesthetic.</div>
+    <div class="section-text jp">はじめまして、凌绡（Crythane）です。ファーソナをテーマにしたデジタルアーティストです。キャラクターの個性や感情を視覚的に表現することが好きで、清涼感と癒しをテーマにした作品を制作しています。</div>
+  </div>
+
+  <div class="section-block" id="s2">
+    <div class="section-label zh">创作方向</div>
+    <div class="section-label en">Specialties</div>
+    <div class="section-label jp">制作内容</div>
+    <div class="tags">
+      <span class="tag zh">立绘</span>
+      <span class="tag zh">表情包</span>
+      <span class="tag zh">参考图</span>
+      <span class="tag zh">头像</span>
+      <span class="tag zh">YCH</span>
+      <span class="tag en">Full Body</span>
+      <span class="tag en">Emotes</span>
+      <span class="tag en">Reference Sheet</span>
+      <span class="tag en">Avatar</span>
+      <span class="tag en">YCH</span>
+      <span class="tag jp">全身イラスト</span>
+      <span class="tag jp">スタンプ</span>
+      <span class="tag jp">参照シート</span>
+      <span class="tag jp">アバター</span>
+      <span class="tag jp">YCH</span>
+    </div>
+  </div>
+
+  <div class="section-block" id="s3">
+    <div class="section-label zh">使用工具</div>
+    <div class="section-label en">Tools</div>
+    <div class="section-label jp">使用ツール</div>
+    <div class="tags">
+      <span class="tag">Procreate</span>
+      <span class="tag">Clip Studio Paint</span>
+      <span class="tag">Photoshop</span>
+    </div>
+  </div>
+
+  <div class="section-block" id="s4">
+    <div class="section-label zh">语言</div>
+    <div class="section-label en">Languages</div>
+    <div class="section-label jp">対応言語</div>
+    <div class="tags">
+      <span class="tag zh">中文</span>
+      <span class="tag zh">English</span>
+      <span class="tag zh">日本語</span>
+      <span class="tag en">Chinese</span>
+      <span class="tag en">English</span>
+      <span class="tag en">Japanese</span>
+      <span class="tag jp">中国語</span>
+      <span class="tag jp">英語</span>
+      <span class="tag jp">日本語</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="zh">版权所有 ©2023-2026 Crythane 保留所有权利</span>
+    <span class="en">Copyright ©2023-2026 Crythane. All rights reserved.</span>
+    <span class="jp">Copyright ©2023-2026 Crythane All Rights Reserved.</span>
+  </div>
+
+</div>
+
+<script>
+const saved = localStorage.getItem("theme");
+if (saved === "light") document.body.classList.add("theme-light");
+document.getElementById("themeBtn").addEventListener("click", () => {
+  document.body.classList.toggle("theme-light");
+  localStorage.setItem("theme", document.body.classList.contains("theme-light") ? "light" : "dark");
+});
+
+const lang = localStorage.getItem("lang") || "zh";
+document.documentElement.lang = {zh:"zh-CN",en:"en",jp:"ja"}[lang] || "zh-CN";
+document.title = {zh:"自介 · Crythane", en:"About · Crythane", jp:"プロフィール · Crythane"}[lang];
+document.body.classList.add(`lang-${lang}`);
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting){ e.target.classList.add("show"); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll(".section-block").forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
