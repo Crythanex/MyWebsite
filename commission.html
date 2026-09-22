@@ -234,6 +234,25 @@ body.lang-jp .hero-title{
   transition:color .35s;
 }
 
+.cal-primary-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  padding:16px 24px;
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:980px;
+  color:var(--text);
+  text-decoration:none;
+  margin-bottom:12px;
+  transition:border-color .25s, color .25s, transform .15s cubic-bezier(.34,1.56,.64,1);
+}
+.cal-primary-btn:hover{ border-color:var(--accent); color:var(--accent); }
+.cal-primary-btn:active{ transform:scale(.98); }
+
+.shop-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px; }
+
 /* ── 店铺 ── */
 .shop-section{
   margin-top:40px;
@@ -428,9 +447,27 @@ body.lang-jp .thanks-main{ font-family:"Kazesawa",sans-serif; }
   </div>
 
   <div class="shop-section" id="shopSection">
-    <div class="shop-label zh">联系 · 店铺</div>
-    <div class="shop-label en">Contact · Shop</div>
-    <div class="shop-label jp">連絡 · ショップ</div>
+    <div class="shop-label zh">联系 · 店铺 · 预约</div>
+    <div class="shop-label en">Contact · Shop · Book</div>
+    <div class="shop-label jp">連絡 · ショップ · 予約</div>
+
+    <!-- Cal.com 主按钮：全宽横条胶囊，只显示logo -->
+    <a class="cal-primary-btn" href="https://cal.com/crythane/commission" target="_blank" rel="noopener">
+      <svg viewBox="0 0 40 40" fill="none" height="24" xmlns="http://www.w3.org/2000/svg">
+        <!-- Cal.com 图标：圆角方块+日历格 -->
+        <rect x="2" y="5" width="36" height="33" rx="6" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M2 14h36" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="12" cy="9.5" r="2" fill="currentColor"/>
+        <circle cx="28" cy="9.5" r="2" fill="currentColor"/>
+        <rect x="8"  y="20" width="5" height="4" rx="1.5" fill="currentColor"/>
+        <rect x="17" y="20" width="5" height="4" rx="1.5" fill="currentColor"/>
+        <rect x="27" y="20" width="5" height="4" rx="1.5" fill="currentColor"/>
+        <rect x="8"  y="28" width="5" height="4" rx="1.5" fill="currentColor"/>
+        <rect x="17" y="28" width="5" height="4" rx="1.5" fill="currentColor"/>
+      </svg>
+    </a>
+
+    <!-- QQ + 闲鱼 -->
     <div class="shop-row">
       <a class="shop-btn" href="https://qm.qq.com/q/xCpMb2NdXc" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
@@ -443,14 +480,15 @@ body.lang-jp .thanks-main{ font-family:"Kazesawa",sans-serif; }
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
           <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
         </svg>
-        <span class="zh">闲鱼店铺</span>
-        <span class="en">Xianyu Shop</span>
-        <span class="jp">閑魚ショップ</span>
+        <span class="zh">闲鱼</span>
+        <span class="en">Xianyu</span>
+        <span class="jp">閑魚</span>
       </a>
     </div>
-    <div class="shop-note zh">可通过 QQ 咨询 · 或前往闲鱼店铺直接下单</div>
-    <div class="shop-note en">Contact via QQ · or visit the Xianyu shop to place an order</div>
-    <div class="shop-note jp">QQ でお問い合わせ · または閑魚ショップで直接注文</div>
+
+    <div class="shop-note zh">Cal.com 预约沟通 · QQ 咨询 · 闲鱼下单</div>
+    <div class="shop-note en">Book via Cal.com · Chat on QQ · Order on Xianyu</div>
+    <div class="shop-note jp">Cal.com で予約 · QQ で相談 · 閑魚で注文</div>
   </div>
 
   <div class="thanks" id="thanks">
