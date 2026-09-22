@@ -881,8 +881,22 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     grid-column:1 / -1;
   }
 
-  /* 卡片列恢复单列，去掉之前的max-width限制 */
-  .card-list{
+  /* 卡片加高 */
+  .card{
+    height:420px;
+  }
+
+  /* 文字列宽度也跟着加宽 */
+  .card-text{ width:100px; }
+  .card:nth-child(even) .card-text{ width:100px; }
+  .card-main{ left:100px; }
+  .card:nth-child(even) .card-main{ right:100px; left:0; }
+  .card-main.expanding{ left:0 !important; right:0 !important; }
+
+  /* 字号跟着放大 */
+  .card-title{ font-size:64px; }
+  body.lang-en .card-title{ font-size:34px; }
+  body.lang-jp .card-title{ font-size:54px; }
     max-width:none;
     width:100%;
     padding:0 24px 80px;
@@ -1087,7 +1101,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
     <div class="card-list">
 
-      <div class="card" data-href="https://sunland.dev">
+      <div class="card" data-href="intro.html">
         <div class="card-text">
           <span class="card-title" data-i18n="intro_card">自介</span>
           </div>
