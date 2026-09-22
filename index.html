@@ -118,23 +118,20 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
   transition:background .35s cubic-bezier(.22,.61,.36,1);
 }
 
-#logo{ width:300px; max-width:68vw; }
-
-#logo text{
-  font-family:"CaviarDreams";
-  font-size:96px;
-  fill:none;
-  stroke:var(--text);
-  stroke-width:2.4;
-  stroke-dasharray:700;
-  stroke-dashoffset:700;
-  animation:
-    draw 1.6s cubic-bezier(.22,.61,.36,1) forwards,
-    fill-text .5s cubic-bezier(.34,1.56,.64,1) forwards 1.55s;
+#splash-text{
+  font-family:"CaviarDreams",sans-serif;
+  font-size:clamp(48px, 10vw, 96px);
+  color:var(--text);
+  letter-spacing:.04em;
+  display:flex;
+  gap:.02em;
+  will-change:transform, opacity;
 }
 
-@keyframes draw{ to{ stroke-dashoffset:0; } }
-@keyframes fill-text{ to{ fill:var(--text); } }
+/* 退场：整体上移淡出 */
+#splash.fade #splash-text{
+  animation:logoSlideUp .5s cubic-bezier(.4,0,.2,1) forwards;
+}
 
 /* 退场：logo上移淡出 + 背景同步淡出 */
 #splash.fade{
@@ -415,10 +412,7 @@ body.theme-light .hero-bg::after{
   color:#fff;
   letter-spacing:0.011em;
   margin:0 0 6px;
-  /* 入场 */
-  opacity:0;
-  transform:translateY(30px);
-  transition:opacity .8s .1s cubic-bezier(.22,.61,.36,1), transform .8s .1s cubic-bezier(.22,.61,.36,1);
+
 }
 
 body.theme-light .hero-name-zh{ color:#1d1d1f; }
@@ -433,18 +427,10 @@ body.theme-light .hero-name-en{ color:#1d1d1f; font-weight:400; }
   letter-spacing:.08em;
   font-weight:400;
   margin:0 0 20px;
-  opacity:0;
-  transform:translateY(24px);
-  transition:opacity .8s .22s cubic-bezier(.22,.61,.36,1), transform .8s .22s cubic-bezier(.22,.61,.36,1);
+
 }
 
-/* tagline */
-/* 入场触发 */
-.hero-content.show .hero-name-zh,
-.hero-content.show .hero-name-en{
-  opacity:1;
-  transform:translateY(0);
-}
+
 
 /* meta 行：细线 + 小字 */
 .hero-meta{
@@ -643,6 +629,17 @@ body.lang-jp .card-title{
 
 
 
+
+/* ── 逐字入场 ── */
+.char{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(0.28em);
+  transition:opacity .55s cubic-bezier(.22,.61,.36,1),
+             transform .55s cubic-bezier(.22,.61,.36,1);
+  will-change:transform, opacity;
+}
+.char.show{ opacity:1; transform:translateY(0); }
 
 /* ================= Contact CTA ================= */
 
@@ -972,6 +969,10 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   }
   .hero-content{ padding:0 10vw 100px; }
   .hero-name-zh{ font-size:clamp(88px,8vw,128px); }
+  .card{ height:500px; }
+  .card-title{ font-size:76px; }
+  body.lang-en .card-title{ font-size:38px; }
+  body.lang-jp .card-title{ font-size:64px; }
 }
 
 /* ── 超宽 ≥1800px ── */
@@ -1038,9 +1039,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
 <!-- Splash -->
 <div id="splash">
-  <svg id="logo" viewBox="0 0 600 160">
-    <text x="50%" y="60%" text-anchor="middle">Crythane</text>
-  </svg>
+  <div id="splash-text">Crythane</div>
 </div>
 
 <div class="page">
@@ -1088,7 +1087,7 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
     <div class="hero-content" id="heroContent">
       <div class="hero-name-zh" data-i18n="hero_zh">凌绡</div>
       <div class="hero-name-en">Crythane</div>
-      <div class="hero-meta">
+      <div class="hero-meta" style="opacity:0;transform:translateY(14px)">
         <span class="hero-meta-line"></span>
         <span class="hero-meta-text" data-i18n="hero_tag">Fursona · 内容创作 · 视觉设计</span>
         <span class="hero-meta-line"></span>
@@ -1181,8 +1180,32 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
 /* ================= Splash ================= */
 
-/* 保底：最多等4秒，不管资源有没有加载完 */
-const splashStart = Date.now();
+/* ── 逐字拆分工具（全局） ── */
+function splitChars(el, baseDelay, interval) {
+  const text = el.textContent;
+  el.textContent = "";
+  el.style.opacity = 1;
+  const chars = [...text];
+  chars.forEach((ch, i) => {
+    const span = document.createElement("span");
+    span.className = "char";
+    span.textContent = ch;
+    span.style.transitionDelay = `${baseDelay + i * interval}ms`;
+    el.appendChild(span);
+  });
+  return baseDelay + chars.length * interval;
+}
+
+/* ── Splash 逐字入场 ── */
+const splashText = document.getElementById("splash-text");
+const splashDuration = splashText ? splitChars(splashText, 80, 80) : 0;
+
+if (splashText) {
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    splashText.querySelectorAll(".char").forEach(c => c.classList.add("show"));
+  }));
+}
+
 function showPage() {
   if (window.__pageShown) return;
   window.__pageShown = true;
@@ -1194,18 +1217,17 @@ function showPage() {
     startPage();
     return;
   }
-  setTimeout(() => {
-    document.getElementById("splash").classList.add("fade");
-    const page = document.querySelector(".page");
-    page.style.opacity = 1;
-    page.style.visibility = "visible";
-    document.body.style.overflow = "auto";
-    startPage();
-  }, 2050);
+  document.getElementById("splash").classList.add("fade");
+  const page = document.querySelector(".page");
+  page.style.opacity = 1;
+  page.style.visibility = "visible";
+  document.body.style.overflow = "auto";
+  startPage();
 }
 
-window.addEventListener("load", showPage);
-setTimeout(showPage, 4000); /* 保底4秒 */
+/* 所有字母完成 + 400ms 停留后退场 */
+setTimeout(showPage, splashDuration + 400);
+setTimeout(showPage, 5000); /* 保底 */
 
 /* 返回页面时重置所有状态 */
 window.addEventListener("pageshow", (e) => {
@@ -1236,7 +1258,28 @@ function startPage() {
 
   /* Hero 入场 */
   setTimeout(() => {
-    document.getElementById("heroContent").classList.add("show");
+    const nameZh  = document.querySelector(".hero-name-zh");
+    const nameEn  = document.querySelector(".hero-name-en");
+    const meta    = document.querySelector(".hero-meta");
+
+    const zhEnd = splitChars(nameZh, 0, 80);
+    splitChars(nameEn, zhEnd + 60, 40);
+
+    /* 触发所有char入场 */
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.querySelectorAll(".hero-name-zh .char, .hero-name-en .char")
+        .forEach(c => c.classList.add("show"));
+    }));
+
+    if (meta) {
+      setTimeout(() => {
+        meta.style.transition = "opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1)";
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          meta.style.opacity = 1;
+          meta.style.transform = "translateY(0)";
+        }));
+      }, zhEnd + 60 + 3 * 40 + 120);
+    }
   }, 100);
 
   /* 卡片入场 */
