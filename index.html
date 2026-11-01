@@ -1181,6 +1181,15 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
 
 <script>
 
+/* ================= Images ================= */
+
+/* 缺图时隐藏破图图标，只保留卡片占位渐变 */
+document.querySelectorAll(".card-img").forEach(img => {
+  const hide = () => { img.style.visibility = "hidden"; };
+  img.addEventListener("error", hide, { once: true });
+  if (img.complete && img.naturalWidth === 0) hide();   /* 已加载失败的立即处理 */
+});
+
 /* ================= Splash ================= */
 
 /* ── 逐字拆分工具（全局） ── */
