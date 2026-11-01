@@ -164,7 +164,7 @@ body.lang-jp{ font-family:"Kazesawa","Urbanist",sans-serif; }
 .header{
   position:fixed;
   top:calc(16px + env(safe-area-inset-top));
-  right:16px;         /* 初始靠右对齐 */
+  right:max(24px, calc((100vw - 1440px) / 2 + 24px)); /* 与内容右边距对齐(宽屏跟随 1440 内容区) */
   left:auto;          /* 不居中 */
   transform:none;
   z-index:10;
@@ -894,6 +894,9 @@ body.lang-jp .copyright{ font-family:"Kazesawa",sans-serif; }
   .card-title{ font-size:64px; }
   body.lang-en .card-title{ font-size:34px; }
   body.lang-jp .card-title{ font-size:54px; }
+
+  /* 卡片列：桌面端撑满左栏 */
+  .card-list{
     max-width:none;
     width:100%;
     padding:0 24px 80px;
